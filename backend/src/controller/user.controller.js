@@ -117,23 +117,29 @@ const getCurrentUser=asyncHandler(async(req,res)=>{
 
 const updateProfile = async (req, res) => {
   try {
-    const { profilePicture } = req.body;
+    
+    const profilePictureLocalPath=req.file?.path
+    console.log("Request File:", req.file);
     const userId = req.user._id;
 
-    if (!profilePicture) {
+    if (!profilePictureLocalPath) {
       return res.status(400).json({ message: "Profile pic is required" });
     }
 
-    const uploadResponse = await uploadOnCloudinary(profilePicture);
+    const profilePicture = await uploadOnCloudinary(profilePictureLocalPath);
+    console.log("Profile Picture:", profilePicture);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { profilePicture: uploadResponse.secure_url },
+      { profilePicture: profilePicture.secure_url },
       { new: true }
     );
+    console.log("Updated User:", updatedUser);
     await updatedUser.save();
 
     res.status(200).json(
-      new apiResponse(200, updatedUser, "Profile picture updated successfully")
+   {   message:"Profile picture updated successfully"
+    ,user:updatedUser
+   }
     );
   } catch (error) {
     

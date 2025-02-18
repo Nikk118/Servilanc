@@ -16,24 +16,17 @@ const uploadOnCloudinary=async(localFilePath)=>{
     try {
         if(!localFilePath) return null
 
-        //upload
-        console.log(localFilePath)
+       
         const response=await cloudinary.uploader.upload(localFilePath,{
-            resource_type:"auto"
+            folder:"profilePicture",
         })
-        
-        fs.unlink(localFilePath, (err) => {
-            if (err) {
-                console.error("Error deleting local file:", err);
-            } else {
-                console.log("File successfully deleted from local storage:", localFilePath);
-            }
-        });
+        console.log("successfully uploadaed",response.url);
+       
+        fs.unlinkSync(localFilePath)//remove file from server
         
         return response;
-        
     } catch (error) {
-        fs.unlinkSync(localFilePath)//remove file from server
+        // fs.unlinkSync(localFilePath)//remove file from server
         return null;
     }
 }
