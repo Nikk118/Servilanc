@@ -2,7 +2,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Salon } from "../models/Salon.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-const addSalon=asyncHandler(async(req,res)=>{
+const addSalonService=asyncHandler(async(req,res)=>{
     const admin=req.admin
     if (!admin) {
         return res.status(404).json({message:"invalid access"})
@@ -35,6 +35,34 @@ const addSalon=asyncHandler(async(req,res)=>{
     
 })
 
+const allSalonService=asyncHandler(async(req,res)=>{
+    const admin=req.admin
+    if (!admin) {
+        return res.status(404).json({message:"invalid access"})
+    }
+    const salon= await Salon.find()
+    return res.status(200).json({message:"all fetched successfully",salon})
+})  
+
+const removeSalonService=asyncHandler(async(req,res)=>{
+    const admin=req.admin
+    const {salonId}=req.params
+    // const {playlistId}=req.params
+
+    if (!admin) {
+        return res.status(404).json({message:"invalid access"})
+    }
+    if (!salonId) {
+        return removeSalonService.status(400).json({message:"serviceId is required"})
+    }
+
+    const salon= await Salon.findByIdAndDelete(salonId)
+    return res.status(200).json({message:"salon deleted successfully",salon})
+
+})
+
 export {
-    addSalon 
+    addSalonService,
+    allSalonService,
+    removeSalonService
 }
