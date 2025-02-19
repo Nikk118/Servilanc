@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser"
 import userRouter from "./router/user.router.js"
 import addressRouter from "./router/address.router.js"
 import adminRouter from "./router/admin.router.js"
+import salonRouter from "./router/salon.router.js"
 
 
 const app = express()
@@ -30,3 +31,4 @@ app.use(cookieParser())
 app.use("/api/user",userRouter)
 app.use("/api/address",addressRouter)
 app.use("/api/admin",adminRouter)
+app.use("/api/salon",salonRouter)

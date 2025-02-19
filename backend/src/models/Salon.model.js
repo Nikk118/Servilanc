@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 
-const  SolonSchema= new Schema({
+const  SalonSchema= new Schema({
     name:{
         type:String,
         required:true, 
@@ -28,4 +28,4 @@ const  SolonSchema= new Schema({
 
 
 
-export const Solon = mongoose.model("Solon",SolonSchema)
+export const Salon = mongoose.model("Salon",SalonSchema)

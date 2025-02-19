@@ -18,15 +18,15 @@ const uploadOnCloudinary=async(localFilePath)=>{
 
        
         const response=await cloudinary.uploader.upload(localFilePath,{
-            folder:"profilePicture",
+             resource_type:"auto"
         })
-        console.log("successfully uploadaed",response.url);
+      
        
-        fs.unlinkSync(localFilePath)//remove file from server
+        fs.unlinkSync(localFilePath)
         
         return response;
     } catch (error) {
-        // fs.unlinkSync(localFilePath)//remove file from server
+       
         return null;
     }
 }
