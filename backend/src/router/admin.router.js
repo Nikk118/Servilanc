@@ -1,11 +1,14 @@
 import { Router } from "express";
 
-import {signupAdmin,loginAdmin} from "../controller/admin.controller.js"
+import {loginAdmin,getAdmin,logoutAdmin} from "../controller/admin.controller.js"
+import { verifyAdmin } from "../middleware/adminAuth.middleware.js";
 
 const router=Router()
 
-router.route("/signupAdmin").post(signupAdmin)
-
 router.route("/loginAdmin").get(loginAdmin)
+
+router.route("/logoutAdmin").get(verifyAdmin,logoutAdmin)
+
+router.route("/getAdmin").get(verifyAdmin,getAdmin)
 
 export default router
