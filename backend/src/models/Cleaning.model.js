@@ -21,6 +21,10 @@ const  CleaningSchema= new Schema({
     image_url:{
         type:String,
         default:""
+    },
+    category: {
+        type: String, 
+        required: true
     }
     
 },{timestamps:true})

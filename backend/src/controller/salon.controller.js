@@ -7,11 +7,11 @@ const addSalonService=asyncHandler(async(req,res)=>{
     if (!admin) {
         return res.status(404).json({message:"invalid access"})
     }
-    const {name,description,price,duration}=req.body
+    const {name,description,price,duration,category}=req.body
     const image_urlLocalPath=req.file?.path
 
     console.log("Request File:", req.file);
-    if(!name || !description || !price || !duration ){
+    if(!name || !description || !price || !duration || !category){
         return res.status(400).json({message:"All fields are required"})
     }
     if (!image_urlLocalPath) {
