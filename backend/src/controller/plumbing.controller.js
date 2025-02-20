@@ -1,8 +1,8 @@
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import { Salon } from "../models/Salon.model.js";
+import { Plumbing } from "../models/Plumbing.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-const addSalonService=asyncHandler(async(req,res)=>{
+const addPlumbingService=asyncHandler(async(req,res)=>{
     const admin=req.admin
     if (!admin) {
         return res.status(404).json({message:"invalid access"})
@@ -19,10 +19,10 @@ const addSalonService=asyncHandler(async(req,res)=>{
     };
     const image_url = await uploadOnCloudinary(image_urlLocalPath);
 
-   
+    
     
 
-    const salon= await Salon.create({
+    const plumbing= await Plumbing.create({
         name,
         description,
         price,
@@ -30,39 +30,39 @@ const addSalonService=asyncHandler(async(req,res)=>{
         image_url:image_url.secure_url
     })
 
-    return res.status(201).json({message:"salon added successfully",salon})
+    return res.status(201).json({message:"Plumbing added successfully",plumbing})
 
     
 })
 
-const allSalonService=asyncHandler(async(req,res)=>{
+const allPlumbingService=asyncHandler(async(req,res)=>{
     const admin=req.admin
     if (!admin) {
         return res.status(404).json({message:"invalid access"})
     }
-    const salon= await Salon.find()
-    return res.status(200).json({message:"all fetched successfully",salon})
+    const plumbing= await Plumbing.find()
+    return res.status(200).json({message:"all fetched successfully",plumbing})
 })  
 
-const removeSalonService=asyncHandler(async(req,res)=>{
+const removePlumbingService=asyncHandler(async(req,res)=>{
     const admin=req.admin
-    const {salonId}=req.params
-    // const {playlistId}=req.params
+    const {plumbingId}=req.params
+   
 
     if (!admin) {
         return res.status(404).json({message:"invalid access"})
     }
-    if (!salonId) {
-        return removeSalonService.status(400).json({message:"serviceId is required"})
+    if (!plumbingId) {
+        return res.status(400).json({message:"serviceId is required"})
     }
 
-    const salon= await Salon.findByIdAndDelete(salonId)
-    return res.status(200).json({message:"salon deleted successfully",salon})
+    const plumbing= await Plumbing.findByIdAndDelete(plumbingId)
+    return res.status(200).json({message:"plimbing service deleted successfully",plumbing})
 
 })
 
 export {
-    addSalonService,
-    allSalonService,
-    removeSalonService
+    addPlumbingService,
+    allPlumbingService,
+    removePlumbingService
 }

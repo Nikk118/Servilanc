@@ -5,9 +5,9 @@ import { verifyAdmin } from "../middleware/adminAuth.middleware.js";
 
 const router=Router()
 
-router.route("/loginAdmin").get(loginAdmin)
+router.route("/login").get(loginAdmin)
 
-router.route("/logoutAdmin").get(verifyAdmin,logoutAdmin)
+router.route("/logout").get(verifyAdmin,logoutAdmin)
 
 router.route("/getAdmin").get(verifyAdmin,getAdmin)
 

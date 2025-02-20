@@ -11,17 +11,20 @@ const loginAdmin=asyncHandler(async(req,res)=>{
     if (!username || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-
-    const loggedinadmin = await Admin.findOne({ username });
-
+    
+    const loggedinadmin = await Admin.findOne({ username: username });
+    
+    console.log("1")
     if (!loggedinadmin) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-
+    console.log("2")
+    
     const isPasswordValid = await loggedinadmin.isPasswordCorrect(password);
-    if (!isPasswordValid) {
+    if (isPasswordValid) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+    console.log("3")
 
     genrateToken(loggedinadmin._id, res);
 

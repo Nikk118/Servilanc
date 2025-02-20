@@ -4,7 +4,7 @@ import {upload} from "../middleware/multer.middleware.js"
 import {addSalonService,allSalonService, removeSalonService} from "../controller/salon.controller.js"
 const router=Router()    
 
-router.route("/addSalon").post(verifyAdmin,upload.single("image_url"),addSalonService)
+router.route("/addSalonService").post(verifyAdmin,upload.single("image_url"),addSalonService)
 
 router.route("/allSalonService").get(verifyAdmin,allSalonService)
 

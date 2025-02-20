@@ -19,7 +19,7 @@ const addCleaningService=asyncHandler(async(req,res)=>{
     };
     const image_url = await uploadOnCloudinary(image_urlLocalPath);
 
-    console.log(image_url)
+   
     
 
     const cleaning= await Cleaning.create({
@@ -40,20 +40,20 @@ const allCleaningService=asyncHandler(async(req,res)=>{
     if (!admin) {
         return res.status(404).json({message:"invalid access"})
     }
-    const cleaning= await cleaning.find()
+    const cleaning= await Cleaning.find()
     return res.status(200).json({message:"all fetched successfully",cleaning})
 })  
 
 const removeCleaningService=asyncHandler(async(req,res)=>{
     const admin=req.admin
     const {cleaningId}=req.params
-    // const {playlistId}=req.params
+   
 
     if (!admin) {
         return res.status(404).json({message:"invalid access"})
     }
     if (!cleaningId) {
-        return removeSalonService.status(400).json({message:"serviceId is required"})
+        return res.status(400).json({message:"serviceId is required"})
     }
 
     const clean= await Cleaning.findByIdAndDelete(cleaningId)
