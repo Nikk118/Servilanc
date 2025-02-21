@@ -6,6 +6,8 @@ import adminRouter from "./router/admin.router.js"
 import salonRouter from "./router/salon.router.js"
 import cleaningRouter from "./router/cleaning.router.js"
 import plumbingRouter from "./router/plumbing.router.js"
+import bookingRouter from "./router/booking.router.js"
+import professionalRouter from "./router/professional.router.js"
 
 
 const app = express()
@@ -36,3 +38,5 @@ app.use("/api/admin",adminRouter)
 app.use("/api/salon",salonRouter)
 app.use("/api/cleaning",cleaningRouter)
 app.use("/api/plumbing",plumbingRouter)
+app.use("/api/booking",bookingRouter)
+app.use("/api/professional",professionalRouter)

@@ -27,6 +27,7 @@ const addPlumbingService=asyncHandler(async(req,res)=>{
         description,
         price,
         duration,
+        category,
         image_url:image_url.secure_url
     })
 
