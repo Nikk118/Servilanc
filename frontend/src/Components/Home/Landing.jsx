@@ -39,10 +39,10 @@ export default function LandingPage() {
         transition={{ duration: 1 }}
       >
         {[
-          { label: "Login as User", color: "blue-500", path: "/login-user" },
+          { label: "Login as User", color: "blue-500", path: "/api/user/login" },
           { label: "Login as Professional", color: "green-500", path: "/login-professional" },
-          { label: "Login as Admin", color: "red-500", path: "/login-admin" },
-          { label: "Sign Up", color: "purple-500", path: "/signup" },
+          { label: "Login as Admin", color: "red-500", path: "/api/admin/login" },
+          { label: "Sign Up", color: "purple-500", path: "/api/user/signup" },
         ].map((button, index) => (
           <motion.button
             key={index}

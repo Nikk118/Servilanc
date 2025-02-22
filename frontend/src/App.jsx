@@ -29,8 +29,8 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/api/user/login" element={<LoginUser />} />
         <Route path="/login-professional" element={<LoginProfessional />} />
-        <Route path="/login-admin" element={<LoginAdmin />} />
-        <Route path="/signup-user" element={<SignUpUser />} />
+        <Route path="/api/admin/login" element={<LoginAdmin />} />
+        <Route path="/api/user/signup" element={<SignUpUser />} />
       </Routes>
     </Router>
   );
