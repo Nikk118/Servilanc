@@ -8,6 +8,8 @@ import cleaningRouter from "./router/cleaning.router.js"
 import plumbingRouter from "./router/plumbing.router.js"
 import bookingRouter from "./router/booking.router.js"
 import professionalRouter from "./router/professional.router.js"
+import cors from "cors"
+
 
 
 const app = express()
@@ -25,6 +27,12 @@ connectDB()
 .catch((err)=>{
     console.log("connection fail...",err);
 })
+
+// enables running on localhost with frontend
+app.use(cors({
+    origin: 'http://localhost:5173', 
+    credentials: true,
+  }));
 
 
 app.use(express.json({ limit: '10mb' }));

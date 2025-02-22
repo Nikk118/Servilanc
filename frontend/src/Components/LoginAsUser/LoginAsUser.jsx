@@ -21,7 +21,9 @@ export default function LoginUser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/user/login', formData);
+      const response = await axios.post('http://localhost:3000/api/user/login', formData, {
+        headers: { "Content-Type": "application/json" }
+      });
       if (response.status === 200) {
         navigate('/user-dashboard');
       }

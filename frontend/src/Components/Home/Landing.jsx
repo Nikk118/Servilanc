@@ -11,7 +11,7 @@ export default function LandingPage() {
         <div className="space-y-3">
           <button
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-xl hover:bg-blue-600"
-            onClick={() => navigate('/login-user')}
+            onClick={() => navigate('/api/user/login')}
           >
             Login as User
           </button>
