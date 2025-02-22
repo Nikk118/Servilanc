@@ -73,7 +73,7 @@ const userLogin = asyncHandler(async (req, res) => {
 
   // Verify the password
   const isPasswordValid = await loggedinuser.isPasswordCorrect(password);
-  if (!isPasswordValid) {
+  if (isPasswordValid) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
@@ -119,7 +119,7 @@ const updateProfile = async (req, res) => {
   try {
     
     const profilePictureLocalPath=req.file?.path
-    console.log("Request File:", req.file);
+   
     const userId = req.user._id;
 
     if (!profilePictureLocalPath) {

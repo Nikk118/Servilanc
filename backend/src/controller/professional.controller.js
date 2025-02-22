@@ -3,61 +3,11 @@ import {asyncHandler} from "../utils/asyncHandler.js"
 import { genrateToken } from "../utils/generateToken.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
-const professionalSignUp = asyncHandler(async(req,res)=>{
 
-    const {email,name,password,phone,category}=req.body
 
-    if(!email || !name|| !password || !phone || !category){
-      return res.status(400)
-      .json(
-       { message:"all feilds are required"}
-      )
-    }
-
-     const professionalExists= await Professional.findOne({$or:[{name},{email}]})
-    
-        if(professionalExists){
-          return res.status(400)
-          .json(
-           { message:"professional already exists"}
-          )
-        }
-    
-        const professional= await Professional.create({
-            name,
-            email,
-            password,
-            phone,
-            category
-        })
-    
-        const createdprofessional= await Professional.findById(professional._id).select("-password")
-    
-        if(createdprofessional){
-    
-            genrateToken(createdprofessional._id,res)
-            await createdprofessional.save()
-    
-            return res.status(201)
-            .json(
-                {
-                    message:"professional created successfully",
-                    professional:createdprofessional
-                }
-            )
-        }else{
-          return res.status(500)
-          .json(
-           { message:"internal server error"}
-          )
-    
-        }
-        
-        
-    })
     
 const professionalLogin = asyncHandler(async (req, res) => {
-      const { name, password,} = req.body;
+      const { name, password} = req.body;
     
       // Validate input fields
       if (!name || !password) {
@@ -75,7 +25,7 @@ const professionalLogin = asyncHandler(async (req, res) => {
     
       // Verify the password
       const isPasswordValid = await loggedinprofessional.isPasswordCorrect(password);
-      if (!isPasswordValid) {
+      if (isPasswordValid) {
         return res.status(400).json({ message: "Invalid credentials" });
       }
     
@@ -99,8 +49,7 @@ const professionalLogout=asyncHandler(async(req,res)=>{
         return res.status(500).json({ message: "internal server error" });
       }
     })
-    
-    
+     
     
 const getCurrentprofessional=asyncHandler(async(req,res)=>{
       const professional= await Professional.findById(req.professional._id)
@@ -112,7 +61,7 @@ const getCurrentprofessional=asyncHandler(async(req,res)=>{
     
       return res.status(200)
           .json(
-              {message:"professional logged in successfully",
+              {message:"current professional logged in successfully",
               professional}
           )
     })
@@ -121,7 +70,7 @@ const updateProfile = async (req, res) => {
       try {
         
         const profilePictureLocalPath=req.file?.path
-        console.log("Request File:", req.file);
+        
         const professionalId = req.professional._id;
     
         if (!profilePictureLocalPath) {
@@ -130,7 +79,7 @@ const updateProfile = async (req, res) => {
     
         const profilePicture = await uploadOnCloudinary(profilePictureLocalPath);
     
-        const updatedprofessional = await professional.findByIdAndUpdate(
+        const updatedprofessional = await Professional.findByIdAndUpdate(
           professionalId,
           { profilePicture: profilePicture.secure_url },
           { new: true }
@@ -150,8 +99,8 @@ const updateProfile = async (req, res) => {
     };
     
     export {
-      professionalSignUp
-      ,professionalLogin,
+      
+    professionalLogin,
       professionalLogout,
       getCurrentprofessional,
       updateProfile

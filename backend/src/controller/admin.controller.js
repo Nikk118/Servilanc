@@ -1,7 +1,7 @@
 import {asyncHandler} from "../utils/asyncHandler.js";
 import { Admin } from "../models/admin.model.js";
 import { genrateToken } from "../utils/generateToken.js";
-
+import { Professional } from "../models/professional.model.js";
 
 
 const loginAdmin=asyncHandler(async(req,res)=>{
@@ -46,8 +46,64 @@ const getAdmin=asyncHandler(async(req,res)=>{
 
     return res.status(200).json({message:"Admin fetched successfully",admin:req.admin})
 })
+
+const addProfessional= asyncHandler(async(req,res)=>{
+
+   
+    const {email,name,password,phone,category}=req.body
+
+      console.log(email,name,password,phone,category)
+    if(!email || !name|| !password || !phone || !category){
+      return res.status(400)
+      .json(
+       { message:"all feilds are required"}
+      )
+    }
+
+     const professionalExists= await Professional.findOne({$or:[{name},{email}]})
+    
+        if(professionalExists){
+          return res.status(400)
+          .json(
+           { message:"professional already exists"}
+          )
+        }
+    
+        const professional= await Professional.create({
+            name,
+            email,
+            password,
+            phone,
+            category
+        })
+    
+        const createdprofessional= await Professional.findById(professional._id).select("-password")
+    
+        if(createdprofessional){
+    
+            genrateToken(createdprofessional._id,res)
+            await createdprofessional.save()
+    
+            return res.status(201)
+            .json(
+                {
+                    message:"professional created successfully",
+                    professional:createdprofessional
+                }
+            )
+        }else{
+          return res.status(500)
+          .json(
+           { message:"internal server error"}
+          )
+    
+        }
+        
+        
+    })
 export {
     getAdmin,
     loginAdmin,
-    logoutAdmin
+    logoutAdmin,
+    addProfessional
 }

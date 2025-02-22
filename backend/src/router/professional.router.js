@@ -1,19 +1,19 @@
 import {Router} from "express";
-import {professionalSignUp,professionalLogin,professionalLogout,getCurrentprofessional,updateProfile} from "../controller/professional.controller.js";
+import {professionalLogin,professionalLogout,getCurrentprofessional,updateProfile} from "../controller/professional.controller.js";
 
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import {verifyProfessional} from "../middleware/professionalAuth.middleware.js"
 import { upload } from "../middleware/multer.middleware.js";
 
 const router = Router();
 
-router.route("/signup").post(professionalSignUp);
+
 
 router.route("/login").get(professionalLogin)
 
-router.route("/logout").get(verifyJWT,professionalLogout)
+router.route("/logout").get(verifyProfessional,professionalLogout)
 
-router.route("/getCurrentprofessional").get(verifyJWT,getCurrentprofessional)
+router.route("/getCurrentProfessional").get(verifyProfessional,getCurrentprofessional)
 
-router.route("/updateProfile").patch(verifyJWT,upload.single("profilePicture"),updateProfile)
+router.route("/updateProfile").patch(verifyProfessional,upload.single("profilePicture"),updateProfile)
 
 export default router
