@@ -4,6 +4,7 @@ import LandingPage from './Components/Home/Landing';
 import SignUp from './Components/SignUp/SignUp';
 import LoginAsAdmin from './Components/LoginAsAdmin/LoginAsAdmin';
 import LoginAsUser from './Components/LoginAsUser/LoginAsUser'
+import UserDashboard from './Components/UserDashboard/UserDashboard';
 
 // Placeholder components for demonstration
 function LoginUser() {
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/login-professional" element={<LoginProfessional />} />
         <Route path="/api/admin/login" element={<LoginAdmin />} />
         <Route path="/api/user/signup" element={<SignUpUser />} />
+        <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>
     </Router>
   );
