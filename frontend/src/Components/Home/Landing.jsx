@@ -38,24 +38,45 @@ export default function LandingPage() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1 }}
       >
-        {[
-          { label: "Login as User", color: "blue-500", path: "/api/user/login" },
-          { label: "Login as Professional", color: "green-500", path: "/login-professional" },
-          { label: "Login as Admin", color: "red-500", path: "/api/admin/login" },
-          { label: "Sign Up", color: "purple-500", path: "/api/user/signup" },
-        ].map((button, index) => (
-          <motion.button
-            key={index}
-            onClick={() => navigate(button.path)}
-            className={`relative px-6 py-3 rounded-xl text-lg font-semibold bg-${button.color} hover:bg-opacity-80 shadow-lg transition-all transform hover:scale-105`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {button.label}
-            {/* Glow Effect */}
-            <span className={`absolute inset-0 bg-${button.color} opacity-20 blur-3xl rounded-full`}></span>
-          </motion.button>
-        ))}
+        <motion.button
+          onClick={() => navigate("/api/user/login")}
+          className="relative px-6 py-3 rounded-xl text-lg font-semibold bg-blue-500 hover:bg-blue-600 shadow-lg transition-all transform hover:scale-105"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Login as User
+          <span className="absolute inset-0 bg-blue-500 opacity-20 blur-3xl rounded-full"></span>
+        </motion.button>
+
+        <motion.button
+          onClick={() => navigate("/login-professional")}
+          className="relative px-6 py-3 rounded-xl text-lg font-semibold bg-green-500 hover:bg-green-600 shadow-lg transition-all transform hover:scale-105"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Login as Professional
+          <span className="absolute inset-0 bg-green-500 opacity-20 blur-3xl rounded-full"></span>
+        </motion.button>
+
+        <motion.button
+          onClick={() => navigate("/api/admin/login")}
+          className="relative px-6 py-3 rounded-xl text-lg font-semibold bg-red-500 hover:bg-red-600 shadow-lg transition-all transform hover:scale-105"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Login as Admin
+          <span className="absolute inset-0 bg-red-500 opacity-20 blur-3xl rounded-full"></span>
+        </motion.button>
+
+        <motion.button
+          onClick={() => navigate("/api/user/signup")}
+          className="relative px-6 py-3 rounded-xl text-lg font-semibold bg-purple-500 hover:bg-purple-600 shadow-lg transition-all transform hover:scale-105"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Sign Up
+          <span className="absolute inset-0 bg-purple-500 opacity-20 blur-3xl rounded-full"></span>
+        </motion.button>
       </motion.div>
 
       {/* Footer */}
