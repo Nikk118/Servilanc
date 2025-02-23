@@ -39,7 +39,7 @@ export default function LandingPage() {
         transition={{ duration: 1 }}
       >
         <motion.button
-          onClick={() => navigate("/api/user/login")}
+          onClick={() => navigate("/login")}
           className="relative px-6 py-3 rounded-xl text-lg font-semibold bg-blue-500 hover:bg-blue-600 shadow-lg transition-all transform hover:scale-105"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -49,7 +49,7 @@ export default function LandingPage() {
         </motion.button>
 
         <motion.button
-          onClick={() => navigate("/login-professional")}
+          onClick={() => navigate("/professional/login")}
           className="relative px-6 py-3 rounded-xl text-lg font-semibold bg-green-500 hover:bg-green-600 shadow-lg transition-all transform hover:scale-105"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -59,7 +59,7 @@ export default function LandingPage() {
         </motion.button>
 
         <motion.button
-          onClick={() => navigate("/api/admin/login")}
+          onClick={() => navigate("/admin/login")}
           className="relative px-6 py-3 rounded-xl text-lg font-semibold bg-red-500 hover:bg-red-600 shadow-lg transition-all transform hover:scale-105"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -69,7 +69,7 @@ export default function LandingPage() {
         </motion.button>
 
         <motion.button
-          onClick={() => navigate("/api/user/signup")}
+          onClick={() => navigate("/signup")}
           className="relative px-6 py-3 rounded-xl text-lg font-semibold bg-purple-500 hover:bg-purple-600 shadow-lg transition-all transform hover:scale-105"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}

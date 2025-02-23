@@ -1,24 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaShoppingCart, FaUserCircle, FaWrench, FaBroom, FaCut } from "react-icons/fa";
+import {  FaUserCircle, FaWrench, FaBroom, FaCut } from "react-icons/fa";
+import { useAuthStore } from "../../store/userAuthStore";
+import { LogOut } from "lucide-react";
 
-export default function UserDashboard() {
+export default function Home() {
+  
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       {/* Navbar */}
-      <nav className="bg-gray-800 p-4 shadow-lg flex justify-between items-center">
-        <div className="text-3xl font-extrabold tracking-wide text-blue-400">Servielliance</div>
-        <div className="space-x-8 text-lg">
-          <Link to="/" className="hover:text-blue-400 transition">Home</Link>
-          <Link to="/plumbing" className="hover:text-blue-400 transition">Plumbing</Link>
-          <Link to="/cleaning" className="hover:text-blue-400 transition">Cleaning</Link>
-          <Link to="/salon" className="hover:text-blue-400 transition">Salon</Link>
-        </div>
-        <div className="flex items-center space-x-6">
-          <Link to="/cart" className="hover:text-blue-400"><FaShoppingCart size={26} /></Link>
-          <Link to="/profile" className="hover:text-blue-400"><FaUserCircle size={26} /></Link>
-        </div>
-      </nav>
+      
 
       {/* Hero Section */}
       <header className="relative bg-cover bg-center h-[50vh] flex flex-col justify-center items-center" style={{ backgroundImage: "url('hero-bg.jpg')" }}>

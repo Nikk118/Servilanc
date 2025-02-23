@@ -56,6 +56,7 @@ const userSignUp = asyncHandler(async(req,res)=>{
 
 const userLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
+  console.log("req body",req.body);
 
   // Validate input fields
   if (!username || !password) {

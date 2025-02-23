@@ -2,35 +2,25 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { useAuthStore } from "../../store/userAuthStore";
+
 
 export default function SignupUser() {
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
+  const {signup,isSignUp}=useAuthStore()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.email || !formData.password) {
-      setError("All fields are required");
-      return;
-    }
-    
-    try {
-      const response = await axios.post("http://localhost:3000/api/user/signup", formData);
-      if (response.status === 201) {
-        setSuccess("Account created successfully! Redirecting...");
-        setTimeout(() => navigate("/login"), 2000);
-      }
-    } catch (error) {
-      setError(error.response?.data?.message || "Signup failed");
-    }
+    signup(formData);
   };
+
+ 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white">
@@ -43,26 +33,6 @@ export default function SignupUser() {
         <h2 className="text-3xl font-bold text-center text-purple-500 mb-6">
           User Sign Up
         </h2>
-
-        {error && (
-          <motion.div
-            className="mb-4 text-red-500 text-sm text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {error}
-          </motion.div>
-        )}
-
-        {success && (
-          <motion.div
-            className="mb-4 text-purple-500 text-sm text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {success}
-          </motion.div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -119,7 +89,7 @@ export default function SignupUser() {
             Already have an account?{" "}
             <span
               className="text-blue-500 cursor-pointer hover:underline"
-              onClick={() => navigate("/api/user/login")}
+              onClick={() => navigate("/login")} 
             >
               Login
             </span>

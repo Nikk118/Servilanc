@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useAuthStore } from "../../store/userAuthStore.js"; // Import Zustand store
 import { motion } from "framer-motion";
 
 export default function LoginUser() {
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login, isLogin } = useAuthStore(); // Zustand store
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,19 +15,7 @@ export default function LoginUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.password) {
-      setError("All fields are required");
-      return;
-    }
-
-    try {
-      const response = await axios.post("http://localhost:3000/api/user/login", formData);
-      if (response.status === 200) {
-        navigate("/user-dashboard");
-      }
-    } catch (error) {
-      setError(error.response?.data?.message || "Invalid credentials");
-    }
+    login(formData);
   };
 
   return (
@@ -41,16 +29,6 @@ export default function LoginUser() {
         <h2 className="text-3xl font-bold text-center text-blue-400 mb-6">
           User Login
         </h2>
-
-        {error && (
-          <motion.div
-            className="mb-4 text-red-500 text-sm text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {error}
-          </motion.div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -84,8 +62,9 @@ export default function LoginUser() {
             className="w-full bg-blue-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-all duration-200 shadow-lg"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            disabled={isLogin} // Disable button during login
           >
-            Login
+            {isLogin ? "Logging in..." : "Login"}
           </motion.button>
         </form>
 
@@ -94,7 +73,7 @@ export default function LoginUser() {
             Don't have an account?{" "}
             <span
               className="text-purple-500 cursor-pointer hover:underline"
-              onClick={() => navigate("/api/user/signup")}
+              onClick={() => navigate("/signup")}
             >
               Sign Up
             </span>
