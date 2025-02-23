@@ -77,26 +77,45 @@ const cancleBooking=asyncHandler(async(req,res)=>{
     return res.status(200).json({message:"Booking cancle successfully",booking})
 })
 
-// const accpetBooking=asyncHandler(async(req,res)=>{
-//     const {bookingId}=req.params
+const accpetBooking=asyncHandler(async(req,res)=>{
+    const {bookingId}=req.params
+    const professionalId=req.professional._id
 
-//     if(!bookingId){
-//         return res.status(400).json({message:"bookingId is required"})
-//     }
-//     const booking=await Booking.findByIdAndUpdate(
-//         bookingId,
-//         {status:"accepted",
-//             pro
-//         },
-//         {new:true}
-//     )
+    if(!bookingId){
+        return res.status(400).json({message:"bookingId is required"})
+    }
+    const booking=await Booking.findByIdAndUpdate(
+        bookingId,
+        {status:"accepted",
+            professional:professionalId
+            
+        },
+        {new:true}
+    )
 
-//     return res.status(200).json({message:"accpet Booking successfully",booking})
-//     }
-// )
+    return res.status(200).json({message:"accpet Booking successfully",booking})
+    }
+)
+
+const completeBooking=asyncHandler(async(req,res)=>{
+    const {bookingId}=req.params
+
+    if(!bookingId){
+        return res.status(400).json({message:"bookingId is required"})
+    }
+    const booking=await Booking.findByIdAndUpdate(
+        bookingId,
+        {status:"completed"},
+        {new:true}
+    )
+
+    return res.status(200).json({message:"complete Booking successfully",booking})
+})
 
 export {
     addBooking,
     getBooking,
-    cancleBooking
+    cancleBooking,
+    accpetBooking,
+    completeBooking
 }

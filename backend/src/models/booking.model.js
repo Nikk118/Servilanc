@@ -10,7 +10,7 @@ const bookingSchema = new mongoose.Schema(
         professional: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Professional",
-          default: null
+          
         },
         service: {
             type: mongoose.Schema.Types.ObjectId,
@@ -23,7 +23,7 @@ const bookingSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["Pending", "Accepted", "In Progress", "Completed", "Cancelled"],
+            enum: ["Pending", "Accepted", "Completed", "Cancelled"],
             default: "Pending"
         },
         paymentStatus: {

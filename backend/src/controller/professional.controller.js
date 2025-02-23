@@ -7,36 +7,36 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
     
 const professionalLogin = asyncHandler(async (req, res) => {
-      const { name, password} = req.body;
-    
-      // Validate input fields
-      if (!name || !password) {
-      
-        return res.status(400).json({ message: "All fields are required" });
-      }
-    
-      // Find professional by fullname
-      const loggedinprofessional = await Professional.findOne({ name });
-    
-      // Check if professional exists
-      if (!loggedinprofessional) {
-        return res.status(400).json({ message: "Invalid credentials" });
-      }
-    
-      // Verify the password
-      const isPasswordValid = await loggedinprofessional.isPasswordCorrect(password);
-      if (isPasswordValid) {
-        return res.status(400).json({ message: "Invalid credentials" });
-      }
-    
-      // Generate token and send response
-      genrateToken(loggedinprofessional._id, res);
-    
-      return res.status(200).json(
-        {message:"professional logged in successfully",
-        professional:loggedinprofessional}
-      );
-    });
+  const { name, password } = req.body;
+
+
+  if (!name || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  
+  const loggedinprofessional = await Professional.findOne({ name });
+
+  
+  if (!loggedinprofessional) {
+    return res.status(400).json({ message: "Invalid credentials" });
+  }
+console.log(loggedinprofessional)
+
+  const isPasswordValid = await loggedinprofessional.isPasswordCorrect(password);
+  if (isPasswordValid) {
+    return res.status(400).json({ message: "Invalid credentials" });
+  }
+
+
+  genrateToken(loggedinprofessional._id, res);
+
+  return res.status(200).json({
+    message: "Professional logged in successfully",
+    professional: loggedinprofessional
+  });
+});
+
     
 const professionalLogout=asyncHandler(async(req,res)=>{
       try {
