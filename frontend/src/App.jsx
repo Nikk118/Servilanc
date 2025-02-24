@@ -7,6 +7,7 @@ import LoginAsUser from "./Components/LoginAsUser/LoginAsUser";
 import Home from "./Components/home/home";
 import { useAuthStore } from "./store/userAuthStore";
 import Navbar from "./Components/nav/Navbar";
+import { Toaster } from "react-hot-toast";
 
 function LoginProfessional() {
   return <h2>Login as Professional Page</h2>;
@@ -22,6 +23,7 @@ export default function App() {
   return (
     <>
       <Navbar />
+      <Toaster position="top-center" reverseOrder={false} />
       <Routes>
         <Route path="/" element={authUser ? <Home /> : <LandingPage />} />
         <Route path="/login" element={authUser ? <Home /> : <LoginAsUser />} />

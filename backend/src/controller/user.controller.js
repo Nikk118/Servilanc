@@ -57,27 +57,26 @@ const userSignUp = asyncHandler(async(req,res)=>{
 const userLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   
+  console.log("Received login request for:", username);
 
-  // Validate input fields
   if (!username || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Find user by fullname
   const loggedinuser = await User.findOne({ username });
 
-  // Check if user exists
+  
   if (!loggedinuser) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
-  // Verify the password
+ 
   const isPasswordValid = await loggedinuser.isPasswordCorrect(password);
   if (!isPasswordValid) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
-  // Generate token and send response
+
   genrateToken(loggedinuser._id, res);
 
   return res.status(200).json(

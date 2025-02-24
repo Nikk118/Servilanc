@@ -13,7 +13,7 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: true,
 
   
-  // ✅ Check authentication status
+  
   checkAuth: async () => {
     try {
       const res = await axiosInstant.get("/user/getCurrentUser");
@@ -26,7 +26,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  // ✅ Signup function
+
   signup: async (data) => {
     set({ isSignUp: true });
     try {
@@ -48,11 +48,12 @@ export const useAuthStore = create((set) => ({
       const res = await axiosInstant.post("/user/login", data);
       set({ authUser: res.data });
       
-      console.log("Login response data:", res.data);
+   
       toast.success("Logged in successfully");
     } catch (error) {
-      console.error("Login error:", error);
-      toast.error(error?.response?.data?.message || "Login failed");
+      console.error(error.response.data.message);
+      toast.error(error?.response?.data.message || "Login failed");
+
     } finally {
       set({ isLogin: false });
     }
