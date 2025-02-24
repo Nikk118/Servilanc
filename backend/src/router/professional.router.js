@@ -8,7 +8,7 @@ const router = Router();
 
 
 
-router.route("/login").get(professionalLogin)
+router.route("/login").post(professionalLogin)
 
 router.route("/logout").get(verifyProfessional,professionalLogout)
 

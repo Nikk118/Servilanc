@@ -4,6 +4,57 @@ import { genrateToken } from "../utils/generateToken.js";
 import { Professional } from "../models/professional.model.js";
 
 
+const adminSignUp= asyncHandler(async(req,res)=>{
+
+  const {email,username,password,phone}=req.body
+
+    if(!email || !username|| !password || !phone){
+      return res.status(400)
+      .json(
+       { message:"all feilds are required"}
+      )
+    }
+
+    const adminExists= await Admin.findOne({email})
+
+    if(adminExists){
+      return res.status(400)
+      .json(
+       { message:"admin already exists"}
+      )
+    }
+
+    const admin= await Admin.create({
+      username,
+        email,
+        password,
+        phone
+    })
+
+    const createdadmin= await Admin.findById(admin._id).select("-password")
+    
+        if(createdadmin){
+    
+            genrateToken(createdadmin._id,res)
+            await createdadmin.save()
+    
+            return res.status(201)
+            .json(
+                {
+                    message:"admin created successfully",
+                    professional:createdadmin
+                }
+            )
+        }else{
+          return res.status(500)
+          .json(
+           { message:"internal server error"}
+          )
+    
+        }
+    }
+      )
+
 const loginAdmin=asyncHandler(async(req,res)=>{
     const {username,password}=req.body
 
@@ -21,7 +72,7 @@ const loginAdmin=asyncHandler(async(req,res)=>{
     console.log("2")
     
     const isPasswordValid = await loggedinadmin.isPasswordCorrect(password);
-    if (isPasswordValid) {
+    if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     console.log("3")
@@ -102,6 +153,7 @@ const addProfessional= asyncHandler(async(req,res)=>{
         
     })
 export {
+    adminSignUp,
     getAdmin,
     loginAdmin,
     logoutAdmin,

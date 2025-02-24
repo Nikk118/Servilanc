@@ -14,7 +14,7 @@ const professionalSchema = new mongoose.Schema({
 professionalSchema.pre("save", async function (next) {
     try {
         if (!this.isModified("password")) {
-            return next(); // Skip hashing if password is not modified
+            return next(); 
         }
 
         if (!this.password) {

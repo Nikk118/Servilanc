@@ -24,7 +24,8 @@ const professionalLogin = asyncHandler(async (req, res) => {
 console.log(loggedinprofessional)
 
   const isPasswordValid = await loggedinprofessional.isPasswordCorrect(password);
-  if (isPasswordValid) {
+  console.log(isPasswordValid)
+  if (!isPasswordValid) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 

@@ -56,11 +56,10 @@ const userSignUp = asyncHandler(async(req,res)=>{
 
 const userLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
-  console.log("req body",req.body);
+  
 
   // Validate input fields
   if (!username || !password) {
-  
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -74,7 +73,7 @@ const userLogin = asyncHandler(async (req, res) => {
 
   // Verify the password
   const isPasswordValid = await loggedinuser.isPasswordCorrect(password);
-  if (isPasswordValid) {
+  if (!isPasswordValid) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
