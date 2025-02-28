@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {  FaUserCircle, FaWrench, FaBroom, FaCut } from "react-icons/fa";
-import { useAuthStore } from "../../store/userAuthStore";
+import { useAuthStore } from "../store/userAuthStore";
 import { LogOut } from "lucide-react";
 
 export default function Home() {

@@ -95,7 +95,16 @@ const logoutAdmin=asyncHandler(async(req,res)=>{
 
 const getAdmin=asyncHandler(async(req,res)=>{
 
-    return res.status(200).json({message:"Admin fetched successfully",admin:req.admin})
+    const admin=await Admin.findById(req.admin._id).select("-password")
+
+    if(!admin){
+        return res.status(404).json({message:"admin not found"})
+    }
+
+    return res.status(200).json(
+      {message:"admin logged in successfully",
+        admin}
+  )
 })
 
 const addProfessional= asyncHandler(async(req,res)=>{

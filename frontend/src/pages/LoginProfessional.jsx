@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useProfessionalStore } from "../store/useProfessionalStore"; // Import Zustand store
 import { motion } from "framer-motion";
 
-export default function LoginUser() {
+export default function LoginProfessional() {
   const [formData, setFormData] = useState({ name: "", password: "" });
   const navigate = useNavigate();
   const { professionalLogin, isProfessionalLogin } = useProfessionalStore(); 
@@ -17,6 +17,7 @@ export default function LoginUser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     professionalLogin(formData);
+    navigate("/professional/home")
   };
 
   return (
@@ -71,7 +72,7 @@ export default function LoginUser() {
 
         <div className="text-center mt-4">
           <p className="text-gray-400 text-sm">
-             dont have an account
+             dont have an account{" "}
             <span
               className="text-purple-500 cursor-pointer hover:underline"
               onClick={() => navigate("/")}

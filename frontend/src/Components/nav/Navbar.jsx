@@ -10,9 +10,9 @@ function Navbar() {
   return (
     <nav className="bg-gray-800 p-4 shadow-lg flex justify-between items-center">
       {/* Logo */}
-      <Link to="/home" className="text-3xl font-extrabold tracking-wide text-blue-400">
+      <div  className="text-3xl font-extrabold tracking-wide text-blue-400">
         Servielliance
-      </Link>
+      </div>
 
       {/* Navigation Links */}
       {authUser&&(

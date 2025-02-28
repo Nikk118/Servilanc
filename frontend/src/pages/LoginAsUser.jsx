@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/userAuthStore.js"; // Import Zustand store
+import { useAuthStore } from "../store/userAuthStore"; // Import Zustand store
 import { motion } from "framer-motion";
 
 export default function LoginUser() {
@@ -77,6 +77,17 @@ export default function LoginUser() {
               onClick={() => navigate("/signup")}
             >
               Sign Up
+            </span>
+          </p>
+        </div>
+        <div className="text-center mt-4">
+          <p className="text-gray-400 text-sm">
+            login as others?{" "}
+            <span
+              className="text-purple-500 cursor-pointer hover:underline"
+              onClick={() => navigate("/")}
+            >
+              LandingPage
             </span>
           </p>
         </div>

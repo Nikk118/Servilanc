@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useAuthStore } from "../../store/userAuthStore";
+import { useAuthStore } from "../store/userAuthStore";
 
 
 export default function SignupUser() {
@@ -92,6 +92,17 @@ export default function SignupUser() {
               onClick={() => navigate("/login")} 
             >
               Login
+            </span>
+          </p>
+        </div>
+        <div className="text-center mt-4">
+          <p className="text-gray-400 text-sm">
+            login as others?{" "}
+            <span
+              className="text-purple-500 cursor-pointer hover:underline"
+              onClick={() => navigate("/")}
+            >
+              LandingPage
             </span>
           </p>
         </div>
