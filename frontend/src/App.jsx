@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import LandingPage from "./Components/landing/Landing";
+import LandingPage from "./pages/Landing";
 import SignUp from "./Components/SignUp/SignUp";
-import LoginAsAdmin from "./Components/LoginAsAdmin/LoginAsAdmin";
+import LoginAsAdmin from "./pages/LoginAsAdmin";
 import LoginAsUser from "./Components/LoginAsUser/LoginAsUser";
-import LoginProfessional from "./Components/Professional/LoginProfessional"
+import LoginProfessional from "./pages/LoginProfessional"
 import Home from "./Components/home/home";
 import { useAuthStore } from "./store/userAuthStore";
 import Navbar from "./Components/nav/Navbar";
