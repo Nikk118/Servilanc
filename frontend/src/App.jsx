@@ -14,6 +14,10 @@ import ProfessionalHome from "./pages/ProfessionalHome";
 import NotFound from "./pages/NotFound";
 import AdminHome from "./pages/AdminHome";
 import { useAdminStore } from "./store/useAdminStore";
+import Salon from "./pages/services/salon";
+import Cleaning from "./pages/services/Cleaning";
+import Plumbing from "./pages/services/plumbing";
+import Booking from "./pages/Booking";
 
 
 
@@ -47,6 +51,10 @@ export default function App() {
 
             <Route path="/signup" element={authUser ? <Home /> : <SignUp />} />
             <Route path="/home" element={authUser ? <Home />:<LoginAsUser />} />
+            <Route path="salon" element={<Salon/>} />
+            <Route path="cleaning" element={<Cleaning/>} />
+            <Route path="plumbing" element={<Plumbing/>} />
+            <Route path="booking" element={<Booking/>} />
             <Route path="*" element={<NotFound/>}/>
        </Routes>
     </>

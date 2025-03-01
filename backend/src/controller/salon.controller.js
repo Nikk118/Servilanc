@@ -37,11 +37,9 @@ const addSalonService=asyncHandler(async(req,res)=>{
 })
 
 const allSalonService=asyncHandler(async(req,res)=>{
-    const admin=req.admin
-    if (!admin) {
-        return res.status(404).json({message:"invalid access"})
-    }
+   
     const salon= await Salon.find()
+    console.log("salon",salon)
     return res.status(200).json({message:"all fetched successfully",salon})
 })  
 

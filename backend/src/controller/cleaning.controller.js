@@ -37,10 +37,7 @@ const addCleaningService=asyncHandler(async(req,res)=>{
 })
 
 const allCleaningService=asyncHandler(async(req,res)=>{
-    const admin=req.admin
-    if (!admin) {
-        return res.status(404).json({message:"invalid access"})
-    }
+    
     const cleaning= await Cleaning.find()
     return res.status(200).json({message:"all fetched successfully",cleaning})
 })  

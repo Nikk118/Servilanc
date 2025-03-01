@@ -6,7 +6,7 @@ const router=Router()
 
 router.route("/addSalonService").post(verifyAdmin,upload.single("image_url"),addSalonService)
 
-router.route("/allSalonService").get(verifyAdmin,allSalonService)
+router.route("/allSalonService").get(allSalonService)
 
 router.route("/removeSalonService/:salonId").delete(verifyAdmin,removeSalonService)
 

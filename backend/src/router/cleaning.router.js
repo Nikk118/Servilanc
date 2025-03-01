@@ -6,7 +6,7 @@ const router=Router()
 
 router.route("/addCleaningService").post(verifyAdmin,upload.single("image_url"),addCleaningService)
 
-router.route("/allCleaningService").get(verifyAdmin,allCleaningService)
+router.route("/allCleaningService").get(allCleaningService)
 
 router.route("/removeCleaningService/:cleaningId").delete(verifyAdmin,removeCleaningService)
 
