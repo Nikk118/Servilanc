@@ -37,10 +37,7 @@ const addPlumbingService=asyncHandler(async(req,res)=>{
 })
 
 const allPlumbingService=asyncHandler(async(req,res)=>{
-    const admin=req.admin
-    if (!admin) {
-        return res.status(404).json({message:"invalid access"})
-    }
+   
     const plumbing= await Plumbing.find()
     return res.status(200).json({message:"all fetched successfully",plumbing})
 })  

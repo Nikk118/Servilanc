@@ -7,7 +7,7 @@ const router=Router()
 
 router.route("/addPlumbingService").post(verifyAdmin,upload.single("image_url"),addPlumbingService)
 
-router.route("/allPlumbingService").get(verifyAdmin,allPlumbingService)
+router.route("/allPlumbingService").get(allPlumbingService)
 
 router.route("/removePlumbingService/:plumbingId").delete(verifyAdmin,removePlumbingService)
 

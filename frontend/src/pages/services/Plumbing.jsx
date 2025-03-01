@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstant } from "../../lib/axios";
 import { useNavigate } from "react-router-dom";
+import { useBookingStore } from "../../store/useBookingStore";
 
 function Plumbing() {
   const [services, setServices] = useState([]);
   const navigate = useNavigate();
-
+    const {setSelectedService}=useBookingStore();
+  const handleSubmit=(service)=>{
+    setSelectedService(service)
+    navigate("/booking")
+  }
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -47,11 +52,11 @@ function Plumbing() {
               <p className="text-lg font-bold text-green-600 mt-2">₹{service.price}</p>
               
               <button
-  onClick={() => navigate("/booking", { state: { service } })}
+  onClick={() => handleSubmit(service)}
   className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
 >
   Book Now
-</button>;
+</button>
             </div>
           </div>
           ))

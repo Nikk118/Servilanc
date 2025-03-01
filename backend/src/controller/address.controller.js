@@ -48,7 +48,7 @@ const updateAddress=asyncHandler(async(req,res)=>{
     const user = req.user
 
     const {street,city,state,pincode,mobileNumber}=req.body
-
+    
     if( !street||!city || !state  || !pincode || !mobileNumber){
         return res.status(400).json({message:"All fields are required"})
     }
