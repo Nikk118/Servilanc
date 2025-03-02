@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect ,useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/Landing";
 import SignUp from "./pages/SignUp";
@@ -21,10 +21,14 @@ import Booking from "./pages/Booking";
 
 
 
+
+
+
 export default function App() {
   const { authUser, checkAuth } = useAuthStore();
   const {authProfessional,checkProfessional}=useProfessionalStore()
   const {authAdmin,checkAdmin}=useAdminStore()
+  const [selectedMenu, setSelectedMenu] = useState("Admin Dashboard");
 
   useEffect(() => {
     checkAuth();
@@ -41,6 +45,7 @@ export default function App() {
     {authUser && <Navbar />}
       
       <Toaster position="top-center" reverseOrder={false} />
+      
        <Routes>
           <Route path="/" element={authUser ? <Home /> : <LandingPage />} />
             <Route path="/login" element={authUser ? <Home /> : <LoginAsUser />} />
@@ -57,6 +62,10 @@ export default function App() {
             <Route path="booking" element={<Booking/>} />
             <Route path="*" element={<NotFound/>}/>
        </Routes>
+
+       {/* <AdminHomeError>
+        <AdminHome selectedMenu={selectedMenu} />
+       </AdminHomeError> */}
     </>
   );
 }

@@ -25,7 +25,7 @@ const adminSignUp= asyncHandler(async(req,res)=>{
     }
 
     const admin= await Admin.create({
-      username,
+        username,
         email,
         password,
         phone
@@ -68,6 +68,7 @@ const loginAdmin=asyncHandler(async(req,res)=>{
     console.log("1")
     if (!loggedinadmin) {
       return res.status(400).json({ message: "Invalid credentials" });
+      
     }
     console.log("2")
     
