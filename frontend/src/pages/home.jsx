@@ -1,11 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import {  FaUserCircle, FaWrench, FaBroom, FaCut } from "react-icons/fa";
-import { useAuthStore } from "../store/userAuthStore";
-import { LogOut } from "lucide-react";
+import React, { use } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaWrench, FaBroom, FaCut } from "react-icons/fa";
+
 
 export default function Home() {
   
+    const navigate=useNavigate()
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       {/* Navbar */}
@@ -21,33 +21,48 @@ export default function Home() {
 
       {/* Services Section */}
       <section className="p-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[{
-          title: "Plumbing",
-          desc: "Get expert plumbers for all your needs.",
-          icon: <FaWrench size={40} className="text-blue-400" />, 
-          image: "plumbing.jpg"
-        }, {
-          title: "Cleaning",
-          desc: "Top-rated cleaners for your home and office.",
-          icon: <FaBroom size={40} className="text-blue-400" />, 
-          image: "cleaning.jpg"
-        }, {
-          title: "Salon",
-          desc: "Beauty & grooming services at your doorstep.",
-          icon: <FaCut size={40} className="text-blue-400" />, 
-          image: "salon.jpg"
-        }].map((service, index) => (
-          <div key={index} className="relative rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition">
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-6">
-              {service.icon}
-              <h3 className="text-2xl font-semibold mt-4">{service.title}</h3>
-              <p className="text-gray-300 mt-2 text-center">{service.desc}</p>
-              <button className="mt-4 px-5 py-3 bg-blue-500 text-lg rounded-xl hover:bg-blue-600 transition">Book Now</button>
-            </div>
-            <img src={`/images/${service.image}`} alt={service.title} className="w-full h-64 object-cover" />
-          </div>
-        ))}
+  
+  {/* Plumbing Service */}
+  <div className="relative rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+    <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-6">
+      <FaWrench size={40} className="text-blue-400" />
+      <h3 className="text-2xl font-semibold mt-4">Plumbing</h3>
+      <p className="text-gray-300 mt-2 text-center">Get expert plumbers for all your needs.</p>
+      <button onClick={()=>navigate("/plumbing")} className="mt-4 px-5 py-3 bg-blue-500 text-lg rounded-xl hover:bg-blue-600 transition">
+        Book Now
+      </button>
+    </div>
+    <img src="/images/plumbing.jpg" alt="Plumbing" className="w-full h-64 object-cover" />
+  </div>
+
+  {/* Cleaning Service */}
+  <div className="relative rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+    <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-6">
+      <FaBroom size={40} className="text-blue-400" />
+      <h3 className="text-2xl font-semibold mt-4">Cleaning</h3>
+      <p className="text-gray-300 mt-2 text-center">Top-rated cleaners for your home and office.</p>
+      <button onClick={()=>navigate("/cleaning")} className="mt-4 px-5 py-3 bg-blue-500 text-lg rounded-xl hover:bg-blue-600 transition">
+        Book Now
+      </button>
+    </div>
+    <img src="/images/cleaning.jpg" alt="Cleaning" className="w-full h-64 object-cover" />
+  </div>
+
+  {/* Salon Service */}
+  <div className="relative rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+    <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-6">
+      <FaCut size={40} className="text-blue-400" />
+      <h3 className="text-2xl font-semibold mt-4">Salon</h3>
+      <p className="text-gray-300 mt-2 text-center">Beauty & grooming services at your doorstep.</p>
+      <button  onClick={()=>navigate("/salon")}className="mt-4 px-5 py-3 bg-blue-500 text-lg rounded-xl hover:bg-blue-600 transition">
+        Book Now
+      </button>
+    </div>
+    <img src="/images/salon.jpg" alt="Salon" className="w-full h-64 object-cover" />
+  </div>
+
       </section>
+
 
       {/* Customer Feedback */}
       <section className="p-10">
