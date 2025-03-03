@@ -29,12 +29,13 @@ function Cleaning() {
   return (
     <div className="py-10 px-5 bg-gray-100">
       <h1 className="text-4xl text-center text-black mb-10 font-semibold">
-        Available cleaning services:
+        Available Cleaning services:
       </h1>
 
       <div className="min-h-[80vh] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-gray-100">
         {services.length > 0 ? (
           services.map((service) => (
+            
             <div
             key={service._id}
             className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all hover:scale-105"
@@ -52,14 +53,13 @@ function Cleaning() {
               <p className="text-gray-600">{service.description}</p>
               <p className="text-sm text-gray-500 mt-1">{service.duration}</p>
               <p className="text-lg font-bold text-green-600 mt-2">₹{service.price}</p>
-              
               <button
-              
-  onClick={()=>handleSubmit(service)}
+  onClick={() => handleSubmit(service)}
   className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
 >
   Book Now
 </button>
+             
             </div>
           </div>
           ))

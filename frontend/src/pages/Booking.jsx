@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useBookingStore } from "../store/useBookingStore";
+import { useNavigate } from "react-router-dom";
 
 function Booking() {
-  const { selectedService, setSelectedService,craeteAddress, updateAddress, userAddress, getAddress } = useBookingStore();
+  const navigate=useNavigate();
+  const { selectedService, setSelectedService,craeteAddress, createBooking,updateAddress, userAddress, getAddress } = useBookingStore();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [booking, setBooking] = useState({ bookingDate: "", bookingTime: "" });
+  const [isBooked, setIsBooked] = useState(false);
+  
 
   const [address, setAddress] = useState({
     street: "",
@@ -45,13 +50,24 @@ function Booking() {
     setIsUpdateModalOpen(true);
   };
 
+  const makeBooking=(e)=>{
+    e.preventDefault()
+    try {
+       createBooking(booking);
+      setIsBooked(true); // ✅ Update UI state
+  } catch (error) {
+      console.error("Booking failed:", error);
+     
+  }
+  }
+
   useEffect(() => {
     if (selectedService) {
       localStorage.setItem("selectedService", JSON.stringify(selectedService));
     }
   }, [selectedService]);
 
-  // ✅ Load selected service from localStorage on page load
+ 
   useEffect(() => {
     const storedService = localStorage.getItem("selectedService");
     if (storedService) {
@@ -64,7 +80,28 @@ function Booking() {
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5">
+    isBooked ? (
+      <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5">
+      <div className="bg-white text-center shadow-lg rounded-lg p-8 w-full max-w-lg">
+        <h2 className="text-2xl font-bold text-green-600">🎉 Booking Confirmed!</h2>
+        <p className="text-gray-600 mt-2">
+          Your service is scheduled for {booking.bookingDate} at {booking.bookingTime}.
+        </p>
+        <p className="text-sm text-gray-500 mt-2">
+          *If a professional does not accept your request, it will be automatically canceled.
+        </p>
+        <button
+          onClick={() => navigate("/home")}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          Book Another Service
+        </button>
+      </div>
+    </div>
+    
+    
+  ) : (
+    <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5"> 
       <div className="bg-white shadow-lg rounded-lg p-8 flex flex-col md:flex-row w-full max-w-4xl">
         <div className="md:w-1/2 p-4">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Book Your Service</h2>
@@ -89,16 +126,24 @@ function Booking() {
 
           <div>
             <h3 className="text-lg font-semibold mb-2">Select Booking Date & Time</h3>
-            <form className="space-y-3">
-              <input type="date" className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300" />
-              <select className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300">
+            <form  onSubmit={makeBooking} className="space-y-3">
+              <input 
+              type="date" 
+              className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300" 
+              value={booking.bookingDate}
+              onChange={(e) => setBooking({ ...booking, bookingDate: e.target.value })}/>
+              <select 
+              className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
+              value={booking.bookingTime}
+              onChange={(e) => setBooking({ ...booking, bookingTime: e.target.value })}>
+               <option value="">Select Time</option>  
                 <option value="10:00 AM">10:00 AM</option>
                 <option value="12:00 PM">12:00 PM</option>
                 <option value="02:00 PM">02:00 PM</option>
                 <option value="04:00 PM">04:00 PM</option>
                 <option value="06:00 PM">06:00 PM</option>
               </select>
-              <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
+              <button  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
                 Confirm Booking
               </button>
             </form>
@@ -164,8 +209,12 @@ function Booking() {
           </div>
         </div>
       )}
+    
     </div>
-  );
+  )
+);
+  
+ 
 }
 
 export default Booking;

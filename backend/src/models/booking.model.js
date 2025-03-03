@@ -18,6 +18,10 @@ const bookingSchema = new mongoose.Schema(
             required: true
         },
         bookingDate: {
+            type: Date,
+            required: true
+        },
+        bookingTime: {
             type: String,
             required: true
         },

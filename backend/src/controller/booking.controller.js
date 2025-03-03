@@ -22,7 +22,8 @@ const findServiceById = async (serviceId) => {
   };
 
 const addBooking=asyncHandler(async(req,res)=>{
-    const {bookingDate}=req.body 
+    console.log("samna ye aaya",req.body)
+    const {bookingDate,bookingTime}=req.body 
     const user=req.user
     const {serviceId}=req.params
 
@@ -40,7 +41,7 @@ const addBooking=asyncHandler(async(req,res)=>{
     }
     
     
-    if(!bookingDate){
+    if(!bookingDate || !bookingTime){
         return res.status(400).json({message:"All fields are required"})    
     }
 
@@ -50,6 +51,7 @@ const addBooking=asyncHandler(async(req,res)=>{
         user:user._id,
         service:serviceId,
         bookingDate,
+        bookingTime,
         totalAmount:service.price
     })
 
