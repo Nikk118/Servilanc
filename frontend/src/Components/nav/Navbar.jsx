@@ -1,12 +1,17 @@
 import React from "react";
 import { useAuthStore } from "../../store/userAuthStore";
 import { LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 
 function Navbar() {
   const { logout, authUser } = useAuthStore();
+  const navigate=useNavigate()
 
+  const handleLogout=()=>{
+    logout();
+    navigate("/login")
+  }
   return (
     <nav className="bg-gray-800 p-4 shadow-lg flex justify-between items-center">
       {/* Logo */}
@@ -30,12 +35,12 @@ function Navbar() {
       {/* User Profile & Logout */}
       <div className="flex items-center space-x-6 text-white">
         <Link to="/profile" className="hover:text-blue-400">
-          <FaUserCircle size={26} />
+          <FaUserCircle size={26} /> 
         </Link>
         {authUser && (
           <button
             className="flex gap-2 items-center hover:text-red-400 transition"
-            onClick={async () => await logout()}
+            onClick={handleLogout}
           >
             <LogOut className="size-5" />
             <span className="hidden sm:inline">Logout</span>

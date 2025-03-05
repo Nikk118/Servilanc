@@ -38,23 +38,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 
-app.get("/api/admin/stats", async (req, res) => {
-    const { category } = req.query;
-    const totalServices = await Service.countDocuments({ category });
-    const completedServices = await Service.countDocuments({ category, status: "completed" });
-    const pendingServices = totalServices - completedServices;
-    const totalEarnings = await Service.aggregate([
-      { $match: { category, status: "completed" } },
-      { $group: { _id: null, total: { $sum: "$price" } } },
-    ]);
-  
-    res.json({
-      totalServices,
-      completedServices,
-      pendingServices,
-      earnings: totalEarnings.length > 0 ? `₹${totalEarnings[0].total}` : "₹0",
-    });
-  });
+
 
 
 app.use(express.static("public"))
@@ -68,3 +52,21 @@ app.use("/api/cleaning",cleaningRouter)
 app.use("/api/plumbing",plumbingRouter)
 app.use("/api/booking",bookingRouter)
 app.use("/api/professional",professionalRouter)
+
+// app.get("/api/admin/stats", async (req, res) => {
+//     const { category } = req.query;
+//     const totalServices = await Service.countDocuments({ category });
+//     const completedServices = await Service.countDocuments({ category, status: "completed" });
+//     const pendingServices = totalServices - completedServices;
+//     const totalEarnings = await Service.aggregate([
+//       { $match: { category, status: "completed" } },
+//       { $group: { _id: null, total: { $sum: "$price" } } },
+//     ]);
+  
+//     res.json({
+//       totalServices,
+//       completedServices,
+//       pendingServices,
+//       earnings: totalEarnings.length > 0 ? `₹${totalEarnings[0].total}` : "₹0",
+//     });
+//   });

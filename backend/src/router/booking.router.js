@@ -7,7 +7,7 @@ const router=Router()
 
 router.route("/addBooking/:serviceId").post(verifyJWT,addBooking)
 
-router.route("/getBooking").get(verifyJWT,getBooking)  
+router.route("/getBookings").get(verifyJWT,getBooking)  
 
 router.route("/cancleBooking/:bookingId").patch(verifyJWT,cancleBooking)
 

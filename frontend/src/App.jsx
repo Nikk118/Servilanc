@@ -18,6 +18,9 @@ import Salon from "./pages/services/salon";
 import Cleaning from "./pages/services/Cleaning";
 import Plumbing from "./pages/services/plumbing";
 import Booking from "./pages/Booking";
+import Profile from "./pages/ProfilePage";
+import Userdetails from "./pages/Userdetails";
+import UserBookings from "./pages/UserBookings";
 
 
 
@@ -55,6 +58,11 @@ export default function App() {
             <Route path="/admin/home" element={authAdmin?<AdminHome />:<LoginAdmin />} />
 
             <Route path="/signup" element={authUser ? <Home /> : <SignUp />} />
+            <Route path="/profile" element={<Profile />}>
+               <Route path="userDetails" element={<Userdetails />} />
+               <Route path="userBookings" element={<UserBookings />} />
+            </Route>
+
             <Route path="/home" element={authUser ? <Home />:<LoginAsUser />} />
             <Route path="salon" element={<Salon/>} />
             <Route path="cleaning" element={<Cleaning/>} />
