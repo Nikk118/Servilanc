@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useAuthStore } from "../store/userAuthStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 
 export default function SignupUser() {

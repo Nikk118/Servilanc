@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { axiosInstant } from "../lib/axios";
+
 import toast from "react-hot-toast";
 
-const BASE_URL = "http://localhost:3000/api";
+
 
 export const useUserBookings = create((set) => ({
     userBookings: null,
@@ -10,11 +11,11 @@ export const useUserBookings = create((set) => ({
     getUserBookings: async () => {
         set({ isCheckingUserBookings: true });
         try {
-            console.log("gfiugs")
+            console.log("in store")
             const res = await axiosInstant.get("/booking/getBookings");
-            set({ userBookings: res.data });
+            set({ userBookings: res.data.bookings });
 
-            // toast.success("Logged in successfully");
+            
         } catch (error) {
             console.error("Authentication error:", error);
             set({ userBookings: null });
@@ -22,5 +23,20 @@ export const useUserBookings = create((set) => ({
             set({ isCheckingUserBookings: false });
         }
     },
+
+    cancelBooking: async (bookingId) => {
+        try {
+            const res=await axiosInstant.patch(`/booking/cancleBooking/${bookingId}`);
+            toast.success("Booking cancle successfully");
+            set((state) => ({
+                userBookings: state.userBookings
+                    ? state.userBookings.filter((booking) => booking._id !== bookingId)
+                    : [] 
+            }));
+        } catch (error) {
+            console.error("Authentication error:", error);
+            set({ userBookings: null });
+        }
+    }
 }));
     

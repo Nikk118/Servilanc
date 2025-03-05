@@ -6,7 +6,7 @@ import LoginAdmin from "./pages/LoginAsAdmin";
 import LoginAsUser from "./pages/LoginAsUser";
 import LoginProfessional from "./pages/LoginProfessional"
 import Home from "./pages/home";
-import { useAuthStore } from "./store/userAuthStore";
+import { useAuthStore } from "./store/useAuthStore";
 import Navbar from "./Components/nav/Navbar";
 import { Toaster } from "react-hot-toast";
 import { useProfessionalStore } from "./store/useProfessionalStore";
@@ -59,7 +59,8 @@ export default function App() {
 
             <Route path="/signup" element={authUser ? <Home /> : <SignUp />} />
             <Route path="/profile" element={<Profile />}>
-               <Route path="userDetails" element={<Userdetails />} />
+            <Route index element={<Userdetails />} />
+               <Route  path="userDetails"  element={<Userdetails />} />
                <Route path="userBookings" element={<UserBookings />} />
             </Route>
 

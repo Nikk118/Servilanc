@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 function ProfilePage() {
   return (
@@ -8,20 +8,27 @@ function ProfilePage() {
 
       {/* Inner Navigation */}
       <nav className="bg-white p-3 rounded-xl flex justify-center gap-6 shadow-md">
-  <Link
-    to="userDetails"
-    className="px-4 py-2 text-gray-700 font-medium rounded-lg transition duration-300 hover:bg-blue-500 hover:text-white"
-  >
-    User Details
-  </Link>
-  <Link
-    to="userBookings"
-    className="px-4 py-2 text-gray-700 font-medium rounded-lg transition duration-300 hover:bg-blue-500 hover:text-white"
-  >
-    Bookings
-  </Link>
-</nav>
-
+        <NavLink
+          to="userDetails"
+          className={({ isActive }) =>
+            `px-4 py-2 font-medium rounded-lg transition duration-300 ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-blue-500 hover:text-white"
+            }`
+          }
+        >
+          User Details
+        </NavLink>
+        <NavLink
+          to="userBookings"
+          className={({ isActive }) =>
+            `px-4 py-2 font-medium rounded-lg transition duration-300 ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-blue-500 hover:text-white"
+            }`
+          }
+        >
+          Bookings
+        </NavLink>
+      </nav>
 
       {/* Nested Content */}
       <div className="mt-4 p-4 bg-white rounded-lg shadow">

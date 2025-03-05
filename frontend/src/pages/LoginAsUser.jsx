@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/userAuthStore"; // Import Zustand store
+import { useAuthStore } from "../store/useAuthStore"; // Import Zustand store
 import { motion } from "framer-motion";
 
 export default function LoginUser() {

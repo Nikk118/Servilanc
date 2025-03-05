@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuthStore } from "../../store/userAuthStore";
+import { useAuthStore } from "../../store/useAuthStore";
 import { LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";

@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { axiosInstant } from "../lib/axios.js";
 import toast from "react-hot-toast";
 
-const BASE_URL = "http://localhost:3000/api";
-// http://localhost:3000/api/user/login
+
 
 export const useAuthStore = create((set) => ({
   authUser: null,
@@ -17,7 +16,7 @@ export const useAuthStore = create((set) => ({
   checkAuth: async () => {
     try {
       const res = await axiosInstant.get("/user/getCurrentUser");
-      set({ authUser: res.data });
+      set({ authUser: res.data.user });
     } catch (error) {
       console.error("Authentication error:", error);
       set({ authUser: null });

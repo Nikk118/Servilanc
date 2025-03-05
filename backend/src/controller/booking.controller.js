@@ -58,11 +58,42 @@ const addBooking=asyncHandler(async(req,res)=>{
     return res.status(201).json({message:"Booking created successfully",booking:newBooking})
 }) 
 
-const getBooking=asyncHandler(async(req,res)=>{
-    const user=req.user
-    const bookings=await Booking.find({user:user._id})
-    return res.status(200).json({message:"Booking found successfully",bookings})
-})
+const getBooking = asyncHandler(async (req, res) => {
+    try {
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        // Fetch user bookings
+        const bookings = await Booking.find({ user: user._id });
+
+        if (!bookings.length) {
+            return res.status(404).json({ message: "No bookings found" });
+        }
+
+        // Populate service details
+        const populatedBookings = await Promise.all(
+            bookings.map(async (booking) => {
+                const serviceDetails = await findServiceById(booking.service);
+                return {
+                    ...booking.toObject(),
+                    service: serviceDetails || "Service not found",
+                };
+            })
+        );
+
+        return res.status(200).json({
+            message: "Bookings found successfully",
+            bookings: populatedBookings, // renamed key to be more intuitive
+        });
+
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
 
 const cancleBooking=asyncHandler(async(req,res)=>{
     const {bookingId}=req.params
@@ -72,7 +103,7 @@ const cancleBooking=asyncHandler(async(req,res)=>{
     }
     const booking=await Booking.findByIdAndUpdate(
         bookingId,
-        {status:"cancled"},
+        {status:"canceled"},
         {new:true}
     )
 
