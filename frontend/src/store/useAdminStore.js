@@ -12,7 +12,7 @@ export const useAdminStore = create((set) => ({
     checkAdmin: async () => {
         set({ isCheckingAuthAdmin: true });
         try {
-          const res = await axiosInstant.get("/api/admin/getAdmin");
+          const res = await axiosInstant.get("/admin/getAdmin");
           set({ authAdmin: res.data });
           toast.success("Logged in successfully");
         } catch (error) {
@@ -25,7 +25,7 @@ export const useAdminStore = create((set) => ({
       adminLogin: async (data) => {
         set({ isAdminLogin: true });
         try {
-          const res = await axiosInstant.post("/api/admin/login", data);
+          const res = await axiosInstant.post("/admin/login", data);
           set({ authAdmin: res.data });
           toast.success("Logged in successfully");
         } catch (error) {
@@ -37,7 +37,7 @@ export const useAdminStore = create((set) => ({
       } ,
       adminLogout: async () => {
         try {
-          await axiosInstant.get("/api/admin/logout");
+          await axiosInstant.get("/admin/logout");
           set({ authAdmin: null });
           toast.success("Logged out successfully");
         } catch (error) {
