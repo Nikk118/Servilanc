@@ -2,12 +2,16 @@ import { create } from "zustand";
 import { axiosInstant } from "../lib/axios";
 import toast from "react-hot-toast";
 
-const BASE_URL = "http://localhost:3000/api";
+
+
 
 export const useAdminStore = create((set) => ({
     authAdmin: null,
     isCheckingAuthAdmin: true,
-    isAdminLogin: false,    
+    isAdminLogin: false,   
+    servicesStats:null ,
+    userstats:null,
+    bookingsStats :null,
     
     checkAdmin: async () => {
         set({ isCheckingAuthAdmin: true });
@@ -44,6 +48,35 @@ export const useAdminStore = create((set) => ({
           console.error("Logout error:", error);
           toast.error(error?.response?.data?.message || "Logout failed");
         }
+      },
+      setServicesStats:async()=>{
+        try {
+            const res = await axiosInstant.get("/admin/totalServices");
+            set({ servicesStats: res.data.Services });
+            console.log("admin store",res.data.Services)
+          } catch (error) {
+            console.error("Error fetching admin stats:", error);
+          }
+      },
+
+      setUserStats:async()=>{
+        try {
+            const res = await axiosInstant.get("/admin/userstats");
+            set({ userstats: res.data });
+            console.log("admin users",res.data)
+          } catch (error) {
+            console.error("Error fetching admin stats:", error);
+          }
+      },
+
+      setBookingsStats:async()=>{
+        try {
+            const res = await axiosInstant.get("/admin/bookingsStats");
+            set({ bookingsStats: res.data });
+            console.log("admin booking stats",res.data)
+          } catch (error) {
+            console.error("Error fetching admin stats:", error);
+          }
       },
   }));      
     

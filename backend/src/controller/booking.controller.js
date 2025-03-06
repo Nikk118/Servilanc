@@ -103,7 +103,7 @@ const cancleBooking=asyncHandler(async(req,res)=>{
     }
     const booking=await Booking.findByIdAndUpdate(
         bookingId,
-        {status:"canceled"},
+        {status:"Cancelled"},
         {new:true}
     )
 
@@ -119,7 +119,7 @@ const accpetBooking=asyncHandler(async(req,res)=>{
     }
     const booking=await Booking.findByIdAndUpdate(
         bookingId,
-        {status:"accepted",
+        {status:"Accepted",
             professional:professionalId
             
         },
@@ -138,7 +138,7 @@ const completeBooking=asyncHandler(async(req,res)=>{
     }
     const booking=await Booking.findByIdAndUpdate(
         bookingId,
-        {status:"completed"},
+        {status:"Completed"},
         {new:true}
     )
 

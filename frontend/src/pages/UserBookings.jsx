@@ -11,7 +11,7 @@ function UserBookings() {
   }, [getUserBookings]);
 
   // Filter bookings that are not canceled
-  const activeBookings = userBookings?.filter(booking => booking.status !== "canceled") || [];
+  const activeBookings = userBookings?.filter(booking => booking.status !== "Cancelled") || [];
 
   return (
     <div className="max-w-3xl mx-auto p-4 bg-white rounded-lg shadow-md">

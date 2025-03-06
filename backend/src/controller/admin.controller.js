@@ -2,6 +2,11 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 import { Admin } from "../models/admin.model.js";
 import { genrateToken } from "../utils/generateToken.js";
 import { Professional } from "../models/professional.model.js";
+import {Salon} from "../models/Salon.model.js"
+import { Cleaning } from "../models/cleaning.model.js"
+import { Plumbing } from "../models/Plumbing.model.js"
+import { User } from "../models/user.model.js"
+import {Booking} from "../models/booking.model.js"
 
 
 const adminSignUp= asyncHandler(async(req,res)=>{
@@ -162,7 +167,67 @@ const addProfessional= asyncHandler(async(req,res)=>{
         
         
     })
+
+const totalServices=asyncHandler(async(req,res)=>{
+      const salon= await Salon.countDocuments()
+      const cleaning= await Cleaning.countDocuments()
+      const plumbing= await Plumbing.countDocuments()
+
+      const totalCount=salon+cleaning+plumbing
+      const Services={salon,cleaning,plumbing,totalCount}
+      return res.status(200).json({message:"total services",Services})
+})
+
+const userstats = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.countDocuments(); // ✅ Await added
+    const professionals = await Professional.countDocuments(); // ✅ Await added
+
+    return res.status(200).json({
+      message: "User stats",
+      users,
+      professionals
+    });
+  } catch (error) {
+    console.error("Error fetching user stats:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+const bookingsStats = asyncHandler(async (req, res) => {
+  try {
+    const bookingsCount = await Booking.countDocuments(); // Total bookings
+
+    const statusCounts = await Booking.aggregate([
+      { $group: { _id: "$status", count: { $sum: 1 } } }
+    ]);
+
+    // Convert aggregation result into a key-value object
+    const statusMap = statusCounts.reduce((acc, { _id, count }) => {
+      acc[_id] = count;
+      return acc;
+    }, {});
+
+    return res.status(200).json({
+      message: "Bookings stats",
+      totalBookings: bookingsCount,
+      Pending: statusMap["Pending"] || 0,
+      Cancelled: statusMap["Cancelled"] || 0,
+      Completed: statusMap["Completed"] || 0,
+      Accepted: statusMap["Accepted"] || 0,
+    });
+  } catch (error) {
+    console.error("Error fetching booking stats:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+
 export {
+  bookingsStats,
+  userstats,
+  totalServices,
     adminSignUp,
     getAdmin,
     loginAdmin,
