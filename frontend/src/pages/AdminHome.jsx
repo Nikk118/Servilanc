@@ -39,10 +39,13 @@ function AdminHome() {
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
-      <Sidebar setSelectedMenu={setSelectedMenu} selectedMenu={selectedMenu} />
+      {/* Sidebar with a fixed width */}
+      <div className="w-1/5 bg-gray-800 min-h-screen">
+        <Sidebar setSelectedMenu={setSelectedMenu} selectedMenu={selectedMenu} />
+      </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="w-4/5 flex flex-col">
         {/* Navbar */}
         <div className="bg-gray-800 px-6 py-4 flex justify-between items-center shadow-lg">
           <h2 className="text-lg font-semibold">{selectedMenu}</h2>
@@ -62,8 +65,12 @@ function AdminHome() {
           </div>
         </div>
 
-        {/* Page Content */}
-        <div className="flex-1 p-6">{renderContent()}</div>
+        {/* Page Content with Padding and Centered Layout */}
+        <div className="flex-1 p-6 overflow-y-auto">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+            {renderContent()}
+          </div>
+        </div>
       </div>
     </div>
   );

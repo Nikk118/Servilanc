@@ -37,7 +37,7 @@ export default function App() {
     checkAuth();
     checkProfessional();
     checkAdmin();
-  }, [checkAuth, checkProfessional,checkAdmin]);
+},[]);
 
   return (
     <>
@@ -49,28 +49,45 @@ export default function App() {
       
       <Toaster position="top-center" reverseOrder={false} />
       
-       <Routes>
-          <Route path="/" element={authUser ? <Home /> : <LandingPage />} />
-            <Route path="/login" element={authUser ? <Home /> : <LoginAsUser />} />
-            <Route path="/professional/login" element={authUser ? <Home /> : <LoginProfessional />} />
-            <Route path="/professional/home" element={authProfessional?<ProfessionalHome/>:<LoginProfessional />}/>
-            <Route path="/admin/login" element={authAdmin?<AdminHome />:<LoginAdmin />} />
-            <Route path="/admin/home" element={authAdmin?<AdminHome />:<LoginAdmin />} />
+      <Routes>
+  {/* Home Route - Redirects Based on Auth State */}
+  <Route path="/" 
+    element={authAdmin ? <AdminHome /> 
+           : authProfessional ? <ProfessionalHome /> 
+           : authUser ? <Home /> 
+           : <LandingPage />} 
+  />
 
-            <Route path="/signup" element={authUser ? <Home /> : <SignUp />} />
-            <Route path="/profile" element={<Profile />}>
-            <Route index element={<Userdetails />} />
-               <Route  path="userDetails"  element={<Userdetails />} />
-               <Route path="userBookings" element={<UserBookings />} />
-            </Route>
+  {/* User Authentication Routes */}
+  <Route path="/login" element={authUser ? <Home /> : <LoginAsUser />} />
+  <Route path="/signup" element={authUser ? <Home /> : <SignUp />} />
+  <Route path="/home" element={authUser ? <Home /> : <LoginAsUser />} />
 
-            <Route path="/home" element={authUser ? <Home />:<LoginAsUser />} />
-            <Route path="salon" element={<Salon/>} />
-            <Route path="cleaning" element={<Cleaning/>} />
-            <Route path="plumbing" element={<Plumbing/>} />
-            <Route path="booking" element={<Booking/>} />
-            <Route path="*" element={<NotFound/>}/>
-       </Routes>
+  {/* Professional Authentication Routes */}
+  <Route path="/professional/login" element={authProfessional ? <ProfessionalHome /> : <LoginProfessional />} />
+  <Route path="/professional/home" element={authProfessional ? <ProfessionalHome /> : <LoginProfessional />} />
+
+  {/* Admin Authentication Routes */}
+  <Route path="/admin/login" element={authAdmin ? <AdminHome /> : <LoginAdmin />} />
+  <Route path="/admin/home" element={authAdmin ? <AdminHome /> : <LoginAdmin />} />
+
+  {/* Profile Page with Nested Routes */}
+  <Route path="/profile" element={<Profile />}>
+    <Route index element={<Userdetails />} />
+    <Route path="userDetails" element={<Userdetails />} />
+    <Route path="userBookings" element={<UserBookings />} />
+  </Route>
+
+  {/* Service Routes */}
+  <Route path="/salon" element={<Salon />} />
+  <Route path="/cleaning" element={<Cleaning />} />
+  <Route path="/plumbing" element={<Plumbing />} />
+  <Route path="/booking" element={<Booking />} />
+
+  {/* 404 Page */}
+  <Route path="*" element={<NotFound />} />
+      </Routes>
+
 
        {/* <AdminHomeError>
         <AdminHome selectedMenu={selectedMenu} />

@@ -14,18 +14,27 @@ export const useAdminStore = create((set) => ({
     bookingsStats :null,
     
     checkAdmin: async () => {
-        set({ isCheckingAuthAdmin: true });
-        try {
-          const res = await axiosInstant.get("/admin/getAdmin");
-          set({ authAdmin: res.data });
-          // toast.success("Logged in successfully");
-        } catch (error) {
-          console.error("Authentication error:", error);
-          set({ authAdmin: null }); 
-        } finally {
-          set({ isCheckingAuthAdmin: false });
+      set({ isCheckingAuthAdmin: true });
+    
+      try {
+        const res = await axiosInstant.get("/admin/getAdmin");
+        console.log("Admin API Response:", res.data);
+    
+        if (res.data && res.data.admin) {
+          set({ authAdmin: res.data.admin });
+          console.log("Updated authAdmin:", res.data.admin);
+        } else {
+          set({ authAdmin: null });
+          console.log("No admin data found, setting authAdmin to null");
         }
-      },   
+      } catch (error) {
+        console.error("Authentication error:", error);
+        set({ authAdmin: null });
+      } finally {
+        set({ isCheckingAuthAdmin: false });
+      }
+    }
+,      
       adminLogin: async (data) => {
         set({ isAdminLogin: true });
         try {
