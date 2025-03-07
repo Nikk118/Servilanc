@@ -1,15 +1,21 @@
 import React, { useEffect } from "react";
 import { useAdminStore } from "../store/useAdminStore";
-import { FaCheckCircle, FaTimesCircle, FaClock, FaClipboardList } from "react-icons/fa";
+import { FaCheckCircle, FaTimesCircle, FaClock, FaClipboardList, FaTrash } from "react-icons/fa";
 
 function AllUsers() {
-  const { userStats, fetchUserStats } = useAdminStore();
+  const { userStats, fetchUserStats, removeUser } = useAdminStore();
 
   useEffect(() => {
     fetchUserStats();
     const interval = setInterval(fetchUserStats, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleDelete = (userId) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      removeUser(userId);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -24,7 +30,6 @@ function AllUsers() {
               key={user.user}
               className="relative bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-600 text-white transition-transform transform hover:scale-105"
             >
-              {/* User Info */}
               <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-gray-700 px-4 py-2 rounded-full text-sm font-semibold text-blue-300 shadow-lg">
                 {user.username}
               </div>
@@ -59,6 +64,13 @@ function AllUsers() {
                   </p>
                 </div>
               </div>
+
+              <button
+                onClick={() => handleDelete(user.user)}
+                className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2"
+              >
+                <FaTrash /> Delete User
+              </button>
             </div>
           ))
         ) : (

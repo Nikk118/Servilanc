@@ -287,7 +287,20 @@ const removeProfessional=asyncHandler(async(req,res)=>{
   }
 
 })
+
+const removeUser=asyncHandler(async(req,res)=>{
+  const {userId}=req.params
+  const user=await User.findByIdAndDelete(userId)
+  if(user){
+    return res.status(200).json({message:"user removed successfully"})
+  }else{
+    return res.status(500).json({message:"internal server error"})
+  }
+})
+
+
 export {
+  removeUser,
   removeProfessional,
   getAllUsersStats,
   getAllProfessionalStats,

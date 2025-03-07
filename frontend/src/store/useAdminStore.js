@@ -5,7 +5,8 @@ import toast from "react-hot-toast";
 
 
 
-export const useAdminStore = create((set) => ({
+
+export const useAdminStore = create((set,get) => ({
     authAdmin: null,
     isCheckingAuthAdmin: true,
     isAdminLogin: false,   
@@ -13,14 +14,34 @@ export const useAdminStore = create((set) => ({
     userstats:null,
     bookingsStats :null,
     isAddingProfessional: false,
-    userStats: null,
     professionalStats: null,
 
+    
+    removeUser: async (userId) => {
+      try {
+        await axiosInstant.delete(`/admin/removeUser/${userId}`);
+    
+        // Optimistically update the state
+        set((state) => ({
+          userStats: state.userStats ? state.userStats.filter(user => user.user !== userId) : [],
+        }));
+    
+        toast.success("User removed successfully");
+    
+        // Fetch updated user stats to ensure state consistency
+        get().fetchUserStats();
+      } catch (error) {
+        console.error(error);
+        toast.error("User removal failed");
+      }
+    },
+    
+    
     removeProfessional: async (professionalId) => {
       try {
         await axiosInstant.delete(`/admin/removeProfessional/${professionalId}`);
     
-        // Update professionalStats state after removal
+        
         set((state) => ({
           professionalStats: state.professionalStats.filter(
             (pro) => pro.professional !== professionalId
