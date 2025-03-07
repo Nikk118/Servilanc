@@ -11,7 +11,7 @@ import AllUsers from "../Components/AllUsers";
 import { useAdminStore } from "../store/useAdminStore";
 
 function AdminHome() {
-  const { adminLogout } = useAdminStore();
+  const { adminLogout, authAdmin } = useAdminStore();
   const [selectedMenu, setSelectedMenu] = useState("Admin Dashboard");
 
   const renderContent = () => {
@@ -39,33 +39,36 @@ function AdminHome() {
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
-      {/* Sidebar with a fixed width */}
-      <div className="w-1/5 bg-gray-800 min-h-screen">
+      {/* Sidebar */}
+      <div className="w-1/5 bg-gray-800 min-h-screen shadow-lg">
         <Sidebar setSelectedMenu={setSelectedMenu} selectedMenu={selectedMenu} />
       </div>
 
       {/* Main Content */}
       <div className="w-4/5 flex flex-col">
         {/* Navbar */}
-        <div className="bg-gray-800 px-6 py-4 flex justify-between items-center shadow-lg">
-          <h2 className="text-lg font-semibold">{selectedMenu}</h2>
+        <div className="bg-gray-800 px-6 py-4 flex justify-between items-center shadow-lg border-b border-gray-700">
+          <h2 className="text-lg font-bold text-blue-400 tracking-wide uppercase">{selectedMenu}</h2>
+          
           <div className="flex items-center gap-4">
-            <img
-              src="https://via.placeholder.com/40"
-              alt="Admin"
-              className="w-10 h-10 rounded-full border-2 border-blue-500"
-            />
-            <span className="font-semibold">Admin</span>
+            <div className="bg-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 shadow-md">
+              <span className="text-gray-300 text-sm">Welcome,</span>
+              <span className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+                {authAdmin.username}
+              </span>
+              <span className="bg-blue-500 text-xs px-2 py-1 rounded-full text-white font-bold">Admin</span>
+            </div>
+            
             <button
               onClick={adminLogout}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition"
+              className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition shadow-md"
             >
-              Logout
+              Logout 🚀
             </button>
           </div>
         </div>
 
-        {/* Page Content with Padding and Centered Layout */}
+        {/* Page Content */}
         <div className="flex-1 p-6 overflow-y-auto">
           <div className="bg-gray-800 p-6 rounded-lg shadow-md">
             {renderContent()}

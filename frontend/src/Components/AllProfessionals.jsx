@@ -1,48 +1,69 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useAdminStore } from "../store/useAdminStore";
+import { FaTrash } from "react-icons/fa"; // Importing delete icon
 
-function AllProfessionals() {
-  const [stats, setStats] = useState({
-    totalServices: 0,
-    completedServices: 0,
-    pendingServices: 0,
-  });
+function ProfessionalStats() {
+  const { professionalStats, fetchProfessionalStats, removeProfessional } = useAdminStore();
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await axios.get("/admin/stats");
-        setStats(response.data);
-      } catch (error) {
-        console.error("Error fetching admin stats:", error);
-      }
-    };
-
-    fetchStats();
-    const interval = setInterval(fetchStats, 5000); // Fetch data every 5 seconds
-
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    fetchProfessionalStats();
+    const interval = setInterval(fetchProfessionalStats, 5000);
+    return () => clearInterval(interval);
   }, []);
 
+  if (!professionalStats) {
+    return <div className="text-center text-gray-400">Loading stats...</div>;
+  }
+
+  const handleRemove = (id, name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to remove ${name}?`);
+    if (confirmDelete) {
+      removeProfessional(id);
+    }
+  };
+
   return (
-    <div className="p-6">
-      <h3 className="text-xl font-semibold mb-4">Admin Dashboard</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gray-700 p-4 rounded-lg">
-          <h4 className="text-lg font-semibold">Total Services</h4>
-          <p className="text-blue-400 text-xl">{stats.totalServices}</p>
+    <div className="p-6 bg-gray-900 text-white min-h-screen">
+      <h2 className="text-3xl font-extrabold mb-6 text-center text-blue-400 uppercase">
+        Elite Professional Dashboard
+      </h2>
+
+      {professionalStats.map((pro) => (
+        <div
+          key={pro.professional}
+          className="bg-gray-800 p-6 rounded-xl shadow-lg mb-4 relative transition-transform transform hover:scale-105"
+        >
+          <div className="absolute top-2 right-2">
+            <button
+              onClick={() => handleRemove(pro.professional, pro.name)}
+              className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md flex items-center gap-2 transition"
+            >
+              <FaTrash />
+              Remove
+            </button>
+          </div>
+
+          <h3 className="text-xl font-semibold text-white">{pro.name}</h3>
+          <p className="text-gray-400 text-sm">{pro.email} | 📞 {pro.phone}</p>
+
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            <div className="bg-blue-600 p-4 rounded-lg">
+              <h4 className="text-lg font-semibold">Total Engagements</h4>
+              <p className="text-white text-xl">{pro.acceptedBookings}</p>
+            </div>
+            <div className="bg-green-600 p-4 rounded-lg">
+              <h4 className="text-lg font-semibold">Successful Appointments</h4>
+              <p className="text-white text-xl">{pro.completedBookings}</p>
+            </div>
+            <div className="bg-red-600 p-4 rounded-lg">
+              <h4 className="text-lg font-semibold">Lost Opportunities</h4>
+              <p className="text-white text-xl">{pro.cancelledBookings}</p>
+            </div>
+          </div>
         </div>
-        <div className="bg-green-700 p-4 rounded-lg">
-          <h4 className="text-lg font-semibold">Completed Services</h4>
-          <p className="text-green-300 text-xl">{stats.completedServices}</p>
-        </div>
-        <div className="bg-red-700 p-4 rounded-lg">
-          <h4 className="text-lg font-semibold">Pending Services</h4>
-          <p className="text-red-300 text-xl">{stats.pendingServices}</p>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
 
-export default AllProfessionals;
+export default ProfessionalStats;

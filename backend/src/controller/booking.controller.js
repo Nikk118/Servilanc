@@ -132,13 +132,15 @@ const accpetBooking=asyncHandler(async(req,res)=>{
 
 const completeBooking=asyncHandler(async(req,res)=>{
     const {bookingId}=req.params
-
+    const professionalId=req.professional._id
     if(!bookingId){
         return res.status(400).json({message:"bookingId is required"})
     }
     const booking=await Booking.findByIdAndUpdate(
         bookingId,
-        {status:"Completed"},
+        {status:"Completed",
+            professional:professionalId
+        },
         {new:true}
     )
 

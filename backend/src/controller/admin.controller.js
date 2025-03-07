@@ -126,7 +126,7 @@ const addProfessional= asyncHandler(async(req,res)=>{
       )
     }
 
-     const professionalExists= await Professional.findOne({$or:[{name},{email}]})
+      const professionalExists= await Professional.findOne({$or:[{name},{email}]})
     
         if(professionalExists){
           return res.status(400)
@@ -146,10 +146,6 @@ const addProfessional= asyncHandler(async(req,res)=>{
         const createdprofessional= await Professional.findById(professional._id).select("-password")
     
         if(createdprofessional){
-    
-            genrateToken(createdprofessional._id,res)
-            await createdprofessional.save()
-    
             return res.status(201)
             .json(
                 {
@@ -166,7 +162,7 @@ const addProfessional= asyncHandler(async(req,res)=>{
         }
         
         
-    })
+})
 
 const totalServices=asyncHandler(async(req,res)=>{
       const salon= await Salon.countDocuments()
@@ -222,9 +218,79 @@ const bookingsStats = asyncHandler(async (req, res) => {
   }
 });
 
+const getAllProfessionalStats=asyncHandler(async(req,res)=>{
+  const professionals=await Professional.find()
 
+  const professionalStats=await Promise.all(
+    professionals.map(async(professional)=>{
+        
+        const acceptedBookings=await Booking.countDocuments({professional:professional._id,status:"Accepted"})
+        const completedBookings=await Booking.countDocuments({professional:professional._id,status:"Completed"})
+        const cancelledBookings=await Booking.countDocuments({professional:professional._id,status:"Cancelled"})
 
+        return{
+            professional:professional._id,
+            name:professional.name,
+            email:professional.email,
+            phone:professional.phone,
+            acceptedBookings,
+            completedBookings,
+            cancelledBookings
+        }
+  }))
+
+  return res.status(200).json({message:"All professionals booking stats",professionalStats})
+    
+})
+
+const getAllUsersStats = asyncHandler(async (req, res) => {
+  const users = await User.find();
+
+  const userStats = await Promise.all(
+    users.map(async (user) => {
+      const totalBookings = await Booking.countDocuments({ userId: user._id });
+      const pendingBookings = await Booking.countDocuments({
+        user: user._id,
+        status: "Pending",
+      });
+      const completedBookings = await Booking.countDocuments({
+        user: user._id,
+        status: "Completed",
+      });
+      const cancelledBookings = await Booking.countDocuments({
+        user: user._id,
+        status: "Cancelled",
+      });
+
+      return {
+        user: user._id,
+        username: user.username,
+        email: user.email,
+        totalBookings,
+        pendingBookings,
+        completedBookings,
+        cancelledBookings,
+      };
+    })
+  );
+
+  return res.status(200).json({ message: "All users booking stats", userStats });
+});
+
+const removeProfessional=asyncHandler(async(req,res)=>{
+  const {professionalId}=req.params
+  const professional=await Professional.findByIdAndDelete(professionalId)
+  if(professional){
+    return res.status(200).json({message:"professional removed successfully"})
+  }else{
+    return res.status(500).json({message:"internal server error"})
+  }
+
+})
 export {
+  removeProfessional,
+  getAllUsersStats,
+  getAllProfessionalStats,
   bookingsStats,
   userstats,
   totalServices,

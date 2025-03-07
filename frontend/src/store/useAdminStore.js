@@ -12,7 +12,60 @@ export const useAdminStore = create((set) => ({
     servicesStats:null ,
     userstats:null,
     bookingsStats :null,
+    isAddingProfessional: false,
+    userStats: null,
+    professionalStats: null,
+
+    removeProfessional: async (professionalId) => {
+      try {
+        await axiosInstant.delete(`/admin/removeProfessional/${professionalId}`);
     
+        // Update professionalStats state after removal
+        set((state) => ({
+          professionalStats: state.professionalStats.filter(
+            (pro) => pro.professional !== professionalId
+          ),
+        }));
+    
+        toast.success("Professional removed successfully");
+      } catch (error) {
+        console.error(error);
+        toast.error("Professional removal failed");
+      }
+    },
+    
+    fetchProfessionalStats: async () => {
+      try {
+        const res = await axiosInstant.get("/admin/getAllProfessionalStats");
+        set({ professionalStats: res.data.professionalStats });
+        console.log("professionalStats", res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    fetchUserStats: async () => {
+      try {
+        const res = await axiosInstant.get("/admin/getAllUsersStats");
+        set({ userStats: res.data.userStats });
+        console.log("userStats", res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    addProfessional: async (data) => {
+      set({ isAddingProfessional: true });
+      try {
+        const res = await axiosInstant.post("/admin/addProfessional", data);
+        toast.success("Professional added successfully");
+      } catch (error) {
+        console.error(error.response.data.message);
+        toast.error(error?.response?.data.message || "Professional addition failed");
+    }finally {
+      set({ isAddingProfessional: false });
+    }
+  },
     checkAdmin: async () => {
       set({ isCheckingAuthAdmin: true });
     

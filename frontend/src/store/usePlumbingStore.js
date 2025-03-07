@@ -9,7 +9,7 @@ export const usePlumbingStore = create((set) => ({
   fetchServices: async () => {
     try {
       const response = await axiosInstant.get("/plumbing/allPlumbingService");
-      set({ services: response.data.salon });
+      set({ services: response.data.plumbing });
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -27,7 +27,7 @@ export const usePlumbingStore = create((set) => ({
       });
 
       set((state) => ({
-        services: [...state.services, response.data.salon],
+        services: [...state.services, response.data.plumbing],
         isAddingService: false, // Set loading to false after success
       }));
 
