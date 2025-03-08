@@ -8,6 +8,19 @@ export const useProfessionalStore = create((set) => ({
   authProfessional: null,
   isProfessionalLogin: false,
   isCheckingAuthProfessional: true,
+  AcceptedBooking:null,
+
+
+  SetAcceptedBooking: async() => {
+    try{
+      const res = await axiosInstant.get(
+        "/professional/getAcceptedBooking"
+      );
+      set({ AcceptedBooking: res.data.acceptedBookings });
+    } catch (error) {
+      console.log("Didn't get accepted ")
+    }
+  },
 
   // Fetch Professional Data
   fetchProfessionalData: async () => {
@@ -39,6 +52,7 @@ export const useProfessionalStore = create((set) => ({
       set({ isCheckingAuthProfessional: false });
     }
   },
+
 
   professionalLogin: async (data) => {
     set({ isProfessionalLogin: true });

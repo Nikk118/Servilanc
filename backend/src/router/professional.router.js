@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {professionalLogin,professionalLogout,getCurrentprofessional,updateProfile} from "../controller/professional.controller.js";
+import {professionalLogin,professionalLogout,getCurrentprofessional,getAcceptedBooking,updateProfile} from "../controller/professional.controller.js";
 
 import {verifyProfessional} from "../middleware/professionalAuth.middleware.js"
 import { upload } from "../middleware/multer.middleware.js";
@@ -13,6 +13,9 @@ router.route("/login").post(professionalLogin)
 router.route("/logout").get(verifyProfessional,professionalLogout)
 
 router.route("/getCurrentProfessional").get(verifyProfessional,getCurrentprofessional)
+
+router.route("/getAcceptedBooking").get(verifyProfessional,getAcceptedBooking)
+
 
 router.route("/updateProfile").patch(verifyProfessional,upload.single("profilePicture"),updateProfile)
 
