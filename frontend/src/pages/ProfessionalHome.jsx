@@ -6,13 +6,16 @@ import AcceptedServices from "../Components/Professional/AcceptedServices";
 import CompletedServices from "../Components/Professional/CompletedServices";
 import TotalServices from "../Components/Professional/TotalServices";
 import { useProfessionalStore } from "../store/useProfessionalStore";
+import ProfessionalDashboard from "../Components/Professional/ProfessionalDashboard";
 
 function ProfessionalHome() {
   const { professionalLogout, authProfessional } = useProfessionalStore();
-  const [selectedMenu, setSelectedMenu] = useState("New Requests");
+  const [selectedMenu, setSelectedMenu] = useState("Professional Dashboard");
 
   const renderContent = () => {
     switch (selectedMenu) {
+      case "Professional Dashboard":
+        return <ProfessionalDashboard/>;
       case "New Requests":
         return <NewRequests />;
       case "Accepted Services":
@@ -22,7 +25,7 @@ function ProfessionalHome() {
       case "Total Services":
         return <TotalServices />;
       default:
-        return <NewRequests />;
+        return <ProfessionalDashboard/>;
     }
   };
 
@@ -43,8 +46,9 @@ function ProfessionalHome() {
             <div className="bg-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 shadow-md">
               <span className="text-gray-300 text-sm">Welcome,</span>
               <span className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
-                {authProfessional.name}
-              </span>
+  {authProfessional?.name || "Loading..."}
+</span>
+
               <span className="bg-green-500 text-xs px-2 py-1 rounded-full text-white font-bold">Professional</span>
             </div>
             

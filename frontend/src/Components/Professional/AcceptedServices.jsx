@@ -2,15 +2,20 @@ import React, { useEffect } from "react";
 import { useProfessionalStore } from "../../store/useProfessionalStore";
 
 const AcceptedServices = () => {
-  const { acceptedBooking, setAcceptedBooking } = useProfessionalStore();
+  const { acceptedBooking, setAcceptedBooking,completeBooking } = useProfessionalStore();
 
   useEffect(() => {
-    if (setAcceptedBooking) {
+    // if (setAcceptedBooking) {
       setAcceptedBooking();
-    } else {
-      console.error("setAcceptedBooking is not defined");
-    }
+    // } else {
+      // console.error("setAcceptedBooking is not defined");
+    // }
   }, []);
+
+    const handleCompleteBooking=(id)=>{
+      completeBooking(id)
+    }
+
 
   return (
     <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg min-h-screen">
@@ -27,7 +32,8 @@ const AcceptedServices = () => {
               <p className="text-gray-400">Booking Time: {booking.bookingTime}</p>
               <p className="text-gray-400">Booking Date: {new Date(booking.bookingDate).toDateString()}</p>
               <p className="text-gray-400">Payment Status: {booking.paymentStatus}</p>
-              <button className="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+              <button className="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+              onClick={()=>handleCompleteBooking(booking._id)}>
                 Complete
               </button>
             </div>

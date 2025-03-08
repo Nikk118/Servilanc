@@ -1,41 +1,50 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+// import { useProfessionalStore } from "../store/professionalStore"; // Update path based on your project structure
+import { FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
+import { useProfessionalStore } from "../../store/useProfessionalStore";
 
-const CompletedServices = ({ professionalCategory }) => {
-  const [completedServices, setCompletedServices] = useState([]);
-
-  const fetchCompletedServices = async () => {
-    // try {
-    //   const response = await axios.get("http://localhost:5000/api/services/completed");
-    //   const filteredServices = response.data.filter(
-    //     (service) => service.category === professionalCategory
-    //   );
-    //   setCompletedServices(filteredServices);
-    // } catch (error) {
-    //   console.error("Error fetching completed services:", error);
-    // }
-  };
+const CompletedRequests = () => {
+  const { completedBooking, setCompletedBooking } = useProfessionalStore();
 
   useEffect(() => {
-    fetchCompletedServices();
-    const interval = setInterval(fetchCompletedServices, 5000);
+    setCompletedBooking();
+    const interval = setInterval(setCompletedBooking, 5000);
     return () => clearInterval(interval);
-  }, [professionalCategory]);
+  }, []);
 
   return (
-    <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg min-h-screen">
-      <h2 className="text-2xl font-bold mb-4">Completed Services</h2>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white p-8">
+      <h2 className="text-3xl font-bold text-center mb-6 text-gray-100">✅ Completed Services</h2>
 
-      {completedServices.length === 0 ? (
-        <p className="text-gray-400">No completed services.</p>
+      {completedBooking?.length === 0 ? (
+        <p className="text-gray-400 text-center">No completed services.</p>
       ) : (
-        <div className="space-y-4">
-          {completedServices.map((service) => (
-            <div key={service._id} className="bg-gray-800 p-4 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold">{service.customerName}</h3>
-              <p className="text-gray-400">Service: {service.service}</p>
-              <p className="text-gray-400">Location: {service.location}</p>
-              <p className="text-gray-400 text-sm">Completed at: {new Date(service.completedAt).toLocaleString()}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {completedBooking?.map((booking) => (
+            <div
+              key={booking._id}
+              className="bg-gray-800 bg-opacity-90 backdrop-blur-lg border border-gray-700 p-6 rounded-xl shadow-lg transform transition-all hover:scale-105 hover:shadow-xl relative"
+            >
+              <div className="absolute top-3 right-3">
+                {booking.paymentStatus === "Pending" ? (
+                  <FaTimesCircle className="text-red-500 text-xl" title="Payment Pending" />
+                ) : (
+                  <FaCheckCircle className="text-green-500 text-xl" title="Payment Completed" />
+                )}
+              </div>
+
+              <h3 className="text-xl font-semibold text-gray-200">{booking.user.username}</h3>
+              <p className="text-gray-400">
+                <span className="font-medium text-white">Service:</span> {booking.service.name}
+              </p>
+              <p className="text-gray-400">
+                <span className="font-medium text-white">Location:</span> {booking.user.address.street},{" "}
+                {booking.user.address.city}
+              </p>
+              <p className="text-gray-400 flex items-center">
+                <FaClock className="text-gray-300 mr-2" />
+                Completed At: {new Date(booking.updatedAt).toLocaleString()}
+              </p>
             </div>
           ))}
         </div>
@@ -44,4 +53,4 @@ const CompletedServices = ({ professionalCategory }) => {
   );
 };
 
-export default CompletedServices;
+export default CompletedRequests;

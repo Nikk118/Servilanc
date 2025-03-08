@@ -91,11 +91,13 @@ const getAcceptedBooking = asyncHandler(async (req, res) => {
 
     const professionalId = req.professional._id;
 
-    // Fetch accepted bookings and populate user details
+    // Fetch accepted bookings sorted by newest first
     const acceptedBookings = await Booking.find({
       professional: professionalId,
       status: "Accepted"
-    }).populate("user");
+    })
+      .populate("user")
+      .sort({ createdAt: -1 });
 
     // Extract user IDs and service IDs from bookings
     const userIds = acceptedBookings.map(booking => booking.user?._id).filter(id => id);
@@ -110,15 +112,15 @@ const getAcceptedBooking = asyncHandler(async (req, res) => {
     // Attach address and service details to each booking
     const bookingsWithDetails = acceptedBookings.map((booking, index) => {
       const address = userAddresses.find(addr => addr.userId.toString() === booking.user?._id.toString());
-      const service = serviceDetails[index]; // Match services based on order
+      const service = serviceDetails[index];
 
       return {
         ...booking.toObject(),
         user: {
           ...booking.user.toObject(),
-          address: address || null // Attach address or set to null if not found
+          address: address || null
         },
-        service: service || null // Attach service details
+        service: service || null
       };
     });
 
@@ -148,8 +150,10 @@ const getNewBooking = asyncHandler(async (req, res) => {
 
     const professionalCategory = professional.category; // Assuming category field exists
 
-    // Fetch pending bookings and populate user details
-    const pendingBookings = await Booking.find({ status: "Pending" }).populate("user");
+    // Fetch pending bookings sorted by newest first
+    const pendingBookings = await Booking.find({ status: "Pending" })
+      .populate("user")
+      .sort({ createdAt: -1 });
 
     // Extract user IDs and service IDs
     const userIds = pendingBookings.map(booking => booking.user?._id).filter(id => id);
@@ -167,7 +171,6 @@ const getNewBooking = asyncHandler(async (req, res) => {
         const address = userAddresses.find(addr => addr.userId.toString() === booking.user?._id.toString());
         const service = serviceDetails[index];
 
-        // Return only if service category matches professional category
         if (service?.category === professionalCategory) {
           return {
             ...booking.toObject(),
@@ -180,7 +183,7 @@ const getNewBooking = asyncHandler(async (req, res) => {
         }
         return null;
       })
-      .filter(booking => booking !== null); // Remove `null` values
+      .filter(booking => booking !== null);
 
     return res.status(200).json({
       message: "New bookings retrieved successfully",
@@ -192,8 +195,66 @@ const getNewBooking = asyncHandler(async (req, res) => {
   }
 });
 
+const getCompletedBooking = asyncHandler(async (req, res) => {
+  try {
+    if (!req.professional) {
+      return res.status(400).json({ message: "Professional not found" });
+    }
 
+    const professionalId = req.professional._id;
 
+    // Fetch professional details (to get category)
+    const professional = await Professional.findById(professionalId);
+    if (!professional) {
+      return res.status(404).json({ message: "Professional not found" });
+    }
+
+    const professionalCategory = professional.category; // Assuming category field exists
+
+    // Fetch completed bookings sorted by newest first
+    const completedBookings = await Booking.find({ status: "Completed" })
+      .populate("user")
+      .sort({ createdAt: -1 });
+
+    // Extract user IDs and service IDs
+    const userIds = completedBookings.map(booking => booking.user?._id).filter(id => id);
+    const serviceIds = completedBookings.map(booking => booking.service).filter(id => id);
+
+    // Fetch all addresses for the users in a single query
+    const userAddresses = await Address.find({ userId: { $in: userIds } });
+
+    // Fetch all services for the given service IDs
+    const serviceDetails = await Promise.all(serviceIds.map(serviceId => findServiceById(serviceId)));
+
+    // Filter bookings where service category matches professional category
+    const bookingsWithDetails = completedBookings
+      .map((booking, index) => {
+        const address = userAddresses.find(addr => addr.userId.toString() === booking.user?._id.toString());
+        const service = serviceDetails[index];
+
+        if (service?.category === professionalCategory) {
+          return {
+            ...booking.toObject(),
+            user: {
+              ...booking.user.toObject(),
+              address: address || null,
+            },
+            service: service || null,
+          };
+        }
+        return null;
+      })
+      .filter(booking => booking !== null);
+
+    return res.status(200).json({
+      message: "Completed bookings retrieved successfully",
+      completedBookings: bookingsWithDetails,
+    });
+  } catch (error) {
+    console.error("Error fetching completed bookings:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 const updateProfile = async (req, res) => {
   try {
@@ -226,7 +287,36 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const getProfessionalStats = asyncHandler(async (req, res) => {
+  try {
+    const professionalId =  req.professional._id; // Assuming professional ID is extracted from authentication
+
+    // Fetch count for each status using separate queries
+    const pendingCount = await Booking.countDocuments({ professional: professionalId, status: "Pending" });
+    const completedCount = await Booking.countDocuments({ professional: professionalId, status: "Completed" });
+    const acceptedCount = await Booking.countDocuments({ professional: professionalId, status: "Accepted" });
+    const cancelledCount = await Booking.countDocuments({ professional: professionalId, status: "Cancelled" });
+
+    res.status(200).json({
+      message: "Professional booking stats retrieved successfully",
+      stats: {
+        pending: pendingCount,
+        completed: completedCount,
+        accepted: acceptedCount,
+        cancelled: cancelledCount,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching professional stats:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+});
+
+
+
 export {
+  getProfessionalStats,
+  getCompletedBooking,
   getNewBooking,
   professionalLogin,
   professionalLogout,

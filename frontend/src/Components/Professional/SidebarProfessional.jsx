@@ -1,8 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaChartBar } from "react-icons/fa";
+import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaChartBar, FaHome } from "react-icons/fa";
 
 const menuItems = [
+  { name: "Professional Dashboard", icon: <FaHome /> }, // Added this as the first option
   { name: "New Requests", icon: <FaClipboardList /> },
   { name: "Accepted Services", icon: <FaHourglassHalf /> },
   { name: "Completed Services", icon: <FaCheckCircle /> },

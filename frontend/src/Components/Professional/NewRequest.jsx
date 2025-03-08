@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 import { useProfessionalStore } from "../../store/useProfessionalStore"; // Import store
-import axios from "axios";
+
 
 const NewRequest = () => {
-  const { newBooking, setNewBooking } = useProfessionalStore();
+  const { newBooking, setNewBooking,accpetBooking } = useProfessionalStore();
 
   useEffect(() => {
     setNewBooking(); // Fetch new bookings on component mount
   }, []);
+
+  const handleAcceptBooking=(id)=>{
+      accpetBooking(id)
+  }
 
   return (
     <div className="p-6">

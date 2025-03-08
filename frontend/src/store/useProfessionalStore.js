@@ -4,12 +4,62 @@ import toast from "react-hot-toast";
 
 const BASE_URL = "http://localhost:3000/api";
 
-export const useProfessionalStore = create((set) => ({
+export const useProfessionalStore = create((set,get) => ({
   authProfessional: null,
   isProfessionalLogin: false,
   isCheckingAuthProfessional: true,
   acceptedBooking:null,
   newBooking: null,
+  completedBooking:null,
+  professionalStats:null,
+
+  setProfessionalStats: async () => {
+    try {
+      const res = await axiosInstant.get("/professional/getProfessionalStats");
+      set({ professionalStats: res.data.stats });
+    } catch (error) {
+      console.error("Error fetching professional stats:", error);
+    }
+  },
+
+  setCompletedBooking: async () => {
+    try {
+      const res = await axiosInstant.get("/professional/getCompletedBooking");
+      set({ completedBooking: res.data.completedBookings });
+    } catch (error) {
+      console.error("Error fetching completed bookings:", error);
+    }
+  },
+
+  completeBooking: async (bookingId) => {
+    try {
+      const res = await axiosInstant.patch(`/booking/completeBooking/${bookingId}`);
+      toast.success("Booking completed successfully");
+      set((state)=>({...state,acceptedBooking:state.acceptedBooking.filter((booking)=>booking._id!==bookingId)}))
+      // get().();
+    } catch (error) {
+      console.error("Error accepting booking:", error);
+      toast.error("Failed to accept booking");
+    }
+  },
+  accpetBooking: async (bookingId) => {
+    try { 
+      const res = await axiosInstant.patch(`/booking/accpetBooking/${bookingId}`); // Fixed typo
+      toast.success("Booking accepted successfully");
+
+      set((state) => ({
+        ...state,
+        newBooking: state.newBooking?.filter((booking) => booking._id !== bookingId) ?? [],
+        // refreshTrigger: Date.now(),
+      }));
+
+      await get().setNewBooking(); // Ensure state updates properly
+    } catch (error) {
+      console.error("Error accepting booking:", error);
+      toast.error("Failed to accept booking");
+    }
+  },
+
 
   setNewBooking: async () => {
     try {
@@ -44,28 +94,28 @@ export const useProfessionalStore = create((set) => ({
   
 
   // Fetch Professional Data
-  fetchProfessionalData: async () => {
-    try {
-      set({ loading: true, error: null });
-      const response = await axios.get(
-        "http://localhost:3000/api/professional/me",
-        { withCredentials: true }
-      );
-      set({ authProfessional: response.data, loading: false });
-    } catch (error) {
-      set({
-        error: error.response?.data?.message || "Failed to fetch data",
-        loading: false,
-      });
-    }
-  },
+  // fetchProfessionalData: async () => {
+  //   try {
+  //     set({ loading: true, error: null });
+  //     const response = await axios.get(
+  //       "http://localhost:3000/api/professional/me",
+  //       { withCredentials: true }
+  //     );
+  //     set({ authProfessional: response.data.professional, loading: false });
+  //   } catch (error) {
+  //     set({
+  //       error: error.response?.data?.message || "Failed to fetch data",
+  //       loading: false,
+  //     });
+  //   }
+  // },
 
   checkProfessional: async () => {
     try {
       const res = await axiosInstant.get(
         "/professional/getCurrentprofessional"
       );
-      set({ authProfessional: res.data });
+      set({ authProfessional: res.data.professional });
     } catch (error) {
       console.error("Authentication error:", error);
       set({ authProfessional: null });
@@ -79,7 +129,7 @@ export const useProfessionalStore = create((set) => ({
     set({ isProfessionalLogin: true });
     try {
       const res = await axiosInstant.post("/professional/login", data);
-      set({ authProfessional: res.data });
+      set({ authProfessional: res.data.professional });
       toast.success("Logged in successfully");
     } catch (error) {
       console.error(error.response.data.message);

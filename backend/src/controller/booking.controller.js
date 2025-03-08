@@ -65,8 +65,8 @@ const getBooking = asyncHandler(async (req, res) => {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
-        // Fetch user bookings
-        const bookings = await Booking.find({ user: user._id });
+        // Fetch user bookings sorted by newest first
+        const bookings = await Booking.find({ user: user._id }).sort({ createdAt: -1 });
 
         if (!bookings.length) {
             return res.status(404).json({ message: "No bookings found" });
@@ -85,7 +85,7 @@ const getBooking = asyncHandler(async (req, res) => {
 
         return res.status(200).json({
             message: "Bookings found successfully",
-            bookings: populatedBookings, // renamed key to be more intuitive
+            bookings: populatedBookings,
         });
 
     } catch (error) {
@@ -93,6 +93,7 @@ const getBooking = asyncHandler(async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
 
 
 const cancleBooking=asyncHandler(async(req,res)=>{
