@@ -1,113 +1,70 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react";
+import ProfessionalSidebar from "../Components/Professional/SidebarProfessional";
+import NewRequests from "../Components/Professional/NewRequest";
+import PendingServices from "../Components/Professional/PendingServices";
+import CompletedServices from "../Components/Professional/CompletedServices";
+import TotalServices from "../Components/Professional/TotalServices";
 import { useProfessionalStore } from "../store/useProfessionalStore";
 
-const ProfessionalHome = () => {
-  const navigate = useNavigate();
-  const { authProfessional, professionalLogout, fetchProfessionalData } = useProfessionalStore();
-  const [stats, setStats] = useState({
-    totalServices: 0,
-    completedServices: 0,
-    pendingServices: 0,
-    totalEarnings: 0,
-    newRequests: [],
-  });
+function ProfessionalHome() {
+  const { professionalLogout, authProfessional } = useProfessionalStore();
+  const [selectedMenu, setSelectedMenu] = useState("New Requests");
 
-  // Get the authenticated professional's ID
-  const professionalId = authProfessional?.professional?._id;
-
-  useEffect(() => {
-    if (!authProfessional) {
-      navigate("/login"); // Redirect to login if not authenticated
-    } else {
-      fetchProfessionalData();
-      fetchStats();
-      const interval = setInterval(fetchStats, 5000); // Refresh stats every 5 seconds
-      return () => clearInterval(interval);
-    }
-  }, [authProfessional, navigate]);
-
-  // Fetch stats for the authenticated professional
-  const fetchStats = async () => {
-    if (!professionalId) return;
-    try {
-      const response = await axios.get(`http://localhost:3000/professional/stats/${professionalId}`);
-      setStats(response.data);
-    } catch (error) {
-      console.error("Error fetching stats:", error);
-    }
-  };
-
-  // Cancel a service request
-  const cancelService = async (id) => {
-    try {
-      await axios.put(`http://localhost:3000/api/booking/cancel/${id}`);
-      fetchStats(); // Refresh stats after canceling
-    } catch (error) {
-      console.error("Error canceling service:", error);
+  const renderContent = () => {
+    switch (selectedMenu) {
+      case "New Requests":
+        return <NewRequests />;
+      case "Pending Services":
+        return <PendingServices />;
+      case "Completed Services":
+        return <CompletedServices />;
+      case "Total Services":
+        return <TotalServices />;
+      default:
+        return <NewRequests />;
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-white">
+    <div className="flex h-screen bg-gray-900 text-white">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 p-6">
-        <h2 className="text-xl font-bold mb-4">Dashboard</h2>
-        <div className="space-y-4">
-          <div className="bg-blue-600 p-4 rounded">
-            <h3 className="text-lg">Total Services</h3>
-            <p className="text-2xl">{stats.totalServices}</p>
-          </div>
-          <div className="bg-green-600 p-4 rounded">
-            <h3 className="text-lg">Completed</h3>
-            <p className="text-2xl">{stats.completedServices}</p>
-          </div>
-          <div className="bg-yellow-500 p-4 rounded">
-            <h3 className="text-lg">Pending</h3>
-            <p className="text-2xl">{stats.pendingServices}</p>
-          </div>
-          <div className="bg-purple-600 p-4 rounded">
-            <h3 className="text-lg">Earnings</h3>
-            <p className="text-2xl">₹{stats.totalEarnings}</p>
+      <div className="w-1/5 bg-gray-800 min-h-screen shadow-lg">
+        <ProfessionalSidebar setSelectedMenu={setSelectedMenu} selectedMenu={selectedMenu} />
+      </div>
+
+      {/* Main Content */}
+      <div className="w-4/5 flex flex-col">
+        {/* Navbar */}
+        <div className="bg-gray-800 px-6 py-4 flex justify-between items-center shadow-lg border-b border-gray-700">
+          <h2 className="text-lg font-bold text-blue-400 tracking-wide uppercase">{selectedMenu}</h2>
+          
+          <div className="flex items-center gap-4">
+            <div className="bg-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 shadow-md">
+              <span className="text-gray-300 text-sm">Welcome,</span>
+              <span className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+                {authProfessional.username}
+              </span>
+              <span className="bg-green-500 text-xs px-2 py-1 rounded-full text-white font-bold">Professional</span>
+            </div>
+            
+            <button
+              onClick={professionalLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition shadow-md"
+            >
+              Logout 🚀
+            </button>
           </div>
         </div>
 
-        {/* Logout Button */}
-        <button
-          onClick={professionalLogout}
-          className="w-full mt-6 bg-red-600 hover:bg-red-700 py-2 px-4 rounded"
-        >
-          Logout
-        </button>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-6">
-        <h1 className="text-3xl font-bold mb-4">New Service Requests</h1>
-        {stats.newRequests.length === 0 ? (
-          <p className="text-gray-400">No new requests</p>
-        ) : (
-          <div className="space-y-4">
-            {stats.newRequests.map((req) => (
-              <div key={req._id} className="bg-gray-800 p-4 rounded flex justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold">{req.serviceType}</h3>
-                  <p className="text-gray-400">Date: {new Date(req.date).toLocaleString()}</p>
-                </div>
-                <button
-                  onClick={() => cancelService(req._id)}
-                  className="bg-red-600 px-3 py-2 rounded"
-                >
-                  Cancel
-                </button>
-              </div>
-            ))}
+        {/* Page Content */}
+        <div className="flex-1 p-6 overflow-y-auto">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+            {renderContent()}
           </div>
-        )}
-      </main>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 export default ProfessionalHome;
