@@ -8,19 +8,40 @@ export const useProfessionalStore = create((set) => ({
   authProfessional: null,
   isProfessionalLogin: false,
   isCheckingAuthProfessional: true,
-  AcceptedBooking:null,
+  acceptedBooking:null,
+  newBooking: null,
 
-
-  SetAcceptedBooking: async() => {
-    try{
-      const res = await axiosInstant.get(
-        "/professional/getAcceptedBooking"
-      );
-      set({ AcceptedBooking: res.data.acceptedBookings });
+  setNewBooking: async () => {
+    try {
+      const res = await axiosInstant.get("/professional/getNewBooking");
+      console.log("Response Data:", res.data); // Check if data is received
+      if (res.data.newBookings) {
+        set((state) => ({ ...state, newBooking: res.data.newBookings }));
+        console.log("NewBooking Updated:", res.data.newBookings);
+      } else {
+        console.error("newBookings is undefined in response");
+      }
     } catch (error) {
-      console.log("Didn't get accepted ")
+      console.error("Error fetching new bookings:", error);
     }
   },
+  setAcceptedBooking: async () => {
+    try {
+      const res = await axiosInstant.get("/professional/getAcceptedBooking");
+      console.log("Response Data:", res.data); // Check if data is received
+      if (res.data.acceptedBookings) {
+        set((state) => ({ ...state, acceptedBooking: res.data.acceptedBookings }));
+        console.log("AcceptedBooking Updated:", res.data.acceptedBookings);
+      } else {
+        console.error("acceptedBookings is undefined in response");
+      }
+    } catch (error) {
+      console.error("Error fetching accepted bookings:", error);
+    }
+  },
+
+ 
+  
 
   // Fetch Professional Data
   fetchProfessionalData: async () => {

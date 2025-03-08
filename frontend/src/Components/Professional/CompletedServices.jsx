@@ -5,15 +5,15 @@ const CompletedServices = ({ professionalCategory }) => {
   const [completedServices, setCompletedServices] = useState([]);
 
   const fetchCompletedServices = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/services/completed");
-      const filteredServices = response.data.filter(
-        (service) => service.category === professionalCategory
-      );
-      setCompletedServices(filteredServices);
-    } catch (error) {
-      console.error("Error fetching completed services:", error);
-    }
+    // try {
+    //   const response = await axios.get("http://localhost:5000/api/services/completed");
+    //   const filteredServices = response.data.filter(
+    //     (service) => service.category === professionalCategory
+    //   );
+    //   setCompletedServices(filteredServices);
+    // } catch (error) {
+    //   console.error("Error fetching completed services:", error);
+    // }
   };
 
   useEffect(() => {

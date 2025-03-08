@@ -1,47 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useProfessionalStore } from "../../store/useProfessionalStore"; // Import store
 import axios from "axios";
 
-const NewRequest = ({ category }) => {
-  const [newRequests, setNewRequests] = useState([]);
-
-  // Fetch new requests in real-time
-  const fetchNewRequests = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/api/requests/new");
-      const filteredRequests = response.data.filter(
-        (request) => request.category === category
-      );
-      setNewRequests(filteredRequests);
-    } catch (error) {
-      console.error("Error fetching new requests:", error);
-    }
-  };
+const NewRequest = () => {
+  const { newBooking, setNewBooking } = useProfessionalStore();
 
   useEffect(() => {
-    fetchNewRequests();
-    const interval = setInterval(fetchNewRequests, 5000);
-    return () => clearInterval(interval);
-  }, [category]);
+    setNewBooking(); // Fetch new bookings on component mount
+  }, []);
 
   return (
-    <div className="p-6 bg-gray-800 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">New Requests</h2>
-      {newRequests.length === 0 ? (
-        <p className="text-gray-400">No new requests available.</p>
+    <div className="p-6">
+      <h2 className="text-3xl font-semibold mb-6 text-white">New Booking Requests</h2>
+
+      {newBooking && newBooking.length > 0 ? (
+        newBooking.map((booking, index) => (
+          <div
+            key={booking._id}
+            className="border rounded-lg p-5 mb-5 shadow-md bg-gray-800 text-white"
+          >
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-bold">{booking.service.name}</h3>
+              <span className="text-sm text-gray-400">
+                {new Date(booking.bookingDate).toLocaleDateString()}
+              </span>
+            </div>
+
+            <p className="text-gray-300">
+              <strong>Customer:</strong> {booking.user.username} ({booking.user.email})
+            </p>
+
+            <p className="text-gray-300 mt-1">
+              <strong>Address:</strong> {booking.user.address?.street},{" "}
+              {booking.user.address?.city}, {booking.user.address?.state} -{" "}
+              {booking.user.address?.pincode}
+            </p>
+
+            <p className="text-gray-300 mt-1">
+              <strong>Time:</strong> {booking.bookingTime}
+            </p>
+
+            <p className="text-gray-300 mt-1">
+              <strong>Amount:</strong> ₹{booking.totalAmount}
+            </p>
+
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded mt-4 hover:bg-blue-700 transition"
+              onClick={() => handleAcceptBooking(booking._id)}
+            >
+              Accept Booking
+            </button>
+          </div>
+        ))
       ) : (
-        <ul className="space-y-4">
-          {newRequests.map((request) => (
-            <li key={request._id} className="p-4 bg-gray-700 rounded-md">
-              <h3 className="text-lg font-semibold">{request.service}</h3>
-              <p className="text-gray-300">Customer: {request.customerName}</p>
-              <p className="text-gray-300">Location: {request.location}</p>
-              <p className="text-gray-300">Requested on: {new Date(request.createdAt).toLocaleString()}</p>
-            </li>
-          ))}
-        </ul>
+        <p className="text-gray-400">No new booking requests available.</p>
       )}
     </div>
   );
 };
+
+
 
 export default NewRequest;

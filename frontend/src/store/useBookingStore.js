@@ -13,7 +13,7 @@ export const useBookingStore = create((set,get) => ({
     getAddress: async () => {
         try {
             const res = await axiosInstant.get("/address/getAddress");
-            set({ userAddress: res.data });
+            set({ userAddress: res.data.address });
         } catch (error) {
             console.error("Error while fetching address:", error);
            

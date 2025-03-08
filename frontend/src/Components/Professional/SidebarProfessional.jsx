@@ -4,7 +4,7 @@ import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaChartBar } from "rea
 
 const menuItems = [
   { name: "New Requests", icon: <FaClipboardList /> },
-  { name: "Pending Requests", icon: <FaHourglassHalf /> },
+  { name: "Accepted Services", icon: <FaHourglassHalf /> },
   { name: "Completed Services", icon: <FaCheckCircle /> },
   { name: "Total Services", icon: <FaChartBar /> },
 ];

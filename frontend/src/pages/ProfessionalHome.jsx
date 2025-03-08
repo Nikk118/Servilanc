@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ProfessionalSidebar from "../Components/Professional/SidebarProfessional";
 import NewRequests from "../Components/Professional/NewRequest";
-import PendingServices from "../Components/Professional/PendingServices";
+// import  from "../Components/Professional/AcceptedBookings";
+import AcceptedServices from "../Components/Professional/AcceptedServices";
 import CompletedServices from "../Components/Professional/CompletedServices";
 import TotalServices from "../Components/Professional/TotalServices";
 import { useProfessionalStore } from "../store/useProfessionalStore";
@@ -14,8 +15,8 @@ function ProfessionalHome() {
     switch (selectedMenu) {
       case "New Requests":
         return <NewRequests />;
-      case "Pending Services":
-        return <PendingServices />;
+      case "Accepted Services":
+        return <AcceptedServices />;
       case "Completed Services":
         return <CompletedServices />;
       case "Total Services":
@@ -42,7 +43,7 @@ function ProfessionalHome() {
             <div className="bg-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 shadow-md">
               <span className="text-gray-300 text-sm">Welcome,</span>
               <span className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
-                {authProfessional.username}
+                {authProfessional.name}
               </span>
               <span className="bg-green-500 text-xs px-2 py-1 rounded-full text-white font-bold">Professional</span>
             </div>

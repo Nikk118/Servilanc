@@ -50,16 +50,22 @@ function Booking() {
     setIsUpdateModalOpen(true);
   };
 
-  const makeBooking=(e)=>{
-    e.preventDefault()
+  const makeBooking = (e) => {
+    e.preventDefault();
+    
+    if (!userAddress) {
+      alert("Please enter your address before booking.");
+      return;
+    }
+  
     try {
-       createBooking(booking);
+      createBooking(booking);
       setIsBooked(true); // ✅ Update UI state
-  } catch (error) {
+    } catch (error) {
       console.error("Booking failed:", error);
-     
-  }
-  }
+    }
+  };
+  
 
   useEffect(() => {
     if (selectedService) {
