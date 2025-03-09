@@ -1,42 +1,54 @@
 import React from "react";
 import { useAuthStore } from "../../store/useAuthStore";
 import { LogOut } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 
 function Navbar() {
   const { logout, authUser } = useAuthStore();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
-  const handleLogout=()=>{
+  const handleLogout = () => {
     logout();
-    navigate("/login")
-  }
+    navigate("/login");
+  };
+
   return (
     <nav className="bg-gray-800 p-4 shadow-lg flex justify-between items-center">
       {/* Logo */}
-      <div  className="text-3xl font-extrabold tracking-wide text-blue-400">
+      <div className="text-3xl font-extrabold tracking-wide text-blue-400">
         Servielliance
       </div>
 
       {/* Navigation Links */}
-      {authUser&&(
-
-          
-          <div className="space-x-8 text-lg text-white">
-        <Link to="/home" className="hover:text-blue-400 transition">Home</Link>
-        <Link to="/plumbing" className="hover:text-blue-400 transition">Plumbing</Link>
-        <Link to="/cleaning" className="hover:text-blue-400 transition">Cleaning</Link>
-        <Link to="/salon" className="hover:text-blue-400 transition">Salon</Link>
-      </div>
-        )
-    }
+      {authUser && (
+        <div className="space-x-8 text-lg text-white">
+          {["home", "plumbing", "cleaning", "salon"].map((path) => (
+            <NavLink
+              key={path}
+              to={`/${path}`}
+              className={({ isActive }) =>
+                `transition ${
+                  isActive ? "text-blue-400 font-semibold border-b-2 border-blue-400" : "hover:text-blue-400"
+                }`
+              }
+            >
+              {path.charAt(0).toUpperCase() + path.slice(1)}
+            </NavLink>
+          ))}
+        </div>
+      )}
 
       {/* User Profile & Logout */}
       <div className="flex items-center space-x-6 text-white">
-        <Link to="/profile" className="hover:text-blue-400">
-          <FaUserCircle size={26} /> 
-        </Link>
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            `transition ${isActive ? "text-blue-400" : "hover:text-blue-400"}`
+          }
+        >
+          <FaUserCircle size={26} />
+        </NavLink>
         {authUser && (
           <button
             className="flex gap-2 items-center hover:text-red-400 transition"

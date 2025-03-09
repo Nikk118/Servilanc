@@ -2,20 +2,15 @@ import React, { useEffect } from "react";
 import { useProfessionalStore } from "../../store/useProfessionalStore";
 
 const AcceptedServices = () => {
-  const { acceptedBooking, setAcceptedBooking,completeBooking } = useProfessionalStore();
+  const { acceptedBooking, setAcceptedBooking, completeBooking, setPaymentPaid } = useProfessionalStore();
 
   useEffect(() => {
-    // if (setAcceptedBooking) {
-      setAcceptedBooking();
-    // } else {
-      // console.error("setAcceptedBooking is not defined");
-    // }
+    setAcceptedBooking();
   }, []);
 
-    const handleCompleteBooking=(id)=>{
-      completeBooking(id)
-    }
-
+  const handleCompleteBooking = (id) => {
+    completeBooking(id);
+  };
 
   return (
     <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg min-h-screen">
@@ -29,13 +24,32 @@ const AcceptedServices = () => {
               <p className="text-gray-400">Street: {booking.user.address.street}</p>
               <p className="text-gray-400">Mobile: {booking.user.address.mobileNumber}</p>
               <p className="text-gray-400">Service: {booking.service.name}</p>
-              <p className="text-gray-400">Booking Time: {booking.bookingTime}</p>
-              <p className="text-gray-400">Booking Date: {new Date(booking.bookingDate).toDateString()}</p>
+
+              {/* Highlighted Booking Time and Date */}
+              <p className="text-yellow-400 font-semibold text-lg">
+                Booking Time: <span className="text-blue-400">{booking.bookingTime}</span>
+              </p>
+              <p className="text-yellow-400 font-semibold text-lg">
+                 Booking Date: <span className="text-green-400">{new Date(booking.bookingDate).toDateString()}</span>
+              </p>
+
               <p className="text-gray-400">Payment Status: {booking.paymentStatus}</p>
-              <button className="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-              onClick={()=>handleCompleteBooking(booking._id)}>
-                Complete
-              </button>
+
+              {booking.paymentStatus === "Paid" ? (
+                <button
+                  className="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow-md transition-transform transform hover:scale-105"
+                  onClick={() => handleCompleteBooking(booking._id)}
+                >
+                  ✅ Complete
+                </button>
+              ) : (
+                <button
+                  className="mt-2 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-orange-500 hover:to-red-500 text-white px-5 py-2 rounded-full shadow-lg font-semibold text-lg animate-pulse transition-transform transform hover:scale-110"
+                  onClick={() => setPaymentPaid(booking._id)}
+                >
+                  💰 Payment Paid
+                </button>
+              )}
             </div>
           ))}
         </div>

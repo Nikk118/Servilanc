@@ -113,7 +113,7 @@ export const useAdminStore = create((set,get) => ({
         set({ isAdminLogin: true });
         try {
           const res = await axiosInstant.post("/admin/login", data);
-          set({ authAdmin: res.data });
+          set({ authAdmin: res.data.admin });
           toast.success("Logged in successfully");
         } catch (error) {
           console.error(error.response.data.message);

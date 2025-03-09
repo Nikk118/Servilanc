@@ -44,17 +44,17 @@ function UserBookings() {
                       ? "bg-green-600 text-white"
                       : "bg-yellow-500 text-black"
                   }`}>
-                    {booking.status || "Pending"}
+                    {booking.status }
                   </span>
                 </p>
               </div>
 
-              <button
+              {booking.status !== "Completed" && <button
                 onClick={() => cancelBooking(booking._id)}
                 className="px-4 py-2 bg-red-600 text-white font-medium rounded-md hover:bg-red-500 transition"
               >
                 Cancel
-              </button>
+              </button>}
             </li>
           ))}
         </ul>

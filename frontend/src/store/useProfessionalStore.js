@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { axiosInstant } from "../lib/axios.js";
 import toast from "react-hot-toast";
 
-const BASE_URL = "http://localhost:3000/api";
+
 
 export const useProfessionalStore = create((set,get) => ({
   authProfessional: null,
@@ -60,7 +60,6 @@ export const useProfessionalStore = create((set,get) => ({
     }
   },
 
-
   setNewBooking: async () => {
     try {
       const res = await axiosInstant.get("/professional/getNewBooking");
@@ -90,25 +89,19 @@ export const useProfessionalStore = create((set,get) => ({
     }
   },
 
- 
-  
+ setPaymentPaid: async (bookingId) => {
+  try {
+    const res = await axiosInstant.patch(`/professional/paymentPaid/${bookingId}`);
+    
+    toast.success("Payment marked as paid successfully");
+    get().setAcceptedBooking();
+  } catch (error) {
+    console.error("Error accepting booking:", error);
+    toast.error("Failed to mark payment as paid");
+ }
+},
 
-  // Fetch Professional Data
-  // fetchProfessionalData: async () => {
-  //   try {
-  //     set({ loading: true, error: null });
-  //     const response = await axios.get(
-  //       "http://localhost:3000/api/professional/me",
-  //       { withCredentials: true }
-  //     );
-  //     set({ authProfessional: response.data.professional, loading: false });
-  //   } catch (error) {
-  //     set({
-  //       error: error.response?.data?.message || "Failed to fetch data",
-  //       loading: false,
-  //     });
-  //   }
-  // },
+  
 
   checkProfessional: async () => {
     try {

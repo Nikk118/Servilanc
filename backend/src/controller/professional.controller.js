@@ -289,21 +289,61 @@ const updateProfile = async (req, res) => {
 
 const getProfessionalStats = asyncHandler(async (req, res) => {
   try {
-    const professionalId =  req.professional._id; // Assuming professional ID is extracted from authentication
+    const professionalId = req.professional._id;
 
-    // Fetch count for each status using separate queries
-    const pendingCount = await Booking.countDocuments({ professional: professionalId, status: "Pending" });
+    // Fetch professional details
+    const professional = await Professional.findById(professionalId);
+    if (!professional) {
+      return res.status(404).json({ message: "Professional not found" });
+    }
+
+    const professionalCategory = professional.category;
+    console.log(professionalCategory);
+
+    // Count status-based bookings
     const completedCount = await Booking.countDocuments({ professional: professionalId, status: "Completed" });
     const acceptedCount = await Booking.countDocuments({ professional: professionalId, status: "Accepted" });
     const cancelledCount = await Booking.countDocuments({ professional: professionalId, status: "Cancelled" });
 
+    // Calculate total earnings where paymentStatus is "Paid"
+    const totalEarningsResult = await Booking.aggregate([
+      {
+        $match: {
+          professional: professionalId,
+          paymentStatus: "Paid",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalEarnings: { $sum: "$totalAmount" }, 
+        },
+      },
+    ]);
+
+    const totalEarnings = totalEarningsResult.length > 0 ? totalEarningsResult[0].totalEarnings : 0;
+
+    // Fetch all pending bookings
+    const pendingBookings = await Booking.find({ status: "Pending" });
+
+    let newRequestsCount = 0;
+
+    
+    for (const booking of pendingBookings) {
+      const service = await findServiceById(booking.service); 
+      if (service && service.category === professionalCategory) {
+        newRequestsCount++; 
+      }
+    }
+
     res.status(200).json({
       message: "Professional booking stats retrieved successfully",
       stats: {
-        pending: pendingCount,
         completed: completedCount,
         accepted: acceptedCount,
         cancelled: cancelledCount,
+        totalEarnings: totalEarnings,
+        newRequests: newRequestsCount, // New Pending Requests
       },
     });
   } catch (error) {
@@ -314,7 +354,22 @@ const getProfessionalStats = asyncHandler(async (req, res) => {
 
 
 
+
+const paymentPaid=asyncHandler(async(req,res)=>{
+  const bookingId=req.params.id
+  const booking=await Booking.findById(bookingId)
+  if(!booking){
+    return res.status(404).json({message:"Booking not found"})
+  }
+  booking.paymentStatus="Paid"
+  await booking.save()
+  return res.status(200).json({message:"Payment status updated successfully",booking})
+})
+
+
+
 export {
+  paymentPaid,
   getProfessionalStats,
   getCompletedBooking,
   getNewBooking,
