@@ -4,7 +4,6 @@ import NewRequests from "../Components/Professional/NewRequest";
 // import  from "../Components/Professional/AcceptedBookings";
 import AcceptedServices from "../Components/Professional/AcceptedServices";
 import CompletedServices from "../Components/Professional/CompletedServices";
-import TotalServices from "../Components/Professional/TotalServices";
 import { useProfessionalStore } from "../store/useProfessionalStore";
 import ProfessionalDashboard from "../Components/Professional/ProfessionalDashboard";
 
@@ -22,8 +21,6 @@ function ProfessionalHome() {
         return <AcceptedServices />;
       case "Completed Services":
         return <CompletedServices />;
-      case "Total Services":
-        return <TotalServices />;
       default:
         return <ProfessionalDashboard/>;
     }

@@ -142,11 +142,16 @@ function Booking() {
               className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
               value={booking.bookingTime}
               onChange={(e) => setBooking({ ...booking, bookingTime: e.target.value })}>
-               <option value="">Select Time</option>  
+                <option value="">Select Time</option>  
+                <option value="10:00 AM">9:00 AM</option>
                 <option value="10:00 AM">10:00 AM</option>
+                <option value="10:00 AM">11:00 AM</option>
                 <option value="12:00 PM">12:00 PM</option>
+                <option value="12:00 PM">1:00 PM</option>
                 <option value="02:00 PM">02:00 PM</option>
+                <option value="02:00 PM">03:00 PM</option>
                 <option value="04:00 PM">04:00 PM</option>
+                <option value="04:00 PM">05:00 PM</option>
                 <option value="06:00 PM">06:00 PM</option>
               </select>
               <button  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">

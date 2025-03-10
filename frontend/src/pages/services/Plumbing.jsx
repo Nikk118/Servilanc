@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { axiosInstant } from "../../lib/axios";
 import { useNavigate } from "react-router-dom";
 import { useBookingStore } from "../../store/useBookingStore";
-import { FaShoppingCart } from "react-icons/fa"; 
 
 function Plumbing() {
   const [services, setServices] = useState([]);
@@ -28,15 +27,17 @@ function Plumbing() {
   }, []);
 
   return (
-    <div className="py-12 px-6 bg-gradient-to-b from-gray-900 to-gray-800 min-h-screen">
-      <h1 className="text-4xl text-center text-white font-extrabold mb-12">🔧 Plumbing Services</h1>
+    <div className="py-12 px-6 bg-white min-h-screen">
+      <h1 className="text-4xl text-center text-gray-900 font-extrabold mb-12">
+         Plumbing Services
+      </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {services.length > 0 ? (
           services.map((service) => (
             <div
               key={service._id}
-              className="bg-gray-900 text-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              className="bg-gray-100 text-gray-900 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
             >
               {/* Service Image */}
               <div className="relative">
@@ -53,8 +54,8 @@ function Plumbing() {
               {/* Service Details */}
               <div className="p-5">
                 <h2 className="text-lg font-bold">{service.name}</h2>
-                <p className="text-gray-400 text-sm mt-1">{service.description}</p>
-                <p className="text-gray-300 text-sm mt-2">
+                <p className="text-gray-600 text-sm mt-1">{service.description}</p>
+                <p className="text-gray-700 text-sm mt-2">
                   ⏳ <span className="font-semibold">{service.duration}</span>
                 </p>
 
@@ -62,13 +63,13 @@ function Plumbing() {
                   onClick={() => handleSubmit(service)}
                   className="mt-4 w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white py-2 rounded-lg font-semibold shadow-md"
                 >
-                  Book Now 
+                  Book Now
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <p className="col-span-4 text-center text-gray-300 text-lg">No services available</p>
+          <p className="col-span-4 text-center text-gray-600 text-lg">No services available</p>
         )}
       </div>
     </div>
