@@ -21,6 +21,13 @@ import Booking from "./pages/Booking";
 import Profile from "./pages/ProfilePage";
 import Userdetails from "./pages/Userdetails";
 import UserBookings from "./pages/UserBookings";
+import Footer from "./Components/footer";
+import AboutUs from "./Components/footerComponents/AboutUs";
+import Terms from "./Components/footerComponents/Terms";
+import Privacy from "./Components/footerComponents/Privary";
+import Reviews from "./Components/footerComponents/Reviews";
+import ContactUs from "./Components/footerComponents/ContactUs";
+import JoinUs from "./Components/footerComponents/JoinUs";
 
 
 
@@ -83,15 +90,21 @@ export default function App() {
   <Route path="/cleaning" element={<Cleaning />} />
   <Route path="/plumbing" element={<Plumbing />} />
   <Route path="/booking" element={<Booking />} />
+  <Route path="/register" element={<JoinUs />} />
+
+  {/* footer Routes */}
+  <Route path="/about" element={<AboutUs/>}/>
+  <Route path="/terms" element={<Terms/>}/>
+  <Route path="/privacy" element={<Privacy/>}/>
+  <Route path="/reviews" element={<Reviews/>}/>
+  <Route path="/contact" element={<ContactUs/>}/>
 
   {/* 404 Page */}
   <Route path="*" element={<NotFound />} />
       </Routes>
 
-
-       {/* <AdminHomeError>
-        <AdminHome selectedMenu={selectedMenu} />
-       </AdminHomeError> */}
+      {authUser && <Footer />}
+       
     </>
   );
 }

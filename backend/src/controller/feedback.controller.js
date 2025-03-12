@@ -18,12 +18,18 @@ const createFeedback=asyncHandler(async(req,res)=>{
     res.status(201).json({message:"Feedback created successfully",feedback})    
 })
 
-const getAllFeedback=asyncHandler(async(req,res)=>{
-    const feedback= await Feedback.find().populate("user")
+const get10Feedback=asyncHandler(async(req,res)=>{
+    const feedback= await Feedback.find().limit(10).populate("user")
     return res.status(200).json({message:"Feedback fetched successfully",feedback})
 })
 
+const getAllFeedback=asyncHandler(async(req,res)=>{
+    const feedback= await Feedback.find().populate("user")
+    return res.status(200).json({message:"Feedback fetched successfully",feedback})
+});
+
 export {
     createFeedback,
+    get10Feedback,
     getAllFeedback
 }

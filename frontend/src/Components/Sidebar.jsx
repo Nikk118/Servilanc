@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { MessageCircle } from "lucide-react";
 import {
   FaUserTie,
   FaUsers,
@@ -20,12 +21,13 @@ const menuItems = [
   { name: "All Professionals", icon: <FaUserTie /> },
   { name: "Add Professional", icon: <FaPlus /> },
   { name: "All Users", icon: <FaUsers /> },
+  {name:"User Messages", icon:<MessageCircle/>}
 ];
 
 function Sidebar({ setSelectedMenu, selectedMenu }) {
   return (
-    <div className="w-64 bg-gray-800 p-6 shadow-lg">
-      <h2 className="text-xl font-bold mb-6 text-center">Admin Panel</h2>
+    <div className="w-64 bg-gray-800 p-6 shadow-lg h-screen overflow-y-auto">
+      <h2 className="text-xl font-bold mb-6 text-center text-white">Admin Panel</h2>
       <nav>
         {menuItems.map((item) => (
           <motion.div
@@ -37,12 +39,13 @@ function Sidebar({ setSelectedMenu, selectedMenu }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {item.icon} <span>{item.name}</span>
+            {item.icon} <span className="text-white">{item.name}</span>
           </motion.div>
         ))}
       </nav>
     </div>
   );
 }
+
 
 export default Sidebar;

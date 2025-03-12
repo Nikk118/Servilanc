@@ -171,11 +171,8 @@ export default function Home() {
 </section>
 
 
-      {/* Footer */}
-      <footer className="bg-black p-10 text-center text-gray-400 mt-10 shadow-xl">
-        <p className="text-lg">&copy; {new Date().getFullYear()} Servielliance. All rights reserved.</p>
-        <p className="mt-2 text-gray-500">Your trusted home service provider.</p>
-      </footer>
+      
+      
     </div>
   );
 }

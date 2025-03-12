@@ -9,6 +9,7 @@ import plumbingRouter from "./router/plumbing.router.js"
 import bookingRouter from "./router/booking.router.js"
 import professionalRouter from "./router/professional.router.js"
 import feedbackRouter from "./router/feedback.router.js"
+import ContactRouter from "./router/contact.router.js"
 import cors from "cors"
 
 
@@ -54,6 +55,7 @@ app.use("/api/plumbing",plumbingRouter)
 app.use("/api/booking",bookingRouter)
 app.use("/api/professional",professionalRouter)
 app.use("/api/feedback",feedbackRouter)
+app.use("/api/contact",ContactRouter)
 
 // app.get("/api/admin/stats", async (req, res) => {
 //     const { category } = req.query;

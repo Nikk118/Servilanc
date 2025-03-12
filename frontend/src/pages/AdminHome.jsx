@@ -8,6 +8,7 @@ import Cleaning from "../Components/Cleaning";
 import AllProfessionals from "../Components/AllProfessionals";
 import AddProfessional from "../Components/AddProfessional";
 import AllUsers from "../Components/AllUsers";
+import UserContacts from "../Components/UserContacts";
 import { useAdminStore } from "../store/useAdminStore";
 
 function AdminHome() {
@@ -32,6 +33,8 @@ function AdminHome() {
         return <AddProfessional />;
       case "All Users":
         return <AllUsers />;
+        case "User Messages":
+          return <UserContacts/>
       default:
         return <AdminDashboard />;
     }

@@ -6,11 +6,25 @@ export const useFeedbackStore = create((set,get) => ({
     feedbacks: null,
     isCheckingFeedbacks: true,
     isAddingFeedback: false,
+    allFeedback:null,
+
+    getAllFeedback: async () => {
+        try {
+            const res = await axiosInstant.get("/feedback/getAllFeedback");
+            console.log("Full API Response:", res.data); // Log the entire response
+            set({ allFeedback: res.data.feedback });
+        } catch (error) {
+            console.error("Authentication error:", error);
+            set({ allFeedback: null });
+        } finally {
+            set({ isCheckingFeedbacks: false });
+        }    
+    },
 
     getFeedbacks: async () => {
         set({ isCheckingFeedbacks: true });
         try {   
-            const res = await axiosInstant.get("/feedback/getAllFeedback");
+            const res = await axiosInstant.get("/feedback/get10Feedback");
             console.log("Full API Response:", res.data); // Log the entire response
     
             if (res.data && res.data.feedback) {
