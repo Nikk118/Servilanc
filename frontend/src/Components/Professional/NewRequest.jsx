@@ -1,24 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useProfessionalStore } from "../../store/useProfessionalStore"; // Import store
 
-
 const NewRequest = () => {
-  const { newBooking, setNewBooking,accpetBooking } = useProfessionalStore();
+  const { newBooking, setNewBooking, accpetBooking } = useProfessionalStore();
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
-    setNewBooking(); // Fetch new bookings on component mount
+    const fetchBookings = async () => {
+      await setNewBooking(); // Fetch new bookings on component mount
+      setLoading(false); // Set loading to false after fetching
+    };
+    fetchBookings();
   }, []);
 
-  const handleAcceptBooking=(id)=>{
-      accpetBooking(id)
-  }
+  const handleAcceptBooking = (id) => {
+    accpetBooking(id);
+  };
 
   return (
     <div className="p-6">
       <h2 className="text-3xl font-semibold mb-6 text-white">New Booking Requests</h2>
 
-      {newBooking && newBooking.length > 0 ? (
-        newBooking.map((booking, index) => (
+      {/* Show Loading State */}
+      {loading ? (
+        <p className="text-gray-400">Loading booking requests...</p>
+      ) : newBooking && newBooking.length > 0 ? (
+        newBooking.map((booking) => (
           <div
             key={booking._id}
             className="border rounded-lg p-5 mb-5 shadow-md bg-gray-800 text-white"
@@ -62,7 +69,5 @@ const NewRequest = () => {
     </div>
   );
 };
-
-
 
 export default NewRequest;

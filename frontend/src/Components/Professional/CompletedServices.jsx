@@ -1,13 +1,19 @@
-import React, { useEffect } from "react";
-// import { useProfessionalStore } from "../store/professionalStore"; // Update path based on your project structure
+import React, { useEffect, useState } from "react";
+
 import { FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
 import { useProfessionalStore } from "../../store/useProfessionalStore";
 
 const CompletedRequests = () => {
   const { completedBooking, setCompletedBooking } = useProfessionalStore();
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    setCompletedBooking();
+    const fetchCompletedBookings = async () => {
+      await setCompletedBooking();
+      setLoading(false); 
+    };
+    
+    fetchCompletedBookings();
     const interval = setInterval(setCompletedBooking, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -16,7 +22,10 @@ const CompletedRequests = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white p-8">
       <h2 className="text-3xl font-bold text-center mb-6 text-gray-100">✅ Completed Services</h2>
 
-      {completedBooking?.length === 0 ? (
+      {/* Show Loading Indicator */}
+      {loading ? (
+        <p className="text-gray-400 text-center">Loading completed services...</p>
+      ) : completedBooking?.length === 0 ? (
         <p className="text-gray-400 text-center">No completed services.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

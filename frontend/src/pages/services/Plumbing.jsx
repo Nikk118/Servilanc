@@ -5,6 +5,7 @@ import { useBookingStore } from "../../store/useBookingStore";
 
 function Plumbing() {
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
   const navigate = useNavigate();
   const { setSelectedService } = useBookingStore();
 
@@ -16,10 +17,14 @@ function Plumbing() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axiosInstant.get("http://localhost:3000/api/plumbing/allPlumbingService");
+        const res = await axiosInstant.get(
+          "http://localhost:3000/api/plumbing/allPlumbingService"
+        );
         setServices(res.data.plumbing);
       } catch (error) {
         console.error("Error fetching services:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
@@ -29,49 +34,56 @@ function Plumbing() {
   return (
     <div className="py-12 px-6 bg-white min-h-screen">
       <h1 className="text-4xl text-center text-gray-900 font-extrabold mb-12">
-         Plumbing Services
+        Plumbing Services
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {services.length > 0 ? (
-          services.map((service) => (
-            <div
-              key={service._id}
-              className="bg-gray-100 text-gray-900 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-            >
-              {/* Service Image */}
-              <div className="relative">
-                <img
-                  src={service.image_url}
-                  alt={service.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-2 right-2 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                  ₹{service.price}
+      {/* Show Loading Spinner */}
+      {loading ? (
+        <p className="text-center text-lg text-gray-600">Loading services...</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {services.length > 0 ? (
+            services.map((service) => (
+              <div
+                key={service._id}
+                className="bg-gray-100 text-gray-900 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              >
+                {/* Service Image */}
+                <div className="relative">
+                  <img
+                    src={service.image_url}
+                    alt={service.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-2 right-2 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
+                    ₹{service.price}
+                  </div>
+                </div>
+
+                {/* Service Details */}
+                <div className="p-5">
+                  <h2 className="text-lg font-bold">{service.name}</h2>
+                  <p className="text-gray-600 text-sm mt-1">{service.description}</p>
+                  <p className="text-gray-700 text-sm mt-2">
+                    ⏳ <span className="font-semibold">{service.duration}</span>
+                  </p>
+
+                  <button
+                    onClick={() => handleSubmit(service)}
+                    className="mt-4 w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white py-2 rounded-lg font-semibold shadow-md"
+                  >
+                    Book Now
+                  </button>
                 </div>
               </div>
-
-              {/* Service Details */}
-              <div className="p-5">
-                <h2 className="text-lg font-bold">{service.name}</h2>
-                <p className="text-gray-600 text-sm mt-1">{service.description}</p>
-                <p className="text-gray-700 text-sm mt-2">
-                  ⏳ <span className="font-semibold">{service.duration}</span>
-                </p>
-
-                <button
-                  onClick={() => handleSubmit(service)}
-                  className="mt-4 w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white py-2 rounded-lg font-semibold shadow-md"
-                >
-                  Book Now
-                </button>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="col-span-4 text-center text-gray-600 text-lg">No services available</p>
-        )}
-      </div>
+            ))
+          ) : (
+            <p className="col-span-4 text-center text-gray-600 text-lg">
+              No services available
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

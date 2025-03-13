@@ -1,11 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useProfessionalStore } from "../../store/useProfessionalStore";
 
 const AcceptedServices = () => {
   const { acceptedBooking, setAcceptedBooking, completeBooking, setPaymentPaid } = useProfessionalStore();
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
-    setAcceptedBooking();
+    const fetchAcceptedBookings = async () => {
+      await setAcceptedBooking(); // Fetch accepted bookings
+      setLoading(false); // Set loading to false after fetching
+    };
+    fetchAcceptedBookings();
   }, []);
 
   const handleCompleteBooking = (id) => {
@@ -15,7 +20,11 @@ const AcceptedServices = () => {
   return (
     <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg min-h-screen">
       <h2 className="text-2xl font-bold mb-4">Accepted Bookings</h2>
-      {acceptedBooking && acceptedBooking.length > 0 ? (
+
+      {/* Show Loading State */}
+      {loading ? (
+        <p className="text-gray-400">Loading accepted bookings...</p>
+      ) : acceptedBooking && acceptedBooking.length > 0 ? (
         <div className="space-y-4">
           {acceptedBooking.map((booking) => (
             <div key={booking._id} className="bg-gray-800 p-4 rounded-lg shadow-md">
@@ -30,7 +39,7 @@ const AcceptedServices = () => {
                 Booking Time: <span className="text-blue-400">{booking.bookingTime}</span>
               </p>
               <p className="text-yellow-400 font-semibold text-lg">
-                 Booking Date: <span className="text-green-400">{new Date(booking.bookingDate).toDateString()}</span>
+                Booking Date: <span className="text-green-400">{new Date(booking.bookingDate).toDateString()}</span>
               </p>
 
               <p className="text-gray-400">Payment Status: {booking.paymentStatus}</p>

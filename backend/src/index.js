@@ -10,6 +10,7 @@ import bookingRouter from "./router/booking.router.js"
 import professionalRouter from "./router/professional.router.js"
 import feedbackRouter from "./router/feedback.router.js"
 import ContactRouter from "./router/contact.router.js"
+import registerRouter from "./router/registers.router.js"
 import cors from "cors"
 
 
@@ -56,21 +57,5 @@ app.use("/api/booking",bookingRouter)
 app.use("/api/professional",professionalRouter)
 app.use("/api/feedback",feedbackRouter)
 app.use("/api/contact",ContactRouter)
+app.use("/api/registers",registerRouter)
 
-// app.get("/api/admin/stats", async (req, res) => {
-//     const { category } = req.query;
-//     const totalServices = await Service.countDocuments({ category });
-//     const completedServices = await Service.countDocuments({ category, status: "completed" });
-//     const pendingServices = totalServices - completedServices;
-//     const totalEarnings = await Service.aggregate([
-//       { $match: { category, status: "completed" } },
-//       { $group: { _id: null, total: { $sum: "$price" } } },
-//     ]);
-  
-//     res.json({
-//       totalServices,
-//       completedServices,
-//       pendingServices,
-//       earnings: totalEarnings.length > 0 ? `₹${totalEarnings[0].total}` : "₹0",
-//     });
-//   });

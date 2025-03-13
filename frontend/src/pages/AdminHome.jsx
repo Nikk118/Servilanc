@@ -10,6 +10,7 @@ import AddProfessional from "../Components/AddProfessional";
 import AllUsers from "../Components/AllUsers";
 import UserContacts from "../Components/UserContacts";
 import { useAdminStore } from "../store/useAdminStore";
+import NewRegistration from "../Components/NewRegistration";
 
 function AdminHome() {
   const { adminLogout, authAdmin } = useAdminStore();
@@ -35,6 +36,8 @@ function AdminHome() {
         return <AllUsers />;
         case "User Messages":
           return <UserContacts/>
+        case "New Registration":
+          return <NewRegistration/>
       default:
         return <AdminDashboard />;
     }
