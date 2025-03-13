@@ -231,6 +231,7 @@ const getAllProfessionalStats=asyncHandler(async(req,res)=>{
         return{
             professional:professional._id,
             name:professional.name,
+            catagory:professional.category,
             email:professional.email,
             phone:professional.phone,
             acceptedBookings,

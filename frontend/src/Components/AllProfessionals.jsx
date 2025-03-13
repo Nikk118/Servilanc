@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useAdminStore } from "../store/useAdminStore";
-import { FaTrash } from "react-icons/fa"; // Importing delete icon
+import { FaTrash } from "react-icons/fa";
 
 function ProfessionalStats() {
   const { professionalStats, fetchProfessionalStats, removeProfessional } = useAdminStore();
@@ -45,6 +45,11 @@ function ProfessionalStats() {
 
           <h3 className="text-xl font-semibold text-white">{pro.name}</h3>
           <p className="text-gray-400 text-sm">{pro.email} | 📞 {pro.phone}</p>
+
+          
+          <p className="text-blue-400 font-semibold mt-2 uppercase bg-gray-700 px-2 py-1 rounded-md inline-block">
+            {pro.catagory}
+          </p>
 
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div className="bg-blue-600 p-4 rounded-lg">
