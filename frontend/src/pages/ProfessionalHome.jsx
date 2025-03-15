@@ -6,6 +6,7 @@ import AcceptedServices from "../Components/Professional/AcceptedServices";
 import CompletedServices from "../Components/Professional/CompletedServices";
 import { useProfessionalStore } from "../store/useProfessionalStore";
 import ProfessionalDashboard from "../Components/Professional/ProfessionalDashboard";
+import Profile from "../Components/Professional/Profile";
 
 function ProfessionalHome() {
   const { professionalLogout, authProfessional } = useProfessionalStore();
@@ -21,6 +22,8 @@ function ProfessionalHome() {
         return <AcceptedServices />;
       case "Completed Services":
         return <CompletedServices />;
+      case "Profile":
+        return <Profile/>
       default:
         return <ProfessionalDashboard/>;
     }
