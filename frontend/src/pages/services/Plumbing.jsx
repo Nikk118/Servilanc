@@ -5,7 +5,8 @@ import { useBookingStore } from "../../store/useBookingStore";
 
 function Plumbing() {
   const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(""); // Search state
   const navigate = useNavigate();
   const { setSelectedService } = useBookingStore();
 
@@ -24,26 +25,42 @@ function Plumbing() {
       } catch (error) {
         console.error("Error fetching services:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
     fetchServices();
   }, []);
 
+  // Filter services based on search input
+  const filteredServices = services.filter((service) =>
+    service.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="py-12 px-6 bg-white min-h-screen">
-      <h1 className="text-4xl text-center text-gray-900 font-extrabold mb-12">
+    <div className="py-12 px-20 bg-white min-h-screen">
+      <h1 className="text-4xl text-center text-gray-900 font-extrabold mb-8">
         Plumbing Services
       </h1>
+
+      {/* Search Input */}
+      <div className="flex justify-center mb-6">
+        <input
+          type="text"
+          placeholder="Search services..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full max-w-lg px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
       {/* Show Loading Spinner */}
       {loading ? (
         <p className="text-center text-lg text-gray-600">Loading services...</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {services.length > 0 ? (
-            services.map((service) => (
+          {filteredServices.length > 0 ? (
+            filteredServices.map((service) => (
               <div
                 key={service._id}
                 className="bg-gray-100 text-gray-900 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
@@ -79,7 +96,7 @@ function Plumbing() {
             ))
           ) : (
             <p className="col-span-4 text-center text-gray-600 text-lg">
-              No services available
+              No matching services found
             </p>
           )}
         </div>
