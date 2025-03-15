@@ -11,6 +11,7 @@ import AllUsers from "../Components/AllUsers";
 import UserContacts from "../Components/UserContacts";
 import { useAdminStore } from "../store/useAdminStore";
 import NewRegistration from "../Components/NewRegistration";
+import FeedbackManagement from "../Components/FeedbackManagement";
 
 function AdminHome() {
   const { adminLogout, authAdmin } = useAdminStore();
@@ -38,6 +39,8 @@ function AdminHome() {
           return <UserContacts/>
         case "New Registration":
           return <NewRegistration/>
+        case "Feedback":
+          return <FeedbackManagement/>
       default:
         return <AdminDashboard />;
     }

@@ -64,7 +64,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-sm mt-6">
-          © 2024 Urban Company. All rights reserved.
+          © 2025 Servielliance. All rights reserved.
         </div>
       </div>
     </footer>

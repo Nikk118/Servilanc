@@ -11,6 +11,7 @@ import {
   FaBroom,
   FaCut,
   FaChartBar,
+  FaComment,
 } from "react-icons/fa";
 
 const menuItems = [
@@ -23,7 +24,8 @@ const menuItems = [
   { name: "Add Professional", icon: <FaPlus /> },
   { name: "All Users", icon: <FaUsers /> },
   {name:"User Messages", icon:<MessageCircle/>},
-  {name:"New Registration", icon:<UserPlus/>}
+  {name:"New Registration", icon:<UserPlus/>},
+  {name:"Feedback", icon:<FaComment/>},
 ];
 
 function Sidebar({ setSelectedMenu, selectedMenu }) {

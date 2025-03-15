@@ -28,8 +28,15 @@ const getAllFeedback=asyncHandler(async(req,res)=>{
     return res.status(200).json({message:"Feedback fetched successfully",feedback})
 });
 
+const deleteFeedback=asyncHandler(async(req,res)=>{
+    const {feedbackId}=req.params
+    await Feedback.findByIdAndDelete(feedbackId)
+    return res.status(200).json({message:"Feedback deleted successfully"})
+})
+
 export {
     createFeedback,
     get10Feedback,
-    getAllFeedback
+    getAllFeedback,
+    deleteFeedback,
 }

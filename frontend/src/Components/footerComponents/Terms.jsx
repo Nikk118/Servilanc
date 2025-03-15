@@ -9,7 +9,7 @@ function Terms() {
         <div className="bg-white shadow-lg rounded-lg p-8 text-left">
           <h3 className="text-2xl font-semibold text-gray-800 mb-4">1. Introduction</h3>
           <p className="text-gray-600 leading-relaxed">
-            Welcome to Servilanc! By using our services, you agree to comply with our terms and conditions. Please read them carefully.
+            Welcome to Servielliance! By using our services, you agree to comply with our terms and conditions. Please read them carefully.
           </p>
 
           <h3 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">2. User Responsibilities</h3>
@@ -35,7 +35,7 @@ function Terms() {
           <h3 className="text-2xl font-semibold text-gray-800 mt-6 mb-4">5. Contact Us</h3>
           <p className="text-gray-600 leading-relaxed">
             If you have any questions regarding our terms, feel free to reach out at 
-            <span className="text-blue-600 font-semibold"> support@servilanc.com</span>.
+            <span className="text-blue-600 font-semibold"> support@servielliance.com</span>.
           </p>
         </div>
       </div>
