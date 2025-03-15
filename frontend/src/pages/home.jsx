@@ -96,7 +96,7 @@ export default function Home() {
   <div className="overflow-hidden relative w-full">
   <div className="flex space-x-6 animate-scroll">
     {(feedbacks ?? []).length > 0 ? ( // Ensure feedbacks is always an array
-      [...feedbacks, ...feedbacks].map((feedback, index) => ( // Duplicate for infinite scrolling
+      [...feedbacks].map((feedback, index) => ( // Duplicate for infinite scrolling
         <div 
   key={index} 
   className="bg-gray-700 bg-opacity-90 p-6 min-w-[300px] max-w-[350px] rounded-xl shadow-md"
