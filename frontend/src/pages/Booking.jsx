@@ -86,6 +86,8 @@ function Booking() {
   }
 
   return (
+
+    // for bookings 
     isBooked ? (
       <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5">
       <div className="bg-white text-center shadow-lg rounded-lg p-8 w-full max-w-lg">
@@ -106,7 +108,8 @@ function Booking() {
     </div>
     
     
-  ) : (
+  ) : ( 
+    // booking address 
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5"> 
       <div className="bg-white shadow-lg rounded-lg p-8 flex flex-col md:flex-row w-full max-w-4xl">
         <div className="md:w-1/2 p-4">
@@ -121,6 +124,7 @@ function Booking() {
                 </button>
               </div>
             ) : (
+              //  enter address
               <button
                 onClick={() => setIsAddressModalOpen(true)}
                 className="bg-blue-600 text-white py-2 px-4 rounded-lg"
@@ -129,7 +133,7 @@ function Booking() {
               </button>
             )}
           </div>
-
+            {/* for booking */}
           <div>
             <h3 className="text-lg font-semibold mb-2">Select Booking Date & Time</h3>
             <form  onSubmit={makeBooking} className="space-y-3">
@@ -147,11 +151,11 @@ function Booking() {
                 <option value="10:00 AM">10:00 AM</option>
                 <option value="10:00 AM">11:00 AM</option>
                 <option value="12:00 PM">12:00 PM</option>
-                <option value="12:00 PM">1:00 PM</option>
+                <option value="1:00 PM">1:00 PM</option>
                 <option value="02:00 PM">02:00 PM</option>
-                <option value="02:00 PM">03:00 PM</option>
+                <option value="03:00 PM">03:00 PM</option>
                 <option value="04:00 PM">04:00 PM</option>
-                <option value="04:00 PM">05:00 PM</option>
+                <option value="05:00 PM">05:00 PM</option>
                 <option value="06:00 PM">06:00 PM</option>
               </select>
               <button  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
@@ -161,6 +165,7 @@ function Booking() {
           </div>
         </div>
 
+            {/* for displaaying slected service */}
         <div className="md:w-1/2 p-4 flex flex-col items-center justify-center text-center">
           <img
             src={selectedService.image_url}

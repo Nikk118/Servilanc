@@ -28,6 +28,7 @@ import Privacy from "./Components/footerComponents/Privary";
 import Reviews from "./Components/footerComponents/Reviews";
 import ContactUs from "./Components/footerComponents/ContactUs";
 import JoinUs from "./Components/footerComponents/JoinUs";
+import Payment from "./Components/payment/Payment";
 
 
 
@@ -98,6 +99,9 @@ export default function App() {
   <Route path="/privacy" element={<Privacy/>}/>
   <Route path="/reviews" element={<Reviews/>}/>
   <Route path="/contact" element={<ContactUs/>}/>
+
+  <Route path="/payment" element={<Payment/>}/>
+
 
   {/* 404 Page */}
   <Route path="*" element={<NotFound />} />
