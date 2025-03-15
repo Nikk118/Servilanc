@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { User } from "lucide-react";
 import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaHome } from "react-icons/fa";
 
 const menuItems = [
@@ -7,6 +8,7 @@ const menuItems = [
   { name: "New Requests", icon: <FaClipboardList /> },
   { name: "Accepted Services", icon: <FaHourglassHalf /> },
   { name: "Completed Services", icon: <FaCheckCircle /> },
+  { name: "Profile", icon: <User /> },
 ];
 
 function ProfessionalSidebar({ setSelectedMenu, selectedMenu }) {
