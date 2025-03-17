@@ -147,9 +147,9 @@ function Booking() {
               value={booking.bookingTime}
               onChange={(e) => setBooking({ ...booking, bookingTime: e.target.value })}>
                 <option value="">Select Time</option>  
-                <option value="10:00 AM">9:00 AM</option>
+                <option value="9:00 AM">9:00 AM</option>
                 <option value="10:00 AM">10:00 AM</option>
-                <option value="10:00 AM">11:00 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
                 <option value="12:00 PM">12:00 PM</option>
                 <option value="1:00 PM">1:00 PM</option>
                 <option value="02:00 PM">02:00 PM</option>

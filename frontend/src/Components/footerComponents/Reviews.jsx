@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { useFeedbackStore } from "../../store/useFeedbackStore";
 
 function Reviews() {
@@ -19,7 +18,7 @@ function Reviews() {
         ) : allFeedback.length === 0 ? (
           <p className="text-gray-600">No reviews available.</p>
         ) : (
-          <div className="space-y-6">
+          <div className="max-h-[500px] overflow-y-auto space-y-6 p-2 border border-gray-300 rounded-lg">
             {allFeedback.map((feedback) => (
               <div key={feedback._id} className="bg-white shadow-lg rounded-lg p-6 text-left">
                 <h3 className="text-xl font-semibold text-gray-800">

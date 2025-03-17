@@ -25,7 +25,7 @@ export const useBookingStore = create((set,get) => ({
     craeteAddress: async(data)=>{
         try {
             const res = await axiosInstant.post("/address/createAddress", data);
-            set({ userAddress: res.data });
+            set({ userAddress: res.data.address });
             toast.success("Address created successfully");
         } catch (error) {
             console.error("Error while creating address:", error);
@@ -35,7 +35,7 @@ export const useBookingStore = create((set,get) => ({
     updateAddress: async(data)=>{
         try {
             const res = await axiosInstant.patch("/address/updateAddress", data);
-            set({ userAddress: res.data });
+            set({ userAddress: res.data.address });
             toast.success("Address updated successfully");
         } catch (error) {
             console.error("Error while updating address:", error);
