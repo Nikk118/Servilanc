@@ -12,6 +12,7 @@ import feedbackRouter from "./router/feedback.router.js"
 import ContactRouter from "./router/contact.router.js"
 import registerRouter from "./router/registers.router.js"
 import cors from "cors"
+import smsRouter from "./router/sms.router.js"
 
 
 
@@ -46,6 +47,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"))
 app.use(cookieParser())
+
+app.use('/api/sms',smsRouter)
 
 app.use("/api/user",userRouter)
 app.use("/api/address",addressRouter)

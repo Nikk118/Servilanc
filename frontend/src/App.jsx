@@ -29,6 +29,7 @@ import Reviews from "./Components/footerComponents/Reviews";
 import ContactUs from "./Components/footerComponents/ContactUs";
 import JoinUs from "./Components/footerComponents/JoinUs";
 import Payment from "./Components/payment/Payment";
+import SendSms from "./Components/SMS/SendSms";
 
 
 
@@ -65,6 +66,8 @@ export default function App() {
            : authUser ? <Home /> 
            : <LandingPage />} 
   />
+
+
 
   {/* User Authentication Routes */}
   <Route path="/login" element={authUser ? <Home /> : <LoginAsUser />} />
@@ -103,6 +106,9 @@ export default function App() {
   <Route path="/payment" element={<Payment/>}/>
 
 
+      
+  <Route path="/sms" element={<SendSms />} />
+
   {/* 404 Page */}
   <Route path="*" element={<NotFound />} />
       </Routes>
@@ -110,5 +116,6 @@ export default function App() {
       {authUser && <Footer />}
        
     </>
+
   );
 }
