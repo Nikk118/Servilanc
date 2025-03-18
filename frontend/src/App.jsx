@@ -29,7 +29,7 @@ import Reviews from "./Components/footerComponents/Reviews";
 import ContactUs from "./Components/footerComponents/ContactUs";
 import JoinUs from "./Components/footerComponents/JoinUs";
 import Payment from "./Components/payment/Payment";
-import SendSms from "./Components/SMS/SendSms";
+
 
 export default function App() {
   const { authUser, checkAuth } = useAuthStore();
@@ -125,7 +125,6 @@ export default function App() {
 
           <Route path="/payment" element={<Payment />} />
 
-          <Route path="/sms" element={<SendSms />} />
 
           {/* 404 Page */}
           <Route path="*" element={<NotFound />} />
