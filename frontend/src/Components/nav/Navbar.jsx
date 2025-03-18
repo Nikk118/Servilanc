@@ -29,7 +29,7 @@ function Navbar() {
 
       {/* Center Links */}
       <div className="hidden sm:flex flex-grow justify-center space-x-6 text-lg text-white">
-        {["home", "plumbing", "cleaning", "salon", "my-bookings"].map((path) => (
+        {["home", "plumbing", "cleaning", "salon", "userBookings"].map((path) => (
           <NavLink
             key={path}
             to={`/${path}`}
@@ -55,11 +55,11 @@ function Navbar() {
               className="flex items-center cursor-pointer bg-gray-700 px-3 py-1 rounded-md hover:bg-gray-600 transition"
               onClick={() => setProfileMenuOpen(!profileMenuOpen)}
             >
-              <img
+              {/* <img
                 src={authUser.profileImage || "https://via.placeholder.com/40"}
                 alt="Profile"
                 className="w-10 h-10 rounded-full border-2 border-blue-400"
-              />
+              /> */}
               <span className="ml-2 text-white text-sm font-semibold">{authUser.username}</span>
               {authUser.role === "admin" && (
                 <span className="ml-2 bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded">
@@ -82,7 +82,7 @@ function Navbar() {
                   View Profile
                 </NavLink>
                 <NavLink
-                  to="/my-bookings"
+                  to="/userBookings"
                   className="flex items-center px-4 py-3 text-sm text-white hover:bg-gray-700 transition transform hover:scale-105"
                   onClick={() => setProfileMenuOpen(false)}
                 >

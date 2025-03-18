@@ -18,7 +18,7 @@ import Salon from "./pages/services/salon";
 import Cleaning from "./pages/services/Cleaning";
 import Plumbing from "./pages/services/plumbing";
 import Booking from "./pages/Booking";
-import Profile from "./pages/ProfilePage";
+// import Profile from "./pages/ProfilePage";
 import Userdetails from "./pages/Userdetails";
 import UserBookings from "./pages/UserBookings";
 import Footer from "./Components/footer";
@@ -29,7 +29,7 @@ import Reviews from "./Components/footerComponents/Reviews";
 import ContactUs from "./Components/footerComponents/ContactUs";
 import JoinUs from "./Components/footerComponents/JoinUs";
 import Payment from "./Components/payment/Payment";
-import SendSms from "./Components/SMS/SendSms";
+// import SendSms from "./Components/SMS/SendSms";
 import Electrician from "./pages/services/Electrician";
 import Carpentry from "./pages/services/Carpentry";
 import PestControl from "./pages/services/PestControl";
@@ -87,11 +87,11 @@ export default function App() {
   <Route path="/admin/home" element={authAdmin ? <AdminHome /> : <LoginAdmin />} />
 
   {/* Profile Page with Nested Routes */}
-  <Route path="/profile" element={<Profile />}>
+  {/* <Route path="/profile" element={<Profile />}>
     <Route index element={<Userdetails />} />
+    </Route> */}
     <Route path="userDetails" element={<Userdetails />} />
     <Route path="userBookings" element={<UserBookings />} />
-  </Route>
 
   {/* Service Routes */}
   <Route path="/salon" element={<Salon />} />
@@ -115,7 +115,7 @@ export default function App() {
 
 
       
-  <Route path="/sms" element={<SendSms />} />
+  {/* <Route path="/sms" element={<SendSms />} /> */}
 
   {/* 404 Page */}
   <Route path="*" element={<NotFound />} />
