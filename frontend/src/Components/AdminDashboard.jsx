@@ -6,6 +6,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 // ✅ Register required components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+
 function AdminDashboard() {
   const { setServicesStats, servicesStats, setUserStats, userstats } = useAdminStore();
 
