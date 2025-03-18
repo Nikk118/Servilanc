@@ -67,4 +67,3 @@ app.use("/api/registers",registerRouter)
 app.use("/api/electrician", electricianRoutes);
 app.use("/api/carpentry", carpentryRoutes);
 app.use("/api/pestControl", pestControlRoutes);
-

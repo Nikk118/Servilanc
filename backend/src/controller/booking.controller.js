@@ -9,7 +9,7 @@ import { PestControl } from "../models/pestControl.model.js";
 
 const findServiceById = async (serviceId) => {
     try {
-        // Search in all six collections simultaneously
+       
         const [plumbing, cleaning, salon, electrician, carpentry, pestControl] = await Promise.all([
             Plumbing.findById(serviceId),
             Cleaning.findById(serviceId),

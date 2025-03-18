@@ -38,7 +38,7 @@ function Salon() {
   );
 
   return (
-    <div className="py-12 px-20 bg-white min-h-screen">
+    <div className="py-12 px-20 bg-white min-h-screen pt-29">
 
       <h1 className="text-4xl text-center text-gray-900 font-extrabold mb-8">
         Salon Services

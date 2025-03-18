@@ -3,7 +3,6 @@ import { useAdminStore } from "../store/useAdminStore";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 
-// ✅ Register required components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function AdminDashboard() {
@@ -14,34 +13,41 @@ function AdminDashboard() {
     setUserStats();
   }, []);
 
-  // Prepare data for the Line Chart
+  // Improved Data Representation for Readability
   const data = {
-    labels: ["Total Users", "Total Professionals", "Total Services", "Salon Services", "Cleaning Services", "Plumbing Services"],
+    labels: [
+      "Users", 
+      "Professionals", 
+      "Total Services", 
+      "Salon", 
+      "Cleaning", 
+      "Plumbing"
+    ],
     datasets: [
       {
-        label: "Total Users",
+        label: "Users",
         data: [userstats?.users || 0, 0, 0, 0, 0, 0],
-        borderColor: "#4CAF50",
-        backgroundColor: "rgba(76, 175, 80, 0.2)",
-        pointBackgroundColor: "#4CAF50",
+        borderColor: "#00E676",
+        backgroundColor: "rgba(0, 230, 118, 0.2)",
+        pointBackgroundColor: "#00E676",
         pointBorderColor: "#fff",
         tension: 0.4,
       },
       {
-        label: "Total Professionals",
+        label: "Professionals",
         data: [0, userstats?.professionals || 0, 0, 0, 0, 0],
-        borderColor: "#2196F3",
-        backgroundColor: "rgba(33, 150, 243, 0.2)",
-        pointBackgroundColor: "#2196F3",
+        borderColor: "#FF4081",
+        backgroundColor: "rgba(255, 64, 129, 0.2)",
+        pointBackgroundColor: "#FF4081",
         pointBorderColor: "#fff",
         tension: 0.4,
       },
       {
         label: "Total Services",
         data: [0, 0, servicesStats?.totalCount || 0, 0, 0, 0],
-        borderColor: "#FFC107",
-        backgroundColor: "rgba(255, 193, 7, 0.2)",
-        pointBackgroundColor: "#FFC107",
+        borderColor: "#FFD700",
+        backgroundColor: "rgba(255, 215, 0, 0.2)",
+        pointBackgroundColor: "#FFD700",
         pointBorderColor: "#fff",
         tension: 0.4,
       },
@@ -57,9 +63,9 @@ function AdminDashboard() {
       {
         label: "Cleaning Services",
         data: [0, 0, 0, 0, servicesStats?.cleaning || 0, 0],
-        borderColor: "#9C27B0",
-        backgroundColor: "rgba(156, 39, 176, 0.2)",
-        pointBackgroundColor: "#9C27B0",
+        borderColor: "#3D5AFE",
+        backgroundColor: "rgba(61, 90, 254, 0.2)",
+        pointBackgroundColor: "#3D5AFE",
         pointBorderColor: "#fff",
         tension: 0.4,
       },
@@ -75,7 +81,6 @@ function AdminDashboard() {
     ],
   };
 
-  // Chart options
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -83,21 +88,26 @@ function AdminDashboard() {
       legend: {
         display: true,
         position: "top",
-        labels: { color: "white", font: { size: 14 } }
+        labels: {
+          color: "white",
+          font: { size: 14, weight: "bold" },
+        },
       },
       title: {
         display: true,
-        text: "Admin Dashboard Overview",
-        color: "white",
-        font: { size: 18 }
+        text: "Admin Dashboard - Statistics Overview",
+        color: "#FFD700",
+        font: { size: 20, weight: "bold" },
       },
     },
     scales: {
       x: {
-        ticks: { color: "white", font: { size: 12 } },
+        ticks: { color: "#A7FFEB", font: { size: 14, weight: "bold" } },
+        grid: { color: "rgba(255, 255, 255, 0.2)" },
       },
       y: {
-        ticks: { color: "white", font: { size: 12 } },
+        ticks: { color: "#A7FFEB", font: { size: 14, weight: "bold" } },
+        grid: { color: "rgba(255, 255, 255, 0.2)" },
         beginAtZero: true,
       },
     },
@@ -105,13 +115,15 @@ function AdminDashboard() {
 
   return (
     <div className="p-6">
-      <h3 className="text-xl font-semibold text-white mb-4">Admin Dashboard</h3>
+      <h3 className="text-2xl font-bold text-white mb-6 text-center">
+        📊 Admin Dashboard
+      </h3>
 
       {!servicesStats && !userstats ? (
-        <p className="text-blue-400 text-lg">Loading...</p>
+        <p className="text-yellow-400 text-lg text-center animate-pulse">Loading data...</p>
       ) : (
-        <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-          <div className="h-[400px]">
+        <div className="bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-700">
+          <div className="h-[450px] flex justify-center items-center">
             <Line data={data} options={options} />
           </div>
         </div>
