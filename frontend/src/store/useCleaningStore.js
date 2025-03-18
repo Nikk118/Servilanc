@@ -2,11 +2,31 @@ import { create } from "zustand";
 import { axiosInstant } from "../lib/axios";
 import toast from "react-hot-toast";
 
-export const useCleaningStore = create((set) => ({
+export const useCleaningStore = create((set,get) => ({
   services: [],
-  isAddingService: false, // New state for tracking loading status
+  isAddingService: false, 
 
-  fetchServices: async () => {
+  updateService: async (serviceData, serviceId) => {
+    set({ isAddingService: true });
+  
+    try {
+      await axiosInstant.patch(`/cleaning/updateCleaningService/${serviceId}`, serviceData);
+  
+      get().fetchServices();
+      toast.success("Service updated successfully");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred while updating the service.");
+      }
+      console.error("Error updating service:", error);
+    } finally {
+      set({ isAddingService: false });
+    }
+  }
+  
+  ,fetchServices: async () => {
     try {
       const response = await axiosInstant.get("/cleaning/allCleaningService");
       set({ services: response.data.cleaning });

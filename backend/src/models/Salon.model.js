@@ -24,7 +24,7 @@ const  SalonSchema= new Schema({
     },
     category: {
         type: String, 
-        required: true
+        default: "Salon"
     }
     
 },{timestamps:true})

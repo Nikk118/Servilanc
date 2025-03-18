@@ -11,7 +11,7 @@ const addCleaningService=asyncHandler(async(req,res)=>{
     const image_urlLocalPath=req.file?.path
 
     console.log("Request File:", req.file);
-    if(!name || !description || !price || !duration || !category){
+    if(!name || !description || !price || !duration ){
         return res.status(400).json({message:"All fields are required"})
     }
     if (!image_urlLocalPath) {
@@ -59,7 +59,25 @@ const removeCleaningService=asyncHandler(async(req,res)=>{
 
 })
 
+const updateCleaningService=asyncHandler(async(req,res)=>{
+    console.log("req body",req.body);
+    const {cleaningId}=req.params
+    const {name,description,price,duration}=req.body
+    const image_urlLocalPath=req.file?.path
+    console.log("Request File:", req.file);
+    if(!name || !description || !price || !duration){
+        return res.status(400).json({message:"All fields are required"})
+    }
+    if (!image_urlLocalPath) {
+        return res.status(404).json({message:"Image is required"})
+    };
+    const image_url = await uploadOnCloudinary(image_urlLocalPath);
+    const cleaning= await Cleaning.findByIdAndUpdate(cleaningId,{name,description,price,duration,image_url:image_url.secure_url},{new:true})
+    return res.status(200).json({message:"cleaning updated successfully",cleaning})
+})
+
 export {
+    updateCleaningService,
     addCleaningService,
     allCleaningService,
     removeCleaningService

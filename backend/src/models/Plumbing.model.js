@@ -24,7 +24,7 @@ const  PlumbingSchema= new Schema({
     },
     category: {
         type: String, 
-        required: true
+        default: "Plumbing"
     }
     
 },{timestamps:true})

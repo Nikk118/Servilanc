@@ -30,6 +30,10 @@ import ContactUs from "./Components/footerComponents/ContactUs";
 import JoinUs from "./Components/footerComponents/JoinUs";
 import Payment from "./Components/payment/Payment";
 import SendSms from "./Components/SMS/SendSms";
+import Electrician from "./pages/services/Electrician";
+import Carpentry from "./pages/services/Carpentry";
+import PestControl from "./pages/services/PestControl";
+
 
 
 
@@ -95,6 +99,10 @@ export default function App() {
   <Route path="/plumbing" element={<Plumbing />} />
   <Route path="/booking" element={<Booking />} />
   <Route path="/register" element={<JoinUs />} />
+  <Route path="/electrician" element={<Electrician />} />
+<Route path="/carpentry" element={<Carpentry />} />
+<Route path="/pest-control" element={<PestControl />} />
+
 
   {/* footer Routes */}
   <Route path="/about" element={<AboutUs/>}/>

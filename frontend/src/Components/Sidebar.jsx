@@ -12,6 +12,7 @@ import {
   FaCut,
   FaChartBar,
   FaComment,
+  FaBug, FaHammer, FaBolt 
 } from "react-icons/fa";
 
 const menuItems = [
@@ -29,6 +30,9 @@ const categories = [
   { name: "Salon", icon: <FaCut /> },
   { name: "Cleaning", icon: <FaBroom /> },
   { name: "Plumbing", icon: <FaWrench /> },
+  { name: "Pest Control", icon: <FaBug /> },
+  { name: "Carpentry", icon: <FaHammer /> },
+  { name: "Electrician", icon: <FaBolt /> },
 ];
 
 function Sidebar({ setSelectedMenu, selectedMenu }) {

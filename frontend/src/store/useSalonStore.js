@@ -2,9 +2,11 @@ import { create } from "zustand";
 import { axiosInstant } from "../lib/axios";
 import toast from "react-hot-toast";
 
-export const useSalonStore = create((set) => ({
+
+export const useSalonStore = create((set,get) => ({
   services: [],
-  isAddingService: false, // New state for tracking loading status
+  isAddingService: false, 
+  isupdatingService: false,
 
   fetchServices: async () => {
     try {
@@ -18,8 +20,7 @@ export const useSalonStore = create((set) => ({
 
   addService: async (serviceData) => {
     try {
-      set({ isAddingService: true }); // Set loading to true before request
-
+      set({ isAddingService: true }); 
       const response = await axiosInstant.post("/salon/addSalonService", serviceData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -51,4 +52,20 @@ export const useSalonStore = create((set) => ({
       console.error("Error removing service:", error);
     }
   },
+
+  updateService:async(serviceData,serviceId)=>{
+    set({ isAddingService: true }); 
+
+    try {
+      await axiosInstant.patch(`/salon/updateSalonService/${serviceId}`, serviceData);
+
+      get().fetchServices();
+      toast.success("Service updated successfully");
+      set({ isAddingService: false }); 
+
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.error("Error updating service:", error);
+    }
+  }
 }));

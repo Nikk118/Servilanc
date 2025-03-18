@@ -11,6 +11,9 @@ import professionalRouter from "./router/professional.router.js"
 import feedbackRouter from "./router/feedback.router.js"
 import ContactRouter from "./router/contact.router.js"
 import registerRouter from "./router/registers.router.js"
+import electricianRoutes from "./router/electrician.router.js"
+import carpentryRoutes from "./router/carpentry.router.js";
+import pestControlRoutes from "./router/pestControl.router.js";
 import cors from "cors"
 import smsRouter from "./router/sms.router.js"
 
@@ -61,4 +64,7 @@ app.use("/api/professional",professionalRouter)
 app.use("/api/feedback",feedbackRouter)
 app.use("/api/contact",ContactRouter)
 app.use("/api/registers",registerRouter)
+app.use("/api/electrician", electricianRoutes);
+app.use("/api/carpentry", carpentryRoutes);
+app.use("/api/pestControl", pestControlRoutes);
 

@@ -7,23 +7,30 @@ import {Address} from "../models/address.model.js"
 import { Salon } from "../models/Salon.model.js";
 import { Plumbing } from "../models/Plumbing.model.js";
 import { Cleaning } from "../models/cleaning.model.js";
+import { Electrician } from "../models/electrician.model.js";
+import { Carpentry } from "../models/carpentry.model.js";
+import { PestControl } from "../models/pestControl.model.js";
 
 const findServiceById = async (serviceId) => {
-    try {
-      // Search in all three collections simultaneously
-      const [plumbing, cleaning, salon] = await Promise.all([
-        Plumbing.findById(serviceId),
-        Cleaning.findById(serviceId),
-        Salon.findById(serviceId),
+  try {
+      // Search in all six collections simultaneously
+      const [plumbing, cleaning, salon, electrician, carpentry, pestControl] = await Promise.all([
+          Plumbing.findById(serviceId),
+          Cleaning.findById(serviceId),
+          Salon.findById(serviceId),
+          Electrician.findById(serviceId),
+          Carpentry.findById(serviceId),
+          PestControl.findById(serviceId),
       ]);
-  
+
       // Return the first found service
-      return plumbing || cleaning || salon || null;
-    } catch (error) {
+      return plumbing || cleaning || salon || electrician || carpentry || pestControl || null;
+  } catch (error) {
       console.error("Error finding service:", error);
       return null;
-    }
-  };
+  }
+};
+
 
 
 const professionalLogin = asyncHandler(async (req, res) => {

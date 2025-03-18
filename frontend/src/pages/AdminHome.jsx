@@ -12,6 +12,9 @@ import UserContacts from "../Components/UserContacts";
 import { useAdminStore } from "../store/useAdminStore";
 import NewRegistration from "../Components/NewRegistration";
 import FeedbackManagement from "../Components/FeedbackManagement";
+import Electrician from "../Components/Electrician";
+import Carpentry from "../Components/Carpenty";
+import PestControl from "../Components/PestControl";
 
 function AdminHome() {
   const { adminLogout, authAdmin } = useAdminStore();
@@ -29,6 +32,13 @@ function AdminHome() {
         return <Plumbing />;
       case "Cleaning":
         return <Cleaning />;
+
+      case "Pest Control":
+        return <PestControl/>
+      case "Electrician":
+        return <Electrician/>
+      case "Carpentry":
+        return <Carpentry/>
       case "All Professionals":
         return <AllProfessionals />;
       case "Add Professional":

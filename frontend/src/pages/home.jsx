@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFeedbackStore } from "../store/useFeedbackStore.js";
-import { FaWrench, FaBroom, FaCut, FaPlus } from "react-icons/fa";
+import { FaWrench, FaBroom, FaCut, FaPlus,FaBug,FaHammer,FaBolt } from "react-icons/fa";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -48,45 +48,66 @@ export default function Home() {
 
       {/* Services Section */}
       <section className="p-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        {/* Service Cards */}
-        {[{
-          title: "Plumbing",
-          icon: <FaWrench size={45} className="text-blue-400" />,
-          image: "https://images.unsplash.com/photo-1543674892-7d64d45df18b?auto=format&fit=crop&w=1930&q=80",
-          path: "/plumbing"
-        },
-        {
-          title: "Cleaning",
-          icon: <FaBroom size={45} className="text-blue-400" />,
-          image: "https://images.unsplash.com/photo-1581578731548-c64695cc6959?auto=format&fit=crop&w=1930&q=80",
-          path: "/cleaning"
-        },
-        {
-          title: "Salon",
-          icon: <FaCut size={45} className="text-blue-400" />,
-          image: "https://images.unsplash.com/photo-1517940310602-7100e3b75da9?auto=format&fit=crop&w=1930&q=80",
-          path: "/salon"
-        }].map((service, index) => (
-          <div key={index}
-            className="relative w-full h-72 bg-cover bg-center rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition transform hover:scale-105"
-            style={{ backgroundImage: `url('${service.image}')` }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center p-6 text-center">
-              {service.icon}
-              <h3 className="text-3xl font-semibold mt-4 text-white">{service.title}</h3>
-              <p className="text-gray-300 mt-3">
-                Get expert professionals at your doorstep.
-              </p>
-              <button
-                onClick={() => navigate(service.path)}
-                className="mt-5 px-6 py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-500 transition"
-              >
-                Book Now
-              </button>
-            </div>
-          </div>
-        ))}
-      </section>
+  {/* Service Cards */}
+  {[
+    {
+      title: "Plumbing",
+      icon: <FaWrench size={45} className="text-blue-400" />,
+      image: "https://images.unsplash.com/photo-1543674892-7d64d45df18b?auto=format&fit=crop&w=1930&q=80",
+      path: "/plumbing"
+    },
+    {
+      title: "Cleaning",
+      icon: <FaBroom size={45} className="text-blue-400" />,
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6959?auto=format&fit=crop&w=1930&q=80",
+      path: "/cleaning"
+    },
+    {
+      title: "Salon",
+      icon: <FaCut size={45} className="text-blue-400" />,
+      image: "https://images.unsplash.com/photo-1517940310602-7100e3b75da9?auto=format&fit=crop&w=1930&q=80",
+      path: "/salon"
+    },
+    {
+      title: "Electrician",
+      icon: <FaBolt size={45} className="text-yellow-400" />,
+      image: "https://images.unsplash.com/photo-1581090464774-0e04a9e883dc?auto=format&fit=crop&w=1930&q=80",
+      path: "/electrician"
+    },
+    {
+      title: "Carpentry",
+      icon: <FaHammer size={45} className="text-brown-600" />,
+      image: "https://images.unsplash.com/photo-1571175443142-7af255b11de7?auto=format&fit=crop&w=1930&q=80",
+      path: "/carpentry"
+    },
+    {
+      title: "Pest Control",
+      icon: <FaBug size={45} className="text-red-500" />,
+      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1930&q=80",
+      path: "/pest-control"
+    }
+  ].map((service, index) => (
+    <div key={index}
+      className="relative w-full h-72 bg-cover bg-center rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition transform hover:scale-105"
+      style={{ backgroundImage: `url('${service.image}')` }}
+    >
+      <div className="absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center p-6 text-center">
+        {service.icon}
+        <h3 className="text-3xl font-semibold mt-4 text-white">{service.title}</h3>
+        <p className="text-gray-300 mt-3">
+          Get expert professionals at your doorstep.
+        </p>
+        <button
+          onClick={() => navigate(service.path)}
+          className="mt-5 px-6 py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-500 transition"
+        >
+          Book Now
+        </button>
+      </div>
+    </div>
+  ))}
+</section>
+
 
       {/* Customer Feedback Section */}
       <section className="relative bg-gray-800 p-12 text-white">
@@ -170,9 +191,6 @@ export default function Home() {
   )}
 </section>
 
-
-      
-      
     </div>
   );
 }

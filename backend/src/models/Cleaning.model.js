@@ -24,7 +24,7 @@ const  CleaningSchema= new Schema({
     },
     category: {
         type: String, 
-        required: true
+        default: "Cleaner"
     }
     
 },{timestamps:true})

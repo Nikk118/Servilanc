@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useSalonStore } from "../store/useSalonStore";
 
 function Salon() {
-  const { services, addService, removeService, fetchServices, isAddingService } = useSalonStore();
+  const { services, addService, removeService, fetchServices, updateService, isAddingService,isupdatingService } = useSalonStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     price: "",
     duration: "",
     image_url: null,
-    category: "Salon", 
+    category: "Salon",
   });
 
   useEffect(() => {
@@ -27,16 +29,19 @@ function Salon() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("price", formData.price);
-    formDataToSend.append("duration", formData.duration);
-    formDataToSend.append("category", formData.category);
-    formDataToSend.append("image_url", formData.image_url);
+    Object.keys(formData).forEach((key) => {
+      formDataToSend.append(key, formData[key]);
+    });
 
-    await addService(formDataToSend);
+    if (isUpdateMode) {
+      // If updating, call updateService
+      await updateService(formDataToSend, selectedServiceId);
+      console.log("here ")
+    } else {
+      // If adding a new service, call addService
+      await addService(formDataToSend);
+    }
 
     setFormData({
       name: "",
@@ -48,12 +53,32 @@ function Salon() {
     });
 
     setIsModalOpen(false);
+    setIsUpdateMode(false);
+  };
+
+  const handleUpdateClick = (service) => {
+    setIsUpdateMode(true);
+    setSelectedServiceId(service._id);
+    console.log("here update")
+    setFormData({
+      name: service.name,
+      description: service.description,
+      price: service.price,
+      duration: service.duration || "",
+      image_url: null,
+      category: "Salon",
+    });
+    setIsModalOpen(true);
   };
 
   return (
     <div className="p-6">
       <button
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          setIsModalOpen(true);
+          setIsUpdateMode(false);
+          setFormData({ name: "", description: "", price: "", duration: "", image_url: null, category: "Salon" });
+        }}
         className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mb-6"
       >
         Add Service
@@ -62,29 +87,28 @@ function Salon() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-gray-800 p-6 rounded-lg w-96 relative">
-            {!isAddingService && (
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="absolute top-3 right-3 text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded"
-              >
-                ✕
-              </button>
-            )}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-3 right-3 text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded"
+            >
+              ✕
+            </button>
 
-            <h3 className="text-xl font-semibold mb-4">Add New Salon Service</h3>
+            <h3 className="text-xl font-semibold mb-4">{isUpdateMode ? "Update Salon Service" : "Add New Salon Service"}</h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Service Name" className="p-2 rounded bg-gray-700 text-white" required />
               <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Service Description" className="p-2 rounded bg-gray-700 text-white" required></textarea>
               <input type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Service Price" className="p-2 rounded bg-gray-700 text-white" required />
               <input type="text" name="duration" value={formData.duration} onChange={handleChange} placeholder="Duration (optional)" className="p-2 rounded bg-gray-700 text-white" />
-              <input type="file" name="image_url" onChange={handleChange} className="p-2 rounded bg-gray-700 text-white" accept="image/*" required />
+              <input type="file" name="image_url" onChange={handleChange} className="p-2 rounded bg-gray-700 text-white" accept="image/*" />
 
               <button
                 type="submit"
                 className={`py-2 rounded text-white ${isAddingService ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
                 disabled={isAddingService}
+                
               >
-                {isAddingService ? "Adding..." : "Add Service"}
+                {isAddingService ? "Processing..." : isUpdateMode ? "Update Service" : "Add Service"}
               </button>
             </form>
           </div>
@@ -103,9 +127,14 @@ function Salon() {
                   <p className="text-gray-400">Price: ${service.price}</p>
                   {service.duration && <p className="text-gray-400">Duration: {service.duration} </p>}
                 </div>
-                <button onClick={() => removeService(service._id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
-                  Remove
-                </button>
+                <div className="flex gap-2">
+                  <button onClick={() => handleUpdateClick(service)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+                    Update
+                  </button>
+                  <button onClick={() => removeService(service._id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                    Remove
+                  </button>
+                </div>
               </li>
             ))
           ) : (
