@@ -35,12 +35,12 @@ function AdminHome() {
         return <AddProfessional />;
       case "All Users":
         return <AllUsers />;
-        case "User Messages":
-          return <UserContacts/>
-        case "New Registration":
-          return <NewRegistration/>
-        case "Feedback":
-          return <FeedbackManagement/>
+      case "User Messages":
+        return <UserContacts />;
+      case "New Registration":
+        return <NewRegistration />;
+      case "Feedback":
+        return <FeedbackManagement />;
       default:
         return <AdminDashboard />;
     }

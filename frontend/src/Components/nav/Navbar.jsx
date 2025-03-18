@@ -16,9 +16,12 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-gray-800 p-4 shadow-lg flex justify-between items-center relative">
+    <nav className="bg-gray-800 p-4 shadow-lg flex justify-between items-center fixed top-0 left-0 right-0 z-50">
       {/* Left Side - Logo */}
-      <div className="text-3xl font-extrabold tracking-wide text-blue-400">
+      <div
+        className="text-3xl font-extrabold tracking-wide text-blue-400 cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         Servielliance
       </div>
 
@@ -41,45 +44,45 @@ function Navbar() {
         ))}
       </div>
 
-      {/* Right Side - Profile & Logout + Hamburger Menu */}
+      {/* Right Side - Profile, Admin Badge & Logout */}
       <div className="flex items-center space-x-4">
-        {/* Profile & Logout (Visible on Large Screens) */}
-        <div className="hidden sm:flex items-center space-x-6 text-white">
-          <NavLink
-            to="/profile"
-            className={({ isActive }) =>
-              `transition ${isActive ? "text-blue-400" : "hover:text-blue-400"}`
-            }
-          >
-            <FaUserCircle size={26} />
-          </NavLink>
-          {authUser && (
-            <button
-              className="flex gap-2 items-center hover:text-red-400 transition"
-              onClick={handleLogout}
-            >
-              <LogOut className="size-5" />
-              <span className="hidden sm:inline">Logout</span>
-            </button>
-          )}
-        </div>
+        {authUser && (
+          <div className="flex items-center bg-gray-700 px-4 py-2 rounded-lg">
+            <span className="text-white">Welcome, </span>
+            <span className="ml-1 font-semibold text-purple-400">
+              {authUser.username}
+            </span>
+
+            {/* Admin Badge */}
+            {authUser.role === "admin" && (
+              <span className="ml-2 bg-blue-500 text-white text-sm font-semibold px-2 py-1 rounded">
+                Admin
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Logout Button */}
+        <button
+          className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg transition"
+          onClick={handleLogout}
+        >
+          <LogOut className="size-5" />
+          Logout
+        </button>
 
         {/* Hamburger Button (Visible on Small Screens) */}
-        <button
-          className="text-white sm:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <button className="text-white sm:hidden" onClick={() => setIsOpen(!isOpen)}>
           <Menu size={28} />
         </button>
       </div>
 
       {/* Mobile Menu (Dropdown) */}
       <div
-  className={`absolute top-16 left-0 w-full bg-gray-800 text-white sm:hidden transition-all duration-300 z-50 ${
-    isOpen ? "block" : "hidden"
-  }`}
->
-
+        className={`absolute top-16 left-0 w-full bg-gray-800 text-white sm:hidden transition-all duration-300 z-50 ${
+          isOpen ? "block" : "hidden"
+        }`}
+      >
         {["home", "plumbing", "cleaning", "salon"].map((path) => (
           <NavLink
             key={path}
