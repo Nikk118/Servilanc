@@ -55,6 +55,9 @@ function UserBookings() {
                     <span className="font-semibold text-blue-600">Price:</span> ₹{booking.service?.price || "N/A"}
                   </p>
                   <p>
+                    <span className="font-semibold text-blue-600">paymentStatus:</span> {booking.paymentStatus || "N/A"}
+                  </p>
+                  <p>
                     <span className="font-semibold text-blue-600">Date:</span>{" "}
                     {new Date(booking.bookingDate).toLocaleDateString()}
                   </p>

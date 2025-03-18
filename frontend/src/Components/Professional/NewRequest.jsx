@@ -52,6 +52,10 @@ const NewRequest = () => {
             </p>
 
             <p className="text-gray-300 mt-1">
+              <strong>paymentStatus:</strong> ₹{booking.paymentStatus}
+            </p>
+
+            <p className="text-gray-300 mt-1">
               <strong>Amount:</strong> ₹{booking.totalAmount}
             </p>
 

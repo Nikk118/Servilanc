@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import BookingSuccess from "../Components/booking components/BookingSuccess";
 
 function Booking() {
   const navigate=useNavigate();
   const { selectedService, setSelectedService,craeteAddress, createBooking,updateAddress, userAddress, getAddress } = useBookingStore();
+  const [booking, setBooking] = useState({ 
+    bookingDate: "", 
+    bookingTime: "", 
+    paymentMethod: "",
+    transactionId:""
+  });
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [booking, setBooking] = useState({ bookingDate: "", bookingTime: "" });
   const [isBooked, setIsBooked] = useState(false);
   
 
@@ -46,23 +53,32 @@ function Booking() {
   };
 
   const openUpdateModal = () => {
-    setUpdatedAddress(userAddress); // Pre-fill with existing address
+    setUpdatedAddress(userAddress); 
     setIsUpdateModalOpen(true);
   };
 
   const makeBooking = (e) => {
     e.preventDefault();
     
-    if (!userAddress) {
-      alert("Please enter your address before booking.");
+    if (!booking.bookingDate || !booking.bookingTime || !booking.paymentMethod) {
+      toast.error("Please fill in all required fields before proceeding.");
       return;
     }
-  
-    try {
-      createBooking(booking);
-      setIsBooked(true); // ✅ Update UI state
-    } catch (error) {
-      console.error("Booking failed:", error);
+    if (!userAddress) {
+      toast.error("Please enter your address before booking.");
+      return;
+    }
+    if (booking.paymentMethod === "online") {
+      console.log("bookings",booking)
+      navigate("/payment", { state: { booking }}); 
+    }else{
+      try {
+        console.log("bookings",booking)
+        createBooking(booking);
+        setIsBooked(true); 
+      } catch (error) {
+        console.error("Booking failed:", error);
+      }
     }
   };
   
@@ -89,25 +105,8 @@ function Booking() {
 
     // for bookings 
     isBooked ? (
-      <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5">
-      <div className="bg-white text-center shadow-lg rounded-lg p-8 w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-green-600">🎉 Booking Confirmed!</h2>
-        <p className="text-gray-600 mt-2">
-          Your service is scheduled for {booking.bookingDate} at {booking.bookingTime}.
-        </p>
-        <p className="text-sm text-gray-500 mt-2">
-          *If a professional does not accept your request, it will be automatically canceled.
-        </p>
-        <button
-          onClick={() => navigate("/profile/userBookings")}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          See Bookings
-        </button>
-      </div>
-    </div>
-    
-    
+     
+      <BookingSuccess booking={booking} />    
   ) : ( 
     // booking address 
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5"> 
@@ -124,7 +123,7 @@ function Booking() {
                 </button>
               </div>
             ) : (
-              //  enter address
+              
               <button
                 onClick={() => setIsAddressModalOpen(true)}
                 className="bg-blue-600 text-white py-2 px-4 rounded-lg"
@@ -141,6 +140,7 @@ function Booking() {
               type="date" 
               className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300" 
               value={booking.bookingDate}
+              min={new Date().toISOString().split("T")[0]} 
               onChange={(e) => setBooking({ ...booking, bookingDate: e.target.value })}/>
               <select 
               className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
@@ -158,6 +158,29 @@ function Booking() {
                 <option value="05:00 PM">05:00 PM</option>
                 <option value="06:00 PM">06:00 PM</option>
               </select>
+              <div className="mt-3">
+            <h3 className="text-lg font-semibold mb-2">Select Payment Method</h3>
+            <label className="flex items-center space-x-2">
+              <input 
+                type="radio" 
+                name="paymentMethod" 
+                value="cash"
+                className="form-radio text-blue-600"
+                onChange={(e) => setBooking({ ...booking, paymentMethod: e.target.value })}
+              />
+              <span>Cash on Service</span>
+            </label>
+            <label className="flex items-center space-x-2 mt-2">
+              <input 
+                type="radio" 
+                name="paymentMethod" 
+                value="online"
+                className="form-radio text-blue-600"
+                onChange={(e) => setBooking({ ...booking, paymentMethod: e.target.value })}
+              />
+              <span>Online Payment</span>
+            </label>
+          </div>
               <button  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
                 Confirm Booking
               </button>
@@ -177,6 +200,7 @@ function Booking() {
           <p className="text-sm text-gray-500 mt-1">{selectedService.duration}</p>
           <p className="text-lg font-bold text-green-600 mt-2">₹{selectedService.price}</p>
         </div>
+        
       </div>
 
       {/* Address Modal */}

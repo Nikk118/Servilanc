@@ -23,15 +23,13 @@ const findServiceById = async (serviceId) => {
 
 const addBooking=asyncHandler(async(req,res)=>{
     console.log("samna ye aaya",req.body)
-    const {bookingDate,bookingTime}=req.body 
+    const {bookingDate,bookingTime,transactionId}=req.body 
     const user=req.user
     const {serviceId}=req.params
 
     if (!serviceId) {
         return res.status(400).json({message:"service id is  required"})
-    }
-   
-        
+    } 
     const service = await findServiceById(serviceId);
 
     if (!service) {
@@ -45,17 +43,32 @@ const addBooking=asyncHandler(async(req,res)=>{
         return res.status(400).json({message:"All fields are required"})    
     }
 
-    
+    if(!transactionId){
+        
+        
+        const newBooking=await Booking.create({
+            user:user._id,
+            service:serviceId,
+            bookingDate,
+            bookingTime,
+            totalAmount:service.price
+        })
 
-    const newBooking=await Booking.create({
-        user:user._id,
-        service:serviceId,
-        bookingDate,
-        bookingTime,
-        totalAmount:service.price
-    })
+        return res.status(201).json({message:"Booking created successfully",booking:newBooking})
+    } else {
+        const newBooking=await Booking.create({
+            user:user._id,
+            service:serviceId,
+            bookingDate,
+            bookingTime,
+            transactionId:transactionId,
+            paymentStatus:"Paid",
+            totalAmount:service.price
+        })
+        return res.status(201).json({message:"Booking created successfully",booking:newBooking})
+    }  
 
-    return res.status(201).json({message:"Booking created successfully",booking:newBooking})
+   
 }) 
 
 const getBooking = asyncHandler(async (req, res) => {
