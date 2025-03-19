@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useAdminStore } from "../store/useAdminStore";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function AdminDashboard() {
   const { setServicesStats, servicesStats, setUserStats, userstats } = useAdminStore();
@@ -13,70 +13,44 @@ function AdminDashboard() {
     setUserStats();
   }, []);
 
-  // Improved Data Representation for Readability
   const data = {
     labels: [
-      "Users", 
-      "Professionals", 
-      "Total Services", 
-      "Salon", 
-      "Cleaning", 
-      "Plumbing"
+      "Users",
+      "Professionals",
+      "Total Services",
+      "Salon",
+      "Cleaning",
+      "Plumbing",
+      "Electrician",
+      "Pest Control",
+      "Carpentry",
     ],
     datasets: [
       {
-        label: "Users",
-        data: [userstats?.users || 0, 0, 0, 0, 0, 0],
-        borderColor: "#00E676",
-        backgroundColor: "rgba(0, 230, 118, 0.2)",
-        pointBackgroundColor: "#00E676",
-        pointBorderColor: "#fff",
-        tension: 0.4,
-      },
-      {
-        label: "Professionals",
-        data: [0, userstats?.professionals || 0, 0, 0, 0, 0],
-        borderColor: "#FF4081",
-        backgroundColor: "rgba(255, 64, 129, 0.2)",
-        pointBackgroundColor: "#FF4081",
-        pointBorderColor: "#fff",
-        tension: 0.4,
-      },
-      {
-        label: "Total Services",
-        data: [0, 0, servicesStats?.totalCount || 0, 0, 0, 0],
-        borderColor: "#FFD700",
-        backgroundColor: "rgba(255, 215, 0, 0.2)",
-        pointBackgroundColor: "#FFD700",
-        pointBorderColor: "#fff",
-        tension: 0.4,
-      },
-      {
-        label: "Salon Services",
-        data: [0, 0, 0, servicesStats?.salon || 0, 0, 0],
-        borderColor: "#FF5722",
-        backgroundColor: "rgba(255, 87, 34, 0.2)",
-        pointBackgroundColor: "#FF5722",
-        pointBorderColor: "#fff",
-        tension: 0.4,
-      },
-      {
-        label: "Cleaning Services",
-        data: [0, 0, 0, 0, servicesStats?.cleaning || 0, 0],
-        borderColor: "#3D5AFE",
-        backgroundColor: "rgba(61, 90, 254, 0.2)",
-        pointBackgroundColor: "#3D5AFE",
-        pointBorderColor: "#fff",
-        tension: 0.4,
-      },
-      {
-        label: "Plumbing Services",
-        data: [0, 0, 0, 0, 0, servicesStats?.plumbing || 0],
-        borderColor: "#00BCD4",
-        backgroundColor: "rgba(0, 188, 212, 0.2)",
-        pointBackgroundColor: "#00BCD4",
-        pointBorderColor: "#fff",
-        tension: 0.4,
+        label: "Statistics",
+        data: [
+          userstats?.users || 0,
+          userstats?.professionals || 0,
+          servicesStats?.totalCount || 0,
+          servicesStats?.salon || 0,
+          servicesStats?.cleaning || 0,
+          servicesStats?.plumbing || 0,
+          servicesStats?.electrician || 0,
+          servicesStats?.pestControl || 0,
+          servicesStats?.carpentry || 0,
+        ],
+        backgroundColor: [
+          "#00E676", // Users
+          "#FF4081", // Professionals
+          "#FFD700", // Total Services
+          "#FF5722", // Salon
+          "#3D5AFE", // Cleaning
+          "#00BCD4", // Plumbing
+          "#FFA500", // Electrician
+          "#8E44AD", // Pest Control
+          "#2ECC71", // Carpentry
+        ],
+        borderRadius: 8,
       },
     ],
   };
@@ -86,12 +60,7 @@ function AdminDashboard() {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
-        position: "top",
-        labels: {
-          color: "white",
-          font: { size: 14, weight: "bold" },
-        },
+        display: false,
       },
       title: {
         display: true,
@@ -120,11 +89,13 @@ function AdminDashboard() {
       </h3>
 
       {!servicesStats && !userstats ? (
-        <p className="text-yellow-400 text-lg text-center animate-pulse">Loading data...</p>
+        <p className="text-yellow-400 text-lg text-center animate-pulse">
+          Loading data...
+        </p>
       ) : (
         <div className="bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-700">
           <div className="h-[450px] flex justify-center items-center">
-            <Line data={data} options={options} />
+            <Bar data={data} options={options} />
           </div>
         </div>
       )}
