@@ -59,8 +59,37 @@ const removePlumbingService=asyncHandler(async(req,res)=>{
 
 })
 
+const updatePlumbingService = asyncHandler(async (req, res) => {
+    console.log("Request Body:", req.body);
+    const { plumbingId } = req.params;
+    const { name, description, price, duration, category } = req.body;
+    const image_urlLocalPath = req.file?.path;
+
+    console.log("Request File:", req.file);
+
+    if (!name || !description || !price || !duration || !category) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    let updateData = { name, description, price, duration, category };
+
+    if (image_urlLocalPath) {
+        const image_url = await uploadOnCloudinary(image_urlLocalPath);
+        updateData.image_url = image_url.secure_url;
+    }
+
+    const plumbing = await Plumbing.findByIdAndUpdate(plumbingId, updateData, { new: true });
+
+    if (!plumbing) {
+        return res.status(404).json({ message: "Plumbing service not found" });
+    }
+
+    return res.status(200).json({ message: "Plumbing updated successfully", plumbing });
+});
+
 export {
     addPlumbingService,
     allPlumbingService,
-    removePlumbingService
+    removePlumbingService,
+    updatePlumbingService
 }

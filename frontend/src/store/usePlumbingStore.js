@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { axiosInstant } from "../lib/axios";
 import toast from "react-hot-toast";
 
-export const usePlumbingStore = create((set) => ({
+export const usePlumbingStore = create((set,get) => ({
   services: [],
   isAddingService: false, // New state for tracking loading status
 
@@ -13,6 +13,25 @@ export const usePlumbingStore = create((set) => ({
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
+    }
+  },
+  updateService: async (serviceData, serviceId) => {
+    set({ isAddingService: true });
+
+    try {
+      await axiosInstant.patch(`/plumbing/updatePlumbingService/${serviceId}`, serviceData);
+
+      get().fetchServices();
+      toast.success("Service updated successfully");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred while updating the service.");
+      }
+      console.error("Error updating service:", error);
+    } finally {
+      set({ isAddingService: false });
     }
   },
 

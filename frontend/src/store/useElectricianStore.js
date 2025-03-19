@@ -2,9 +2,9 @@ import { create } from "zustand";
 import { axiosInstant } from "../lib/axios";
 import toast from "react-hot-toast";
 
-export const useElectricianStore = create((set,get) => ({
+export const useElectricianStore = create((set, get) => ({
   services: [],
-  isAddingService: false, 
+  isAddingService: false,
 
   fetchServices: async () => {
     try {
@@ -20,16 +20,43 @@ export const useElectricianStore = create((set,get) => ({
     try {
       set({ isAddingService: true });
 
-      const response = await axiosInstant.post("/electrician/addElectricianService", serviceData)
-      console.log("heloo",response.data);
+      const response = await axiosInstant.post("/electrician/addElectricianService", serviceData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       get().fetchServices();
       set({ isAddingService: false });
-     
 
       toast.success("Electrician service added successfully");
     } catch (error) {
       console.error("Error adding electrician service:", error);
       toast.error("Failed to add electrician service");
+      set({ isAddingService: false });
+    }
+  },
+
+  updateService: async (serviceData, serviceId) => {
+    set({ isAddingService: true });
+
+    try {
+      await axiosInstant.patch(`/electrician/updateElectricianService/${serviceId}`, serviceData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      get().fetchServices();
+      toast.success("Electrician service updated successfully");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred while updating the service.");
+      }
+      console.error("Error updating electrician service:", error);
+    } finally {
       set({ isAddingService: false });
     }
   },

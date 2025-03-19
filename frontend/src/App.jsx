@@ -90,7 +90,7 @@ export default function App() {
   {/* <Route path="/profile" element={<Profile />}>
     <Route index element={<Userdetails />} />
     </Route> */}
-    <Route path="userDetails" element={<Userdetails />} />
+    <Route path="profile" element={<Userdetails />} />
     <Route path="userBookings" element={<UserBookings />} />
 
   {/* Service Routes */}

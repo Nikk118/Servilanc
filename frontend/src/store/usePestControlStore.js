@@ -2,9 +2,10 @@ import { create } from "zustand";
 import { axiosInstant } from "../lib/axios";
 import toast from "react-hot-toast";
 
-export const usePestControlStore = create((set,get) => ({
+export const usePestControlStore = create((set, get) => ({
   services: [],
   isAddingService: false,
+  isUpdatingService: false,
 
   fetchServices: async () => {
     try {
@@ -20,9 +21,9 @@ export const usePestControlStore = create((set,get) => ({
     try {
       set({ isAddingService: true });
 
-      const response = await axiosInstant.post("/pestcontrol/addPestControlService", serviceData);
+      await axiosInstant.post("/pestcontrol/addPestControlService", serviceData);
 
-     get().fetchServices();
+      get().fetchServices();
       set({ isAddingService: false });
 
       toast.success("Pest control service added successfully");
@@ -30,6 +31,27 @@ export const usePestControlStore = create((set,get) => ({
       console.error("Error adding pest control service:", error);
       toast.error("Failed to add pest control service");
       set({ isAddingService: false });
+    }
+  },
+
+  updateService: async (serviceId, updatedData) => {
+    try {
+      set({ isUpdatingService: true });
+
+      const response = await axiosInstant.patch(`/pestcontrol/updatePestControlService/${serviceId}`, updatedData);
+
+      set((state) => ({
+        services: state.services.map((service) =>
+          service._id === serviceId ? { ...service, ...response.data.pestControl } : service
+        ),
+        isUpdatingService: false,
+      }));
+
+      toast.success("Pest control service updated successfully");
+    } catch (error) {
+      console.error("Error updating pest control service:", error);
+      toast.error("Failed to update pest control service");
+      set({ isUpdatingService: false });
     }
   },
 

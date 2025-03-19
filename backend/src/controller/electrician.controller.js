@@ -26,7 +26,6 @@ const addElectricianService = asyncHandler(async (req, res) => {
         description,
         price,
         duration,
-        
         image_url: image_url.secure_url
     });
 
@@ -53,8 +52,36 @@ const removeElectricianService = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "Electrician service deleted successfully", electrician });
 });
 
+const updateElectricianService = asyncHandler(async (req, res) => {
+    console.log("Request body:", req.body);
+    const { electricianId } = req.params;
+    const { name, description, price, duration } = req.body;
+    const image_urlLocalPath = req.file?.path;
+    console.log("Request File:", req.file);
+
+    if (!name || !description || !price || !duration) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+    
+    let updateData = { name, description, price, duration };
+    
+    if (image_urlLocalPath) {
+        const image_url = await uploadOnCloudinary(image_urlLocalPath);
+        updateData.image_url = image_url.secure_url;
+    }
+
+    const electrician = await Electrician.findByIdAndUpdate(electricianId, updateData, { new: true });
+    
+    if (!electrician) {
+        return res.status(404).json({ message: "Electrician service not found" });
+    }
+    
+    return res.status(200).json({ message: "Electrician service updated successfully", electrician });
+});
+
 export {
     addElectricianService,
     allElectricianService,
-    removeElectricianService
+    removeElectricianService,
+    updateElectricianService
 };
