@@ -2,7 +2,7 @@ import {User} from "../models/user.model.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import { genrateToken } from "../utils/generateToken.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
-import { sendSignupEmail } from "../utils/emailService.js"
+import { sendEmail } from "../utils/emailService.js"
 
 
 const userSignUp = asyncHandler(async (req, res) => {
@@ -33,11 +33,12 @@ const userSignUp = asyncHandler(async (req, res) => {
 
         // **Send email after successful signup**
         try {
-            await sendSignupEmail(email, username);
-            console.log("Signup email sent to:", email);
-        } catch (error) {
-            console.error("Error sending signup email:", error);
-        }
+          await sendEmail(email, "Welcome to Our Service!", `Hello ${username},\n\nThank you for signing up! We're glad to have you.`);
+          console.log("Signup email sent to:", email);
+      } catch (error) {
+          console.error("Error sending signup email:", error);
+      }
+      
 
         return res.status(201).json({
             message: "User created successfully",

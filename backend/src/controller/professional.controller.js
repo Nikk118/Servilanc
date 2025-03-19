@@ -13,6 +13,8 @@ import { PestControl } from "../models/pestControl.model.js";
 
 const findServiceById = async (serviceId) => {
   try {
+      console.log("Searching for service with ID:", serviceId);
+
       // Search in all six collections simultaneously
       const [plumbing, cleaning, salon, electrician, carpentry, pestControl] = await Promise.all([
           Plumbing.findById(serviceId),
@@ -23,6 +25,8 @@ const findServiceById = async (serviceId) => {
           PestControl.findById(serviceId),
       ]);
 
+      console.log("Results:", { plumbing, cleaning, salon, electrician, carpentry, pestControl });
+
       // Return the first found service
       return plumbing || cleaning || salon || electrician || carpentry || pestControl || null;
   } catch (error) {
@@ -30,6 +34,8 @@ const findServiceById = async (serviceId) => {
       return null;
   }
 };
+
+
 
 
 
@@ -146,14 +152,15 @@ const getNewBooking = asyncHandler(async (req, res) => {
     if (!req.professional) {
       return res.status(400).json({ message: "Professional not found" });
     }
+console.log(" in new booking 1")
+const professionalId = req.professional._id;
 
-    const professionalId = req.professional._id;
-
-    // Fetch professional details (to get category)
-    const professional = await Professional.findById(professionalId);
-    if (!professional) {
-      return res.status(404).json({ message: "Professional not found" });
-    }
+// Fetch professional details (to get category)
+const professional = await Professional.findById(professionalId);
+if (!professional) {
+  return res.status(404).json({ message: "Professional not found" });
+}
+console.log("2")
 
     const professionalCategory = professional.category; // Assuming category field exists
 
@@ -161,6 +168,7 @@ const getNewBooking = asyncHandler(async (req, res) => {
     const pendingBookings = await Booking.find({ status: "Pending" })
       .populate("user")
       .sort({ createdAt: -1 });
+      console.log("3")
 
     // Extract user IDs and service IDs
     const userIds = pendingBookings.map(booking => booking.user?._id).filter(id => id);
@@ -171,26 +179,38 @@ const getNewBooking = asyncHandler(async (req, res) => {
 
     // Fetch all services for the given service IDs
     const serviceDetails = await Promise.all(serviceIds.map(serviceId => findServiceById(serviceId)));
+console.log("4")
+
 
     // Filter bookings where service category matches professional category
-    const bookingsWithDetails = pendingBookings
-      .map((booking, index) => {
-        const address = userAddresses.find(addr => addr.userId.toString() === booking.user?._id.toString());
-        const service = serviceDetails[index];
-
-        if (service?.category === professionalCategory) {
-          return {
-            ...booking.toObject(),
-            user: {
-              ...booking.user.toObject(),
-              address: address || null,
-            },
-            service: service || null,
-          };
-        }
-        return null;
-      })
-      .filter(booking => booking !== null);
+    const bookingsWithDetails = pendingBookings.map((booking, index) => {
+      const address = userAddresses.find(addr => addr.userId?.toString() === booking.user?._id?.toString());
+      const service = serviceDetails[index];
+    
+      // ✅ Check if user or service is null before calling `.toObject()`
+      if (!booking.user) {
+        console.error(`User not found for booking ID: ${booking._id}`);
+        return null; // Skip this booking
+      }
+    
+      if (!service) {
+        console.error(`Service not found for booking ID: ${booking._id}`);
+        return null; // Skip this booking
+      }
+    
+      if (service.category === professionalCategory) {
+        return {
+          ...booking.toObject(),
+          user: {
+            ...booking.user.toObject(),
+            address: address || null,
+          },
+          service: service || null,
+        };
+      }
+      return null;
+    }).filter(booking => booking !== null);
+    
 
     return res.status(200).json({
       message: "New bookings retrieved successfully",

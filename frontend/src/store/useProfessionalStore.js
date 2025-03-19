@@ -46,19 +46,25 @@ export const useProfessionalStore = create((set,get) => ({
     try { 
       const res = await axiosInstant.patch(`/booking/accpetBooking/${bookingId}`); // Fixed typo
       toast.success("Booking accepted successfully");
-
+  
       set((state) => ({
         ...state,
         newBooking: state.newBooking?.filter((booking) => booking._id !== bookingId) ?? [],
-        // refreshTrigger: Date.now(),
       }));
-
+  
       await get().setNewBooking(); // Ensure state updates properly
+  
+      // Delay fetching accepted bookings to ensure data updates
+      setTimeout(() => {
+        get().getAcceptedBooking();
+      }, 500);
+  
     } catch (error) {
       console.error("Error accepting booking:", error);
       toast.error("Failed to accept booking");
     }
   },
+  
 
   setNewBooking: async () => {
     try {

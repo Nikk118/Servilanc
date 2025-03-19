@@ -12,18 +12,19 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export async function sendSignupEmail(toEmail, userName) {
+export async function sendEmail(toEmail, subject, message) {
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: toEmail,
-        subject: "Welcome to Our Service!",
-        text: `Hello ${userName},\n\nThank you for signing up! We're glad to have you.`,
+        subject: subject,
+        text: message,
     };
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log("Signup email sent successfully");
+        console.log(`Email sent successfully to: ${toEmail}`);
     } catch (error) {
         console.error("Error sending email:", error);
     }
 }
+
