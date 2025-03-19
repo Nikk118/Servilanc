@@ -98,7 +98,7 @@ export default function App() {
   <Route path="/register" element={<JoinUs />} />
   <Route path="/electrician" element={<Electrician />} />
 <Route path="/carpentry" element={<Carpentry />} />
-<Route path="/pest-control" element={<PestControl />} />
+<Route path="/pest control" element={<PestControl />} />
 
 
   {/* footer Routes */}

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useAuthStore } from "../../store/useAuthStore";
-import { LogOut, Menu, User, CalendarCheck } from "lucide-react";
+import { LogOut, Menu, User, CalendarCheck, Wrench } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
 
 function Navbar() {
   const { logout, authUser } = useAuthStore();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -29,21 +29,38 @@ function Navbar() {
 
       {/* Center Links */}
       <div className="hidden sm:flex flex-grow justify-center space-x-6 text-lg text-white">
-        {["home", "plumbing", "cleaning", "salon", "userBookings"].map((path) => (
-          <NavLink
-            key={path}
-            to={`/${path}`}
-            className={({ isActive }) =>
-              `transition ${
-                isActive
-                  ? "text-blue-400 font-semibold border-b-2 border-blue-400"
-                  : "hover:text-blue-400"
-              }`
-            }
+        <NavLink
+          to="/home"
+          className={({ isActive }) =>
+            `transition ${isActive ? "text-blue-400 font-semibold border-b-2 border-blue-400" : "hover:text-blue-400"}`
+          }
+        >
+          Home
+        </NavLink>
+
+        {/* Services Dropdown */}
+        <div className="relative">
+          <button
+            className="text-white hover:text-blue-400 flex items-center"
+            onClick={() => setServicesMenuOpen(!servicesMenuOpen)}
           >
-            {path.replace("-", " ").charAt(0).toUpperCase() + path.replace("-", " ").slice(1)}
-          </NavLink>
-        ))}
+            Services <Wrench className="ml-2" size={18} />
+          </button>
+          {servicesMenuOpen && (
+            <div className="absolute left-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-xl shadow-xl overflow-hidden">
+              {["Plumbing", "Cleaning", "Salon", "Electrician", "Carpentry", "Pest Control"].map((service) => (
+                <NavLink
+                  key={service}
+                  to={`/${service.toLowerCase()}`}
+                  className="block px-4 py-3 text-sm text-white hover:bg-gray-700 transition transform hover:scale-105"
+                  onClick={() => setServicesMenuOpen(false)}
+                >
+                  {service}
+                </NavLink>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Right Side */}
@@ -55,19 +72,13 @@ function Navbar() {
               className="flex items-center cursor-pointer bg-gray-700 px-3 py-1 rounded-md hover:bg-gray-600 transition"
               onClick={() => setProfileMenuOpen(!profileMenuOpen)}
             >
-             
-
-<User className="w-10 h-10 rounded-full border-2 border-blue-400 text-blue-400 bg-gray-100 p-2" />
-
+              <User className="w-10 h-10 rounded-full border-2 border-blue-400 text-blue-400 bg-gray-100 p-2" />
               <span className="ml-2 text-white text-sm font-semibold">{authUser.username}</span>
-             
             </div>
 
             {/* Profile Dropdown Menu */}
             {profileMenuOpen && (
-              <div
-                className="absolute right-0 mt-2 w-48 bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-700 rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 scale-95 hover:scale-100"
-              >
+              <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-xl shadow-xl">
                 <NavLink
                   to="/profile"
                   className="flex items-center px-4 py-3 text-sm text-white hover:bg-gray-700 transition transform hover:scale-105"
@@ -108,16 +119,40 @@ function Navbar() {
           isOpen ? "block" : "hidden"
         }`}
       >
-        {["home", "plumbing", "cleaning", "salon", "my-bookings"].map((path) => (
-          <NavLink
-            key={path}
-            to={`/${path}`}
-            className="block p-3 text-sm transition hover:text-blue-400"
-            onClick={() => setIsOpen(false)}
+        <NavLink
+          to="/home"
+          className="block p-3 text-sm transition hover:text-blue-400"
+          onClick={() => setIsOpen(false)}
+        >
+          Home
+        </NavLink>
+
+        {/* Mobile Services Dropdown */}
+        <div className="border-t border-gray-600">
+          <button
+            className="block w-full p-3 text-sm text-white hover:text-blue-400 transition text-left"
+            onClick={() => setServicesMenuOpen(!servicesMenuOpen)}
           >
-            {path.replace("-", " ").charAt(0).toUpperCase() + path.replace("-", " ").slice(1)}
-          </NavLink>
-        ))}
+            Services
+          </button>
+          {servicesMenuOpen && (
+            <div className="pl-5">
+              {["Plumbing", "Cleaning", "Salon", "Electrician", "Carpentry", "Pest Control"].map((service) => (
+                <NavLink
+                  key={service}
+                  to={`/${service.toLowerCase()}`}
+                  className="block p-3 text-sm transition hover:text-blue-400"
+                  onClick={() => {
+                    setIsOpen(false);
+                    setServicesMenuOpen(false);
+                  }}
+                >
+                  {service}
+                </NavLink>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Profile & Logout inside Mobile Menu */}
         {authUser && (
@@ -127,11 +162,10 @@ function Navbar() {
               className="block p-3 text-sm text-white hover:text-blue-400 transition"
               onClick={() => setIsOpen(false)}
             >
-              <FaUserCircle className="inline-block mr-2" />
-              Profile
+              View Profile
             </NavLink>
             <NavLink
-              to="/my-bookings"
+              to="/userBookings"
               className="block p-3 text-sm text-white hover:text-blue-400 transition"
               onClick={() => setIsOpen(false)}
             >
@@ -141,7 +175,6 @@ function Navbar() {
               className="block p-3 text-sm text-white hover:text-red-400 transition w-full text-left"
               onClick={handleLogout}
             >
-              <LogOut className="inline-block mr-2" />
               Logout
             </button>
           </div>
