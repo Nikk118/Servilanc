@@ -6,6 +6,7 @@ import { Cleaning } from "../models/cleaning.model.js";
 import { Electrician } from "../models/electrician.model.js";
 import { Carpentry } from "../models/carpentry.model.js";
 import { PestControl } from "../models/pestControl.model.js";
+import { sendEmail } from "../utils/emailService.js";
 
 const findServiceById = async (serviceId) => {
     try {
@@ -28,55 +29,72 @@ const findServiceById = async (serviceId) => {
 };
 
 
-const addBooking=asyncHandler(async(req,res)=>{
-    console.log("samna ye aaya",req.body)
-    const {bookingDate,bookingTime,transactionId}=req.body 
-    const user=req.user
-    const {serviceId}=req.params
+const addBooking = asyncHandler(async (req, res) => {
+    console.log("Received booking request", req.body);
+    
+    const { bookingDate, bookingTime, transactionId } = req.body;
+    const user = req.user; // Ensure this contains username and email
+    const { serviceId } = req.params;
 
     if (!serviceId) {
-        return res.status(400).json({message:"service id is  required"})
-    } 
+        return res.status(400).json({ message: "Service ID is required" });
+    }
+
     const service = await findServiceById(serviceId);
 
     if (!service) {
-      console.log("Service not found");
-    } else {
-      console.log("Service found:", service);
-    }
-    
-    
-    if(!bookingDate || !bookingTime){
-        return res.status(400).json({message:"All fields are required"})    
+        console.log("Service not found");
+        return res.status(404).json({ message: "Service not found" });
     }
 
-    if(!transactionId){
-        
-        
-        const newBooking=await Booking.create({
-            user:user._id,
-            service:serviceId,
+    if (!bookingDate || !bookingTime) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    let newBooking;
+    if (!transactionId) {
+        newBooking = await Booking.create({
+            user: user._id,
+            service: serviceId,
             bookingDate,
             bookingTime,
-            totalAmount:service.price
-        })
-
-        return res.status(201).json({message:"Booking created successfully",booking:newBooking})
+            totalAmount: service.price,
+        });
     } else {
-        const newBooking=await Booking.create({
-            user:user._id,
-            service:serviceId,
+        newBooking = await Booking.create({
+            user: user._id,
+            service: serviceId,
             bookingDate,
             bookingTime,
-            transactionId:transactionId,
-            paymentStatus:"Paid",
-            totalAmount:service.price
-        })
-        return res.status(201).json({message:"Booking created successfully",booking:newBooking})
-    }  
+            transactionId: transactionId,
+            paymentStatus: "Paid",
+            totalAmount: service.price,
+        });
+    }
 
-   
-}) 
+    // Extract username and service name
+    const userName = user.username || "User"; // Default to "User" if undefined
+    const serviceName = service.name || "the service"; // Default if service name is missing
+
+    // Send booking request email
+    try {
+        await sendEmail(
+            user.email,  // toEmail
+            "Your Booking Request is Pending",  // subject
+            `Hello ${userName},\n\nYour booking request for ${serviceName} on ${bookingDate} at ${bookingTime} is pending. We will notify you when a professional accepts it. If no professional accepts, your request will be automatically canceled.\n\nThank you for choosing our service!` // message
+        );
+        
+        console.log("Booking request email sent to:", user.email);
+    } catch (error) {
+        console.error("Error sending booking request email:", error);
+    }
+
+    return res.status(201).json({
+        message: "Booking created successfully. You will be notified when a professional accepts it.",
+        booking: newBooking,
+    });
+});
+
 
 const getBooking = asyncHandler(async (req, res) => {
     try {
