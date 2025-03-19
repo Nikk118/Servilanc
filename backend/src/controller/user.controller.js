@@ -2,58 +2,52 @@ import {User} from "../models/user.model.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import { genrateToken } from "../utils/generateToken.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { sendSignupEmail } from "../utils/emailService.js"
 
-const userSignUp = asyncHandler(async(req,res)=>{
 
-    const {email,username,password,phone}=req.body
+const userSignUp = asyncHandler(async (req, res) => {
+    const { email, username, password, phone } = req.body;
 
-    if(!email || !username|| !password||!phone){
-      return res.status(400)
-      .json(
-       { message:"all feilds are required"}
-      )
+    if (!email || !username || !password || !phone) {
+        return res.status(400).json({ message: "All fields are required" });
     }
 
-    const userExists= await User.findOne({$or:[{username},{email}]})
+    const userExists = await User.findOne({ $or: [{ username }, { email }] });
 
-    if(userExists){
-      return res.status(400)
-      .json(
-       { message:"user already exists"}
-      )
+    if (userExists) {
+        return res.status(400).json({ message: "User already exists" });
     }
 
-    const user= await User.create({
+    const user = await User.create({
         username,
         email,
         phone,
-        password
-    })
+        password,
+    });
+    console.log("created user")
+    const createdUser = await User.findById(user._id).select("-password");
 
-    const createdUser= await User.findById(user._id).select("-password")
+    if (createdUser) {
+        genrateToken(createdUser._id, res);
+        await createdUser.save();
 
-    if(createdUser){
+        // **Send email after successful signup**
+        try {
+            await sendSignupEmail(email, username);
+            console.log("Signup email sent to:", email);
+        } catch (error) {
+            console.error("Error sending signup email:", error);
+        }
 
-        genrateToken(createdUser._id,res)
-        await createdUser.save()
-
-        return res.status(201)
-        .json(
-            {
-                message:"user created successfully",
-                user:createdUser
-            }
-        )
-    }else{
-      return res.status(500)
-      .json(
-       { message:"internal server error"}
-      )
-
+        return res.status(201).json({
+            message: "User created successfully",
+            user: createdUser,
+        });
+    } else {
+        return res.status(500).json({ message: "Internal server error" });
     }
-    
-    
-})
+});
+
 
 const userLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
