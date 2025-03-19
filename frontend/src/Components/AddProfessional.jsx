@@ -74,9 +74,9 @@ function AddProfessional() {
           <option value="Salon">Salon</option>
           <option value="Cleaner">Cleaner</option>
           <option value="Plumber">Plumber</option>
-          <option value="Plumber">Electrician</option>
-          <option value="Plumber">pest Control</option>
-          <option value="Plumber">Carpenty</option>
+          <option value="Electrician">Electrician</option>
+          <option value="PestControl">pestControl</option>
+          <option value="Carpentry">Carpenty</option>
         </select>
         <button
           type="submit"

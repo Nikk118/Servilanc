@@ -13,7 +13,7 @@ function UserDetails() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white">
+    <div className="flex justify-center items-center min-h-screen bg-white pt-20">
       <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-lg border border-gray-200 text-gray-900">
         
         {/* Profile Header */}
@@ -23,7 +23,7 @@ function UserDetails() {
           </div>
           <h2 className="text-3xl font-extrabold text-gray-800">User Profile</h2>
         </div>
-
+  
         {/* User Details */}
         <div className="mt-6 space-y-5 text-lg">
           <p>
@@ -43,11 +43,11 @@ function UserDetails() {
             </span>
           </p>
         </div>
-
-        
+  
       </div>
     </div>
   );
+  
 }
 
 export default UserDetails;

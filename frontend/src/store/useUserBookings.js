@@ -14,6 +14,7 @@ export const useUserBookings = create((set) => ({
             console.log("in store")
             const res = await axiosInstant.get("/booking/getBookings");
             set({ userBookings: res.data.bookings });
+            console.log("Updated userBookings:", res.data.bookings);
 
             
         } catch (error) {

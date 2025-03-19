@@ -38,11 +38,13 @@ function Carpentry() {
   );
 
   return (
-    <div className="py-12 px-20 bg-white min-h-screen">
+    <div className="py-12 px-20 bg-white min-h-screen pt-29">
+
       <h1 className="text-4xl text-center text-gray-900 font-extrabold mb-8">
-      Carpentry Services
+        Carpentry Services
       </h1>
 
+      {/* Search Input */}
       <div className="flex justify-center mb-6">
         <input
           type="text"
@@ -53,6 +55,7 @@ function Carpentry() {
         />
       </div>
 
+      {/* Show Loading Spinner */}
       {loading ? (
         <p className="text-center text-lg text-gray-600">Loading services...</p>
       ) : (
@@ -63,6 +66,7 @@ function Carpentry() {
                 key={service._id}
                 className="bg-gray-100 text-gray-900 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
               >
+                {/* Service Image */}
                 <div className="relative">
                   <img
                     src={service.image_url}
@@ -74,6 +78,7 @@ function Carpentry() {
                   </div>
                 </div>
 
+                {/* Service Details */}
                 <div className="p-5">
                   <h2 className="text-lg font-bold">{service.name}</h2>
                   <p className="text-gray-600 text-sm mt-1">{service.description}</p>

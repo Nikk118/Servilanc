@@ -86,10 +86,7 @@ export default function App() {
   <Route path="/admin/login" element={authAdmin ? <AdminHome /> : <LoginAdmin />} />
   <Route path="/admin/home" element={authAdmin ? <AdminHome /> : <LoginAdmin />} />
 
-  {/* Profile Page with Nested Routes */}
-  {/* <Route path="/profile" element={<Profile />}>
-    <Route index element={<Userdetails />} />
-    </Route> */}
+
     <Route path="profile" element={<Userdetails />} />
     <Route path="userBookings" element={<UserBookings />} />
 

@@ -55,17 +55,12 @@ function Navbar() {
               className="flex items-center cursor-pointer bg-gray-700 px-3 py-1 rounded-md hover:bg-gray-600 transition"
               onClick={() => setProfileMenuOpen(!profileMenuOpen)}
             >
-              {/* <img
-                src={authUser.profileImage || "https://via.placeholder.com/40"}
-                alt="Profile"
-                className="w-10 h-10 rounded-full border-2 border-blue-400"
-              /> */}
+             
+
+<User className="w-10 h-10 rounded-full border-2 border-blue-400 text-blue-400 bg-gray-100 p-2" />
+
               <span className="ml-2 text-white text-sm font-semibold">{authUser.username}</span>
-              {authUser.role === "admin" && (
-                <span className="ml-2 bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                  Admin
-                </span>
-              )}
+             
             </div>
 
             {/* Profile Dropdown Menu */}

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useAdminStore } from "../store/useAdminStore";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
-import { motion } from "framer-motion"; // Smooth animations
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { motion } from "framer-motion";
 
-// Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+// Register Pie Chart components
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function AllBookings() {
   const { bookingsStats, setBookingsStats } = useAdminStore();
@@ -14,57 +14,45 @@ function AllBookings() {
     setBookingsStats();
   }, [setBookingsStats]);
 
-
-  const chartData = {
-    labels: ["Total", "Pending", "Cancelled", "Completed", "Accepted"],
+  // Pie Chart Data
+  const pieData = {
+    labels: ["Pending", "Cancelled", "Completed", "Accepted"],
     datasets: [
       {
-        label: "Bookings Overview",
         data: [
-          bookingsStats?.totalBookings || 0,
           bookingsStats?.Pending || 0,
           bookingsStats?.Cancelled || 0,
           bookingsStats?.Completed || 0,
-          bookingsStats?.Accepted || 0
+          bookingsStats?.Accepted || 0,
         ],
-        borderColor: "#00C2FF",
-        backgroundColor: "rgba(0, 194, 255, 0.2)",
-        pointBackgroundColor: "#00C2FF",
-        pointBorderColor: "#fff",
-        tension: 0.4, // Smooth curve
+        backgroundColor: ["#F4B400", "#DB4437", "#0F9D58", "#673AB7"],
+        borderColor: "#fff",
+        borderWidth: 2,
       },
     ],
   };
 
-  // 📊 Chart Options
-  const chartOptions = {
+  // Pie Chart Options (Bigger Labels)
+  const pieOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: false },
-      title: {
-        display: true,
-        text: "Bookings Statistics",
-        color: "white",
-        font: { size: 16 },
-      },
-    },
-    scales: {
-      x: {
-        ticks: { color: "white", font: { size: 12 } },
-      },
-      y: {
-        ticks: { color: "white", font: { size: 12 } },
-        beginAtZero: true,
+      legend: {
+        labels: {
+          font: {
+            size: 16, // Bigger labels
+            weight: "bold",
+          },
+          color: "#fff",
+        },
       },
     },
   };
 
   return (
     <div className="p-6">
-      <h3 className="text-2xl font-bold text-white mb-6"> Bookings Overview</h3>
+      <h3 className="text-2xl font-bold text-white mb-6">Bookings Overview</h3>
 
-      {/** 🔹 Show Loading State */}
       {!bookingsStats ? (
         <motion.p
           className="text-blue-400 text-lg"
@@ -76,13 +64,13 @@ function AllBookings() {
         </motion.p>
       ) : (
         <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-          {/** 🔹 Chart Component */}
-          <div className="h-[350px] mb-6">
-            <Line data={chartData} options={chartOptions} />
+          {/* Pie Chart */}
+          <div className="h-[400px] w-full flex justify-center">
+            <Pie data={pieData} options={pieOptions} />
           </div>
 
-          {/** 🔹 Booking Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {/* Booking Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
             <StatCard title="Total Bookings" value={bookingsStats.totalBookings} color="text-blue-400" />
             <StatCard title="Pending" value={bookingsStats.Pending} color="text-yellow-400" />
             <StatCard title="Cancelled" value={bookingsStats.Cancelled} color="text-red-500" />
@@ -94,7 +82,6 @@ function AllBookings() {
     </div>
   );
 }
-
 
 const StatCard = ({ title, value, color }) => (
   <motion.div

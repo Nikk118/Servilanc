@@ -6,6 +6,9 @@ import {Salon} from "../models/Salon.model.js"
 import { Cleaning } from "../models/cleaning.model.js"
 import { Plumbing } from "../models/Plumbing.model.js"
 import { User } from "../models/user.model.js"
+import { Electrician } from "../models/electrician.model.js"
+import { Carpentry } from "../models/carpentry.model.js"
+import { PestControl } from "../models/pestControl.model.js"
 import {Booking} from "../models/booking.model.js"
 
 
@@ -168,9 +171,12 @@ const totalServices=asyncHandler(async(req,res)=>{
       const salon= await Salon.countDocuments()
       const cleaning= await Cleaning.countDocuments()
       const plumbing= await Plumbing.countDocuments()
+      const electrician= await Electrician.countDocuments()
+      const carpentry= await Carpentry.countDocuments()
+      const pestControl= await PestControl.countDocuments()
 
-      const totalCount=salon+cleaning+plumbing
-      const Services={salon,cleaning,plumbing,totalCount}
+      const totalCount=salon+cleaning+plumbing+electrician+carpentry+pestControl
+      const Services={salon,cleaning,plumbing,totalCount,electrician,carpentry,pestControl}
       return res.status(200).json({message:"total services",Services})
 })
 
