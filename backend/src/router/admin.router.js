@@ -24,7 +24,7 @@ router.route("/totalServices").get(verifyAdmin,totalServices)
 
 router.route("/bookingsStats").get(verifyAdmin,bookingsStats)
 
-router.route("/getAllProfessionalStats").get(verifyAdmin,getAllProfessionalStats)
+router.route("/getAllProfessionalStats").get(getAllProfessionalStats)
 
 router.route("/getAllUsersStats").get(verifyAdmin,getAllUsersStats)
 

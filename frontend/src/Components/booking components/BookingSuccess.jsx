@@ -15,7 +15,7 @@ function BookingSuccess({booking}) {
           *If a professional does not accept your request, it will be automatically canceled.
         </p>
         <button
-          onClick={() => navigate("/profile/userBookings")}
+          onClick={() => navigate("/userBookings")}
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
         >
           See Bookings

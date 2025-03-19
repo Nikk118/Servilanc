@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFeedbackStore } from "../store/useFeedbackStore.js";
+
 import { FaWrench, FaBroom, FaCut, FaPlus,FaBug,FaHammer,FaBolt } from "react-icons/fa";
+import OurProfessional from "../Components/homepage/OurProfessional.jsx";
 
 export default function Home() {
   const navigate = useNavigate();
   const { feedbacks, getFeedbacks, addFeedback } = useFeedbackStore();
   const [showForm, setShowForm] = useState(false);
   const [comment, setComment] = useState("");
+  
 
   // Fetch feedbacks when component mounts
   React.useEffect(() => {
@@ -108,6 +111,7 @@ export default function Home() {
   ))}
 </section>
 
+      <OurProfessional/>
 
       {/* Customer Feedback Section */}
       <section className="relative bg-gray-800 p-12 text-white">

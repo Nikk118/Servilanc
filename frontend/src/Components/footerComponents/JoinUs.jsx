@@ -32,7 +32,7 @@ const JoinUs = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4 pt-30">
        {submitted ? (
         <div className="text-center p-6 bg-green-100 border border-green-300 rounded-lg">
           <CheckCircle className="text-green-500 w-12 h-12 mx-auto" />
@@ -121,6 +121,9 @@ const JoinUs = () => {
             <option value="Salon">Salon</option>
             <option value="Plumber">Plumber</option>
             <option value="Cleaner">Cleaner</option>
+            <option value="Electrician">Electrician</option>
+            <option value="Carpentry">Carpentry</option>
+            <option value="PestControl">PestControl</option>
             <option value="Other">Other</option>
           </select>
         </div>

@@ -32,7 +32,7 @@ function ContactUs() {
   };
 
   return (
-    <section className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg my-10">
+    <section className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-lg pt-30">
       {submitted ? (
         <div className="text-center p-6 bg-green-100 border border-green-300 rounded-lg">
           <CheckCircle className="text-green-500 w-12 h-12 mx-auto" />

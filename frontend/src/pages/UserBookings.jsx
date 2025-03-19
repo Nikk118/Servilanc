@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUserBookings } from "../store/useUserBookings";
 import { useNavigate } from "react-router-dom";
-
+import Invoice from "../Components/invoice/Invoice"; 
 function UserBookings() {
   const {
     userBookings,
@@ -10,13 +10,13 @@ function UserBookings() {
     cancelBooking,
   } = useUserBookings();
   const navigate = useNavigate();
-  const [filter, setFilter] = useState("All"); // Default filter
+  const [filter, setFilter] = useState("All");
+  const [selectedBooking, setSelectedBooking] = useState(null); // 2️⃣ State for selected booking
 
   useEffect(() => {
     getUserBookings();
   }, [getUserBookings]);
 
-  // Filtering bookings based on selected status
   const filteredBookings = (userBookings || []).filter(
     (booking) => filter === "All" || booking.status === filter
   );
@@ -30,7 +30,6 @@ function UserBookings() {
             Your Bookings
           </h2>
 
-          {/* Filter Dropdown */}
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
@@ -109,16 +108,29 @@ function UserBookings() {
                     </p>
                   </div>
 
-                  {/* Cancel Button */}
-                  {booking.status !== "Completed" &&
-                    booking.status !== "Cancelled" && (
+                  {/* Buttons */}
+                  <div className="flex flex-col gap-3">
+                    {/* Cancel Button */}
+                    {booking.status !== "Completed" &&
+                      booking.status !== "Cancelled" && (
+                        <button
+                          onClick={() => cancelBooking(booking._id)}
+                          className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-400 transition-all shadow-md"
+                        >
+                          Cancel
+                        </button>
+                      )}
+
+                    {/* View Invoice Button (Only for Paid Bookings) */}
+                    {booking.paymentStatus === "Paid" && (
                       <button
-                        onClick={() => cancelBooking(booking._id)}
-                        className="ml-auto px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-400 transition-all shadow-md"
+                        onClick={() => setSelectedBooking(booking)} // 3️⃣ Set booking for invoice
+                        className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition-all shadow-md"
                       >
-                        Cancel
+                        View Invoice
                       </button>
                     )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -140,6 +152,30 @@ function UserBookings() {
           </div>
         )}
       </div>
+
+      {/* Invoice Modal */}
+      {selectedBooking && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <Invoice
+              service={selectedBooking.service?.name}
+              price={selectedBooking.service?.price}
+              date={new Date(selectedBooking.bookingDate).toLocaleDateString()}
+              time={selectedBooking.bookingTime}
+              status={selectedBooking.status}
+              paymentStatus={selectedBooking.paymentStatus}
+              transactionId={selectedBooking.transactionId}  
+            />
+            <button
+              onClick={() => setSelectedBooking(null)} // Close invoice
+              className="mt-2 bg-gray-500 text-white px-4 py-2 rounded w-full"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
