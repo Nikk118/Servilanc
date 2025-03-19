@@ -5,9 +5,9 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 const userSignUp = asyncHandler(async(req,res)=>{
 
-    const {email,username,password}=req.body
+    const {email,username,password,phone}=req.body
 
-    if(!email || !username|| !password){
+    if(!email || !username|| !password||!phone){
       return res.status(400)
       .json(
        { message:"all feilds are required"}
@@ -26,6 +26,7 @@ const userSignUp = asyncHandler(async(req,res)=>{
     const user= await User.create({
         username,
         email,
+        phone,
         password
     })
 

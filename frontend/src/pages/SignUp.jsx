@@ -4,12 +4,16 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/useAuthStore";
 
-
 export default function SignupUser() {
-  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
   const navigate = useNavigate();
 
-  const {signup,isSignUp}=useAuthStore()
+  const { signup, isSignUp } = useAuthStore();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -19,8 +23,6 @@ export default function SignupUser() {
     e.preventDefault();
     signup(formData);
   };
-
- 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white">
@@ -62,6 +64,21 @@ export default function SignupUser() {
           </div>
 
           <div>
+            <label className="block text-gray-300 text-sm mb-1">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500"
+              placeholder="Enter your phone number"
+              required
+            />
+          </div>
+
+          <div>
             <label className="block text-gray-300 text-sm mb-1">Password</label>
             <input
               type="password"
@@ -89,7 +106,7 @@ export default function SignupUser() {
             Already have an account?{" "}
             <span
               className="text-blue-500 cursor-pointer hover:underline"
-              onClick={() => navigate("/login")} 
+              onClick={() => navigate("/login")}
             >
               Login
             </span>
