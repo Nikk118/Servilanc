@@ -3,6 +3,7 @@ import { Admin } from "../models/admin.model.js";
 import { genrateToken } from "../utils/generateToken.js";
 import { Professional } from "../models/professional.model.js";
 import {Salon} from "../models/Salon.model.js"
+import {Address} from "../models/address.model.js"
 import { Cleaning } from "../models/cleaning.model.js"
 import { Plumbing } from "../models/Plumbing.model.js"
 import { User } from "../models/user.model.js"
@@ -243,31 +244,93 @@ const bookingsStats = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllProfessionalStats=asyncHandler(async(req,res)=>{
-  const professionals=await Professional.find()
+const getAllProfessionalStats = asyncHandler(async (_, res) => {
+  const professionals = await Professional.find();
 
-  const professionalStats=await Promise.all(
-    professionals.map(async(professional)=>{
-        
-        const acceptedBookings=await Booking.countDocuments({professional:professional._id,status:"Accepted"})
-        const completedBookings=await Booking.countDocuments({professional:professional._id,status:"Completed"})
-        const cancelledBookings=await Booking.countDocuments({professional:professional._id,status:"Cancelled"})
+  const professionalStats = await Promise.all(
+    professionals.map(async (professional) => {
+      const acceptedBookings = await Booking.find({
+        professional: professional._id,
+        status: "Accepted",
+      });
 
-        return{
-            professional:professional._id,
-            name:professional.name,
-            catagory:professional.category,
-            email:professional.email,
-            phone:professional.phone,
-            acceptedBookings,
-            completedBookings,
-            cancelledBookings
+      const completedBookings = await Booking.countDocuments({
+        professional: professional._id,
+        status: "Completed",
+      });
+
+      const cancelledBookings = await Booking.countDocuments({
+        professional: professional._id,
+        status: "Cancelled",
+      });
+
+      const acceptedBookingDetails = await Promise.all(
+        acceptedBookings.map(async (booking) => {
+          const address = await Address.find({ userId: booking.user });
+          const serviceDetails = await findServiceById(booking.service);
+          return {
+            user: booking.user,
+            service: serviceDetails,
+            address,
+            booking: {
+              _id: booking._id,
+              bookingDate: booking.bookingDate,
+              bookingTime: booking.bookingTime,
+            },
+          };
+        })
+      );
+
+      // 🔹 Sorting by Date (Ascending) → Then by Time (Ascending)
+      acceptedBookingDetails.sort((a, b) => {
+        const dateA = new Date(a.booking.bookingDate).getTime();
+        const dateB = new Date(b.booking.bookingDate).getTime();
+
+        if (dateA !== dateB) {
+          return dateA - dateB; // Earlier date first
         }
-  }))
 
-  return res.status(200).json({message:"All professionals booking stats",professionalStats})
-    
-})
+        // Convert time (e.g., "11:00 AM") to 24-hour format for comparison
+        const timeA = convertTo24Hour(a.booking.bookingTime);
+        const timeB = convertTo24Hour(b.booking.bookingTime);
+
+        return timeA - timeB; // Earlier time first
+      });
+
+      return {
+        professional: professional._id,
+        name: professional.name,
+        catagory: professional.category,
+        email: professional.email,
+        phone: professional.phone,
+        acceptedBookings: acceptedBookings.length,
+        completedBookings,
+        cancelledBookings,
+        acceptedBookingDetails,
+      };
+    })
+  );
+
+  return res.status(200).json({
+    message: "All professionals booking stats",
+    professionalStats,
+  });
+});
+
+// 🔹 Function to Convert "12-hour Time" to "24-hour Time"
+const convertTo24Hour = (timeStr) => {
+  const [time, period] = timeStr.split(" ");
+  let [hours, minutes] = time.split(":").map(Number);
+
+  if (period === "PM" && hours !== 12) {
+    hours += 12;
+  } else if (period === "AM" && hours === 12) {
+    hours = 0;
+  }
+
+  return hours * 60 + minutes; // Convert to total minutes for easy sorting
+};
+
 
 const getAllUsersStats = asyncHandler(async (req, res) => {
   const users = await User.find();
@@ -326,16 +389,16 @@ const removeUser=asyncHandler(async(req,res)=>{
 
 const getALLBookingWithDeatils = asyncHandler(async (req, res) => {
   try {
-      // Fetch all bookings and populate user and professional
+     
       const bookings = await Booking.find().populate("user professional");
 
-      // Fetch service details for each booking
+     
       const bookingsWithDetails = await Promise.all(
           bookings.map(async (booking) => {
-              const service = await findServiceById(booking.service); // Get correct service details
+              const service = await findServiceById(booking.service); 
               return {
                   ...booking.toObject(),
-                  service: service || null, // Attach service details
+                  service: service || null, 
               };
           })
       );
