@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"; 
-import { useCleaningStore } from "../store/useCleaningStore";
+import { useCleaningStore } from "../../store/useCleaningStore";
 
 function Cleaning() {
   const { services, addService, removeService, fetchServices, updateService, isAddingService } = useCleaningStore();

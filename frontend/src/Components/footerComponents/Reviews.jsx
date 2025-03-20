@@ -22,7 +22,8 @@ function Reviews() {
             {allFeedback.map((feedback) => (
               <div key={feedback._id} className="bg-white shadow-lg rounded-lg p-6 text-left">
                 <h3 className="text-xl font-semibold text-gray-800">
-                  {feedback.user.username}
+                {feedback?.user?.username || "User"}
+
                 </h3>
                 <p className="text-gray-600 mt-2">"{feedback.comment}"</p>
                 <p className="text-gray-400 text-sm mt-2">

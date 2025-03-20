@@ -146,7 +146,7 @@ const getAcceptedBooking = asyncHandler(async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
+1
 const getNewBooking = asyncHandler(async (req, res) => {
   try {
     if (!req.professional) {

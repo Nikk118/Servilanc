@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useCarpentryStore } from "../store/useCarpentryStore";
+import { useCarpentryStore } from "../../store/useCarpentryStore";
 
 function Carpentry() {
   const {

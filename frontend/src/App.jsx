@@ -21,7 +21,7 @@ import Booking from "./pages/Booking";
 // import Profile from "./pages/ProfilePage";
 import Userdetails from "./pages/Userdetails";
 import UserBookings from "./pages/UserBookings";
-import Footer from "./Components/footer";
+import Footer from "./Components/footerComponents/Footer";
 import AboutUs from "./Components/footerComponents/AboutUs";
 import Terms from "./Components/footerComponents/Terms";
 import Privacy from "./Components/footerComponents/Privary";

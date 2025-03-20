@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { usePlumbingStore } from "../store/usePlumbingStore";
+import { usePlumbingStore } from "../../store/usePlumbingStore";
 
 function Plumbing() {
   const {

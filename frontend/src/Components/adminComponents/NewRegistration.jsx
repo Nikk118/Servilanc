@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRegistersStore } from '../store/useRegistersStore';
+import { useRegistersStore } from '../../store/useRegistersStore';
 
 const NewRegistration = () => {
     const { registers, getRegisters, deleteRegister } = useRegistersStore();

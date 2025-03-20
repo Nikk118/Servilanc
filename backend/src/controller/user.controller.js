@@ -31,7 +31,11 @@ const userSignUp = asyncHandler(async (req, res) => {
         genrateToken(createdUser._id, res);
         await createdUser.save();
 
-        // **Send email after successful signup**
+        res.status(201).json({
+          message: "User created successfully",
+          user: createdUser,
+      });
+        
         try {
           await sendEmail(email, "Welcome to Our Service!", `Hello ${username},\n\nThank you for signing up! We're glad to have you.`);
           console.log("Signup email sent to:", email);
@@ -40,10 +44,7 @@ const userSignUp = asyncHandler(async (req, res) => {
       }
       
 
-        return res.status(201).json({
-            message: "User created successfully",
-            user: createdUser,
-        });
+        
     } else {
         return res.status(500).json({ message: "Internal server error" });
     }

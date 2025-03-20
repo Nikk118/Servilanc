@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
-import { UserPlus } from "lucide-react";
+import { UserPlus,FileText  } from "lucide-react";
 import {
   FaUserTie,
   FaUsers,
@@ -21,6 +21,7 @@ const menuItems = [
   { name: "All Professionals", icon: <FaUserTie /> },
   { name: "Add Professional", icon: <FaPlus /> },
   { name: "All Users", icon: <FaUsers /> },
+  { name: "BookingWithDetails", icon: <FileText  /> },
   { name: "User Messages", icon: <MessageCircle /> },
   { name: "New Registration", icon: <UserPlus /> },
   { name: "Feedback", icon: <FaComment /> },

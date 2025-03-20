@@ -11,6 +11,25 @@ import { Carpentry } from "../models/carpentry.model.js"
 import { PestControl } from "../models/pestControl.model.js"
 import {Booking} from "../models/booking.model.js"
 
+const findServiceById = async (serviceId) => {
+    try {
+       
+        const [plumbing, cleaning, salon, electrician, carpentry, pestControl] = await Promise.all([
+            Plumbing.findById(serviceId),
+            Cleaning.findById(serviceId),
+            Salon.findById(serviceId),
+            Electrician.findById(serviceId),
+            Carpentry.findById(serviceId),
+            PestControl.findById(serviceId),
+        ]);
+
+        // Return the first found service
+        return plumbing || cleaning || salon || electrician || carpentry || pestControl || null;
+    } catch (error) {
+        console.error("Error finding service:", error);
+        return null;
+    }
+};
 
 const adminSignUp= asyncHandler(async(req,res)=>{
 
@@ -305,8 +324,33 @@ const removeUser=asyncHandler(async(req,res)=>{
   }
 })
 
+const getALLBookingWithDeatils = asyncHandler(async (req, res) => {
+  try {
+      // Fetch all bookings and populate user and professional
+      const bookings = await Booking.find().populate("user professional");
+
+      // Fetch service details for each booking
+      const bookingsWithDetails = await Promise.all(
+          bookings.map(async (booking) => {
+              const service = await findServiceById(booking.service); // Get correct service details
+              return {
+                  ...booking.toObject(),
+                  service: service || null, // Attach service details
+              };
+          })
+      );
+
+      return res.status(200).json({ message: "All bookings retrieved successfully", bookings: bookingsWithDetails });
+  } catch (error) {
+      console.error("Error fetching bookings:", error);
+      return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 
 export {
+  getALLBookingWithDeatils,
   removeUser,
   removeProfessional,
   getAllUsersStats,

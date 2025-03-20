@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSalonStore } from "../store/useSalonStore";
+import { useSalonStore } from "../../store/useSalonStore";
 
 function Salon() {
   const { services, addService, removeService, fetchServices, updateService, isAddingService, isupdatingService } = useSalonStore();

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAdminStore } from "../store/useAdminStore";
+import { useAdminStore } from "../../store/useAdminStore";
 
 function AddProfessional() {
 

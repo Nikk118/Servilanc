@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAdminStore } from "../store/useAdminStore";
+import { useAdminStore } from "../../store/useAdminStore";
 import { FaCheckCircle, FaTimesCircle, FaClock, FaClipboardList, FaTrash } from "react-icons/fa";
 
 function AllUsers() {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useContactStore } from "../store/useContactStore.js";
+import { useContactStore } from "../../store/useContactStore.js";
 
 function UserContacts() {
   const { getContact, contacts, deleteContact } = useContactStore();
@@ -13,9 +13,9 @@ function UserContacts() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
-      <div className="bg-white shadow-md rounded-lg w-full max-w-5xl p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">
+    <div className="p-6 bg-gray-900 min-h-screen flex flex-col items-center">
+      <div className="bg-gray-800 shadow-md rounded-lg w-full max-w-5xl p-6">
+        <h2 className="text-2xl font-bold text-gray-300 mb-4 border-b pb-2">
           User Messages
         </h2>
         <div className="overflow-x-auto">
@@ -35,7 +35,7 @@ function UserContacts() {
                 [...contacts]
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by newest first
                   .map((contact, index) => (
-                    <tr key={contact.id || index} className="text-gray-800">
+                    <tr key={contact.id || index} className="text-white">
                       <td className="p-3 border text-center">{index + 1}</td>
                       <td className="p-3 border">{contact.fullName}</td>
                       <td className="p-3 border">{contact.email}</td>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useFeedbackStore } from "../store/useFeedbackStore";
+import { useFeedbackStore } from "../../store/useFeedbackStore";
 import toast from "react-hot-toast";
 
 const FeedbackManagement = () => {

@@ -15,8 +15,16 @@ export const useAdminStore = create((set,get) => ({
     bookingsStats :null,
     isAddingProfessional: false,
     professionalStats: null,
+    BookingDeatils:null,
 
-    
+    setBookingDeatils:async()=>{
+      try {
+        const res= await axiosInstant.get("/admin/getALLBookingWithDeatils")
+        set({BookingDeatils:res.data.bookings})
+      } catch (error) {
+        console.log("cant fetch booking details",error)
+      }
+    },
     removeUser: async (userId) => {
       try {
         await axiosInstant.delete(`/admin/removeUser/${userId}`);

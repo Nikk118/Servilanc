@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useElectricianStore } from "../store/useElectricianStore";
+import { usePestControlStore } from "../../store/usePestControlStore";
 
-function Electrician() {
+function PestControl() {
   const {
     services,
     addService,
     removeService,
-    fetchServices,
     updateService,
+    fetchServices,
     isAddingService,
-  } = useElectricianStore();
+    isUpdatingService,
+  } = usePestControlStore();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -19,7 +21,6 @@ function Electrician() {
     price: "",
     duration: "",
     image_url: null,
-    category: "Electrician",
   });
 
   useEffect(() => {
@@ -41,8 +42,8 @@ function Electrician() {
       formDataToSend.append(key, formData[key]);
     });
 
-    if (isUpdateMode) {
-      await updateService(formDataToSend, selectedServiceId);
+    if (selectedServiceId) {
+      await updateService(selectedServiceId, formDataToSend);
     } else {
       await addService(formDataToSend);
     }
@@ -53,14 +54,13 @@ function Electrician() {
       price: "",
       duration: "",
       image_url: null,
-      category: "Electrician",
     });
     setIsModalOpen(false);
-    setIsUpdateMode(false);
+    setIsEditModalOpen(false);
+    setSelectedServiceId(null);
   };
 
-  const handleUpdateClick = (service) => {
-    setIsUpdateMode(true);
+  const handleEditClick = (service) => {
     setSelectedServiceId(service._id);
     setFormData({
       name: service.name,
@@ -68,45 +68,47 @@ function Electrician() {
       price: service.price,
       duration: service.duration || "",
       image_url: null,
-      category: "Electrician",
     });
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
   };
 
   return (
     <div className="p-6">
+      {/* Add Service Button */}
       <button
         onClick={() => {
           setIsModalOpen(true);
-          setIsUpdateMode(false);
+          setSelectedServiceId(null);
           setFormData({
             name: "",
             description: "",
             price: "",
             duration: "",
             image_url: null,
-            category: "Electrician",
           });
         }}
         className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mb-6"
       >
-        Add Electrician Service
+        Add Service
       </button>
 
-      {isModalOpen && (
+      {/* Add/Edit Service Modal */}
+      {(isModalOpen || isEditModalOpen) && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-gray-800 p-6 rounded-lg w-96 relative">
             <button
-              onClick={() => setIsModalOpen(false)}
+              onClick={() =>
+                isModalOpen ? setIsModalOpen(false) : setIsEditModalOpen(false)
+              }
               className="absolute top-3 right-3 text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded"
             >
               ✕
             </button>
 
             <h3 className="text-xl font-semibold mb-4">
-              {isUpdateMode
-                ? "Update Electrician Service"
-                : "Add New Electrician Service"}
+              {selectedServiceId
+                ? "Update Pest Control Service"
+                : "Add New Pest Control Service"}
             </h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <input
@@ -125,7 +127,7 @@ function Electrician() {
                 placeholder="Service Description"
                 className="p-2 rounded bg-gray-700 text-white"
                 required
-              ></textarea>
+              />
               <input
                 type="text"
                 name="price"
@@ -158,11 +160,11 @@ function Electrician() {
                     ? "bg-gray-600 cursor-not-allowed"
                     : "bg-blue-600 hover:bg-blue-700"
                 }`}
-                disabled={isAddingService}
+                disabled={isAddingService || isUpdatingService}
               >
-                {isAddingService
-                  ? "Processing..."
-                  : isUpdateMode
+                {isUpdatingService
+                  ? "Updating..."
+                  : selectedServiceId
                   ? "Update Service"
                   : "Add Service"}
               </button>
@@ -171,9 +173,10 @@ function Electrician() {
         </div>
       )}
 
+      {/* Pest Control Services List */}
       <div className="bg-gray-900 p-6 rounded-lg">
         <h3 className="text-xl font-semibold mb-4 text-white">
-          Total Electrician Services
+          Total Pest Control Services
         </h3>
         <ul className="space-y-4">
           {services && services.length > 0 ? (
@@ -184,7 +187,7 @@ function Electrician() {
               >
                 {/* Image Section (Left) */}
                 <img
-                  src={service.image_url}
+                  src={service.image_url || "/default-pest-control.jpg"}
                   alt={service.name}
                   className="w-20 h-20 rounded-lg object-cover mr-4"
                 />
@@ -206,7 +209,7 @@ function Electrician() {
                 {/* Buttons (Right) */}
                 <div className="flex flex-col gap-2">
                   <button
-                    onClick={() => handleUpdateClick(service)}
+                    onClick={() => handleEditClick(service)}
                     className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
                   >
                     Update
@@ -222,7 +225,7 @@ function Electrician() {
             ))
           ) : (
             <p className="text-gray-400 text-center">
-              No electrician services available
+              No pest control services available
             </p>
           )}
         </ul>
@@ -231,4 +234,4 @@ function Electrician() {
   );
 }
 
-export default Electrician;
+export default PestControl;

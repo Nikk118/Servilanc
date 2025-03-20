@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import Sidebar from "../Components/Sidebar";
-import AdminDashboard from "../Components/AdminDashboard";
-import AllBookings from "../Components/AllBookings";
-import Salon from "../Components/Salon";
-import Plumbing from "../Components/Plumbing";
-import Cleaning from "../Components/Cleaning";
-import AllProfessionals from "../Components/AllProfessionals";
-import AddProfessional from "../Components/AddProfessional";
-import AllUsers from "../Components/AllUsers";
-import UserContacts from "../Components/UserContacts";
+import Sidebar from "../Components/adminComponents/Sidebar";
+import AdminDashboard from "../Components/adminComponents/AdminDashboard";
+import AllBookings from "../Components/adminComponents/AllBookings";
+import Salon from "../Components/adminComponents/Salon";
+import Plumbing from "../Components/adminComponents/Plumbing";
+import Cleaning from "../Components/adminComponents/Cleaning";
+import AllProfessionals from "../Components/adminComponents/AllProfessionals";
+import AddProfessional from "../Components/adminComponents/AddProfessional";
+import AllUsers from "../Components/adminComponents/AllUsers";
+import UserContacts from "../Components/adminComponents/UserContacts";
 import { useAdminStore } from "../store/useAdminStore";
-import NewRegistration from "../Components/NewRegistration";
-import FeedbackManagement from "../Components/FeedbackManagement";
-import Electrician from "../Components/Electrician";
-import Carpentry from "../Components/Carpenty";
-import PestControl from "../Components/PestControl";
+import NewRegistration from "../Components/adminComponents/NewRegistration";
+import FeedbackManagement from "../Components/adminComponents/FeedbackManagement";
+import Electrician from "../Components/adminComponents/Electrician";
+import Carpentry from "../Components/adminComponents/Carpenty"
+import PestControl from "../Components/adminComponents/PestControl";
+import BookingWithDetails from "../Components/adminComponents/BookingWithDetails";
 
 function AdminHome() {
   const { adminLogout, authAdmin } = useAdminStore();
@@ -32,7 +33,8 @@ function AdminHome() {
         return <Plumbing />;
       case "Cleaning":
         return <Cleaning />;
-
+      case "BookingWithDetails":
+        return <BookingWithDetails/>
       case "Pest Control":
         return <PestControl/>
       case "Electrician":
