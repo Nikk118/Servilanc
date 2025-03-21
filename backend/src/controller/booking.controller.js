@@ -2,7 +2,7 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 import { Booking } from "../models/booking.model.js";
 import { Salon } from "../models/Salon.model.js";
 import { Plumbing } from "../models/Plumbing.model.js";
-import { Cleaning } from "../models/cleaning.model.js";
+import { Cleaning } from "../models/Cleaning.model.js";
 import { Electrician } from "../models/electrician.model.js";
 import { Carpentry } from "../models/carpentry.model.js";
 import { PestControl } from "../models/pestControl.model.js";
