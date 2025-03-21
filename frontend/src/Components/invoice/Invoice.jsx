@@ -1,22 +1,23 @@
 import React from "react";
 
 const Invoice = ({ service, price, date, time, status, transactionId, paymentStatus }) => {
-  const paymentMethod = transactionId ? "Online" : "Offline";
+  const isValidTransaction = transactionId && transactionId !== "N/A";
+  const paymentMethod = isValidTransaction ? "Online" : "Offline";
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg w-96 border border-gray-300">
+    <div className="p-6 bg-white shadow-lg rounded-lg border border-gray-300 max-w-md w-full mx-auto">
       <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Invoice</h2>
       <hr className="mb-4 border-gray-400" />
 
       <div className="space-y-2 text-gray-700">
         <p>
-          <span className="font-semibold">Service:</span> {service}
+          <span className="font-semibold">Service:</span> {service || "N/A"}
         </p>
         <p>
-          <span className="font-semibold">Date:</span> {date}
+          <span className="font-semibold">Date:</span> {date || "N/A"}
         </p>
         <p>
-          <span className="font-semibold">Time:</span> {time}
+          <span className="font-semibold">Time:</span> {time || "N/A"}
         </p>
         <p>
           <span className="font-semibold">Booking Status:</span>{" "}
@@ -31,19 +32,19 @@ const Invoice = ({ service, price, date, time, status, transactionId, paymentSta
                 : "bg-gray-100 text-gray-600"
             }`}
           >
-            {status}
+            {status || "N/A"}
           </span>
         </p>
 
         <p>
-          <span className="font-semibold">Payment Status:</span> {paymentStatus}
+          <span className="font-semibold">Payment Status:</span> {paymentStatus || "N/A"}
         </p>
 
         <p>
           <span className="font-semibold">Payment Method:</span> {paymentMethod}
         </p>
 
-        {transactionId && (
+        {isValidTransaction && (
           <p>
             <span className="font-semibold">Transaction ID:</span> {transactionId}
           </p>
@@ -52,7 +53,7 @@ const Invoice = ({ service, price, date, time, status, transactionId, paymentSta
         <hr className="my-4 border-gray-400" />
 
         <p className="text-lg font-semibold">
-          Total Amount: <span className="text-blue-600">₹{price}</span>
+          Total Amount: <span className="text-blue-600">₹{price || 0}</span>
         </p>
 
         <p className="text-sm text-center text-gray-500 mt-4 italic">

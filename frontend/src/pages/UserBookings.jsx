@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useUserBookings } from "../store/useUserBookings";
 import { useNavigate } from "react-router-dom";
-import Invoice from "../Components/invoice/Invoice"; 
+import Invoice from "../Components/invoice/Invoice";
+
 function UserBookings() {
   const {
     userBookings,
@@ -11,7 +12,7 @@ function UserBookings() {
   } = useUserBookings();
   const navigate = useNavigate();
   const [filter, setFilter] = useState("All");
-  const [selectedBooking, setSelectedBooking] = useState(null); // 2️⃣ State for selected booking
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   useEffect(() => {
     getUserBookings();
@@ -22,18 +23,18 @@ function UserBookings() {
   );
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white pt-20">
-      <div className="bg-white text-gray-900 p-8 rounded-2xl shadow-lg border border-gray-200 w-full max-w-3xl">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-20 px-4">
+      <div className="bg-white text-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 w-full max-w-3xl">
         {/* Heading and Filter */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-extrabold text-gray-800">
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800">
             Your Bookings
           </h2>
 
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
+            className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 outline-none mt-3 sm:mt-0"
           >
             <option value="All">All</option>
             <option value="Pending">Pending</option>
@@ -48,22 +49,22 @@ function UserBookings() {
             Loading your bookings...
           </p>
         ) : filteredBookings.length > 0 ? (
-          <div className="max-h-80 overflow-y-auto space-y-6 border border-gray-200 rounded-lg p-4">
-            <ul className="space-y-6">
+          <div className="max-h-96 overflow-y-auto space-y-4 border border-gray-200 rounded-lg p-4">
+            <ul className="space-y-4">
               {filteredBookings.map((booking) => (
                 <li
                   key={booking._id}
-                  className="p-4 bg-gray-50 rounded-xl shadow-md border border-gray-200 flex items-center space-x-4"
+                  className="p-4 bg-gray-50 rounded-xl shadow-md border border-gray-200 flex flex-col sm:flex-row items-center space-x-0 sm:space-x-4 space-y-3 sm:space-y-0"
                 >
                   {/* Image on the Left */}
                   <img
-                    src={booking.service?.image_url}
-                    alt="image"
+                    src={booking.service?.image_url || "/default-image.jpg"}
+                    alt="service"
                     className="w-20 h-20 object-cover rounded-lg border border-gray-300"
                   />
 
-                  {/* Details on the Right */}
-                  <div className="flex-1 space-y-2">
+                  {/* Details */}
+                  <div className="flex-1 space-y-2 text-center sm:text-left">
                     <p>
                       <span className="font-semibold text-gray-700">
                         Service:
@@ -84,11 +85,13 @@ function UserBookings() {
                     </p>
                     <p>
                       <span className="font-semibold text-gray-700">Date:</span>{" "}
-                      {new Date(booking.bookingDate).toLocaleDateString()}
+                      {booking.bookingDate
+                        ? new Date(booking.bookingDate).toLocaleDateString()
+                        : "N/A"}
                     </p>
                     <p>
                       <span className="font-semibold text-gray-700">Time:</span>{" "}
-                      {booking.bookingTime}
+                      {booking.bookingTime || "N/A"}
                     </p>
                     <p className="font-semibold">
                       <span className="mr-2 text-gray-700">Status:</span>
@@ -103,14 +106,13 @@ function UserBookings() {
                             : "bg-yellow-100 text-yellow-600 border border-yellow-400"
                         }`}
                       >
-                        {booking.status}
+                        {booking.status || "N/A"}
                       </span>
                     </p>
                   </div>
 
                   {/* Buttons */}
                   <div className="flex flex-col gap-3">
-                    {/* Cancel Button */}
                     {booking.status !== "Completed" &&
                       booking.status !== "Cancelled" && (
                         <button
@@ -121,10 +123,9 @@ function UserBookings() {
                         </button>
                       )}
 
-                    {/* View Invoice Button (Only for Paid Bookings) */}
                     {booking.paymentStatus === "Paid" && (
                       <button
-                        onClick={() => setSelectedBooking(booking)} // 3️⃣ Set booking for invoice
+                        onClick={() => setSelectedBooking(booking)}
                         className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition-all shadow-md"
                       >
                         View Invoice
@@ -155,21 +156,24 @@ function UserBookings() {
 
       {/* Invoice Modal */}
       {selectedBooking && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <Invoice
-              service={selectedBooking.service?.name}
-              price={selectedBooking.service?.price}
-              date={new Date(selectedBooking.bookingDate).toLocaleDateString()}
-              time={selectedBooking.bookingTime}
-              status={selectedBooking.status}
-              paymentStatus={selectedBooking.paymentStatus}
-              transactionId={selectedBooking.transactionId}  
+              service={selectedBooking.service?.name || "N/A"}
+              price={selectedBooking.service?.price || "N/A"}
+              date={
+                selectedBooking.bookingDate
+                  ? new Date(selectedBooking.bookingDate).toLocaleDateString()
+                  : "N/A"
+              }
+              time={selectedBooking.bookingTime || "N/A"}
+              status={selectedBooking.status || "N/A"}
+              paymentStatus={selectedBooking.paymentStatus || "N/A"}
+              transactionId={selectedBooking.transactionId || "N/A"}
             />
             <button
-              onClick={() => setSelectedBooking(null)} // Close invoice
-              className="mt-2 bg-gray-500 text-white px-4 py-2 rounded w-full"
+              onClick={() => setSelectedBooking(null)}
+              className="mt-2 bg-gray-500 text-white px-4 py-2 rounded w-full hover:bg-gray-600"
             >
               Close
             </button>
