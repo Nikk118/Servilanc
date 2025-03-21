@@ -18,8 +18,7 @@ function Electrician() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axiosInstant.get(
-          "http://localhost:3000/api/electrician/allElectricianService"
+        const res = await axiosInstant.get("/electrician/allElectricianService"
         );
         setServices(res.data.electricians);
       } catch (error) {

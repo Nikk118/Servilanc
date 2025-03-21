@@ -19,7 +19,7 @@ function Salon() {
     const fetchServices = async () => {
       try {
         const res = await axiosInstant.get(
-          "http://localhost:3000/api/salon/allSalonService"
+          "/salon/allSalonService"
         );
         setServices(res.data.salon);
       } catch (error) {

@@ -19,7 +19,7 @@ function Plumbing() {
     const fetchServices = async () => {
       try {
         const res = await axiosInstant.get(
-          "http://localhost:3000/api/plumbing/allPlumbingService"
+          "/plumbing/allPlumbingService"
         );
         setServices(res.data.plumbing);
       } catch (error) {

@@ -18,8 +18,7 @@ function Carpentry() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axiosInstant.get(
-          "http://localhost:3000/api/carpentry/allCarpentryService"
+        const res = await axiosInstant.get("/carpentry/allCarpentryService"
         );
         setServices(res.data.carpentry);
       } catch (error) {

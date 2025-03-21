@@ -19,7 +19,7 @@ function PestControl() {
     const fetchServices = async () => {
       try {
         const res = await axiosInstant.get(
-          "http://localhost:3000/api/pestControl/allPestControlService"
+          "/pestControl/allPestControlService"
         );
         setServices(res.data.pestControl);
       } catch (error) {

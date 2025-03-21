@@ -18,9 +18,7 @@ function Cleaning() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axiosInstant.get(
-          "http://localhost:3000/api/cleaning/allCleaningService"
-        );
+        const res = await axiosInstant.get("/cleaning/allCleaningService");
         setServices(res.data.cleaning);
       } catch (error) {
         console.error("Error fetching services:", error);
