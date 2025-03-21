@@ -1,5 +1,5 @@
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import { Cleaning } from "../models/cleaning.model.js";
+import { Cleaning } from "../models/Cleaning.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const addCleaningService=asyncHandler(async(req,res)=>{
