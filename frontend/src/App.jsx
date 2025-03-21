@@ -16,7 +16,7 @@ import AdminHome from "./pages/AdminHome";
 import { useAdminStore } from "./store/useAdminStore";
 import Salon from "./pages/services/Salon";
 import Cleaning from "./pages/services/Cleaning";
-import Plumbing from "./pages/services/plumbing";
+import Plumbing from "./pages/services/Plumbing";
 import Booking from "./pages/Booking";
 import Userdetails from "./pages/Userdetails";
 import UserBookings from "./pages/UserBookings";
