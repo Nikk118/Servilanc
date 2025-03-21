@@ -21,7 +21,7 @@ function Booking() {
   const [address, setAddress] = useState({
     street: "",
     city: "",
-    state: "",
+    state: "Gujarat",
     pincode: "",
     mobileNumber: ""
   });
@@ -239,7 +239,7 @@ function Booking() {
             <input
               type="text"
               name="state"
-              value="Valsad"
+              value="Gujarat"
               readOnly
               placeholder="State"
               className="w-full p-2 border rounded-lg bg-gray-100 cursor-not-allowed"
@@ -308,7 +308,7 @@ function Booking() {
             <input
               type="text"
               name="state"
-              value="Valsad"
+              value="Gujarat"
               readOnly
               placeholder="State"
               className="w-full p-2 border rounded-lg bg-gray-100 cursor-not-allowed"
