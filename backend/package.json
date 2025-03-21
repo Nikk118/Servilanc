@@ -4,7 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/index.js"
+    "dev": "node --watch src/index.js",
+     "build": "node src/index.js",
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +28,7 @@
     "nodemailer": "^6.10.0",
     "razorpay": "^2.9.6",
     "react-chartjs-2": "^5.3.0",
+    "servilanc": "file:..",
     "twilio": "^5.5.0"
   },
   "devDependencies": {

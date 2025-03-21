@@ -16,13 +16,17 @@ import carpentryRoutes from "./router/carpentry.router.js";
 import pestControlRoutes from "./router/pestControl.router.js";
 import cors from "cors"
 // import smsRouter from "./router/sms.router.js"
+import path from "path"
 
+ 
 
 
 const app = express()
 
 import dotenv from 'dotenv';
 dotenv.config();
+
+const __dirname = path.resolve();
 
 import connectDB from "./db/index.js"
 connectDB()
@@ -67,3 +71,11 @@ app.use("/api/registers",registerRouter)
 app.use("/api/electrician", electricianRoutes);
 app.use("/api/carpentry", carpentryRoutes);
 app.use("/api/pestControl", pestControlRoutes);
+
+if(process.env.NODE_ENV === "production"){
+    app.use(express.static(path.join(__dirname,"../frontend/dist")));
+
+    app.get("*",(req,res)=>{
+        res.sendFile(path.resolve(__dirname,"../frontend","dist","index.html"))
+    })
+}

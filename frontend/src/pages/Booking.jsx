@@ -108,8 +108,8 @@ function Booking() {
      
       <BookingSuccess booking={booking} />    
   ) : ( 
-    // booking address 
-    <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5"> 
+     
+    <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5 pt-30"> 
       <div className="bg-white shadow-lg rounded-lg p-8 flex flex-col md:flex-row w-full max-w-4xl">
         <div className="md:w-1/2 p-4">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Book Your Service</h2>
@@ -206,48 +206,139 @@ function Booking() {
       {/* Address Modal */}
       {isAddressModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-
+        <div className="relative bg-white p-6 rounded-lg shadow-lg w-96">
+          {/* Close (X) Button Positioned Correctly */}
           <button
-        className="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl"
-        onClick={() => setIsAddressModalOpen(false)}
-      >
-        ❌
-      </button>
-            <h2 className="text-xl font-semibold mb-4">Enter Your Address</h2>
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <input type="text" name="street" value={address.street} onChange={handleChange} placeholder="Street" className="w-full p-2 border rounded-lg" required />
-              <input type="text" name="city" value={address.city} onChange={handleChange} placeholder="City" className="w-full p-2 border rounded-lg" required />
-              <input type="text" name="state" value={address.state} onChange={handleChange} placeholder="State" className="w-full p-2 border rounded-lg" required />
-              <input type="text" name="pincode" value={address.pincode} onChange={handleChange} placeholder="Pincode" className="w-full p-2 border rounded-lg" required />
-              <input type="tel" name="mobileNumber" value={address.mobileNumber} onChange={handleChange} placeholder="Mobile Number" className="w-full p-2 border rounded-lg" required />
-              <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg">Save Address</button>
-            </form>
-          </div>
+            className="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl"
+            onClick={() => setIsAddressModalOpen(false)}
+          >
+            ❌
+          </button>
+      
+          <h2 className="text-xl font-semibold mb-4 text-center">Enter Your Address</h2>
+      
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <input
+              type="text"
+              name="street"
+              value={address.street}
+              onChange={handleChange}
+              placeholder="Street"
+              className="w-full p-2 border rounded-lg"
+              required
+            />
+            <input
+              type="text"
+              name="city"
+              value={address.city}
+              onChange={handleChange}
+              placeholder="City"
+              className="w-full p-2 border rounded-lg"
+              required
+            />
+            <input
+              type="text"
+              name="state"
+              value="Valsad"
+              readOnly
+              placeholder="State"
+              className="w-full p-2 border rounded-lg bg-gray-100 cursor-not-allowed"
+              required
+            />
+            <input
+              type="text"
+              name="pincode"
+              value={address.pincode}
+              onChange={handleChange}
+              placeholder="Pincode"
+              className="w-full p-2 border rounded-lg"
+              required
+            />
+            <input
+              type="tel"
+              name="mobileNumber"
+              value={address.mobileNumber}
+              onChange={handleChange}
+              placeholder="Mobile Number"
+              className="w-full p-2 border rounded-lg"
+              required
+            />
+            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg">
+              Save Address
+            </button>
+          </form>
         </div>
+      </div>
+      
       )}
 
       {/* Update Address Modal */}
       {isUpdateModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="relative bg-white p-6 rounded-lg shadow-lg w-96">
+          {/* Close (X) Button Positioned Correctly */}
           <button
-        className="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl"
-        onClick={() => setIsUpdateModalOpen(false)}
-      >
-        ❌
-      </button>
-            <h2 className="text-xl font-semibold mb-4">Update Your Address</h2>
-            <form onSubmit={handleUpdateSubmit} className="space-y-3">
-              <input type="text" name="street" value={updatedAddress.street} onChange={handleUpdateChange} placeholder="Street" className="w-full p-2 border rounded-lg" required />
-              <input type="text" name="city" value={updatedAddress.city} onChange={handleUpdateChange} placeholder="City" className="w-full p-2 border rounded-lg" required />
-              <input type="text" name="state" value={updatedAddress.state} onChange={handleUpdateChange} placeholder="State" className="w-full p-2 border rounded-lg" required />
-              <input type="text" name="pincode" value={updatedAddress.pincode} onChange={handleUpdateChange} placeholder="Pincode" className="w-full p-2 border rounded-lg" required />
-              <input type="tel" name="mobileNumber" value={updatedAddress.mobileNumber} onChange={handleUpdateChange} placeholder="Mobile Number" className="w-full p-2 border rounded-lg" required />
-              <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg">Update Address</button>
-            </form>
-          </div>
+            className="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl"
+            onClick={() => setIsUpdateModalOpen(false)}
+          >
+            ❌
+          </button>
+      
+          <h2 className="text-xl font-semibold mb-4 text-center">Update Your Address</h2>
+      
+          <form onSubmit={handleUpdateSubmit} className="space-y-3">
+            <input
+              type="text"
+              name="street"
+              value={updatedAddress.street}
+              onChange={handleUpdateChange}
+              placeholder="Street"
+              className="w-full p-2 border rounded-lg"
+              required
+            />
+            <input
+              type="text"
+              name="city"
+              value={updatedAddress.city}
+              onChange={handleUpdateChange}
+              placeholder="City"
+              className="w-full p-2 border rounded-lg"
+              required
+            />
+            <input
+              type="text"
+              name="state"
+              value="Valsad"
+              readOnly
+              placeholder="State"
+              className="w-full p-2 border rounded-lg bg-gray-100 cursor-not-allowed"
+              required
+            />
+            <input
+              type="text"
+              name="pincode"
+              value={updatedAddress.pincode}
+              onChange={handleUpdateChange}
+              placeholder="Pincode"
+              className="w-full p-2 border rounded-lg"
+              required
+            />
+            <input
+              type="tel"
+              name="mobileNumber"
+              value={updatedAddress.mobileNumber}
+              onChange={handleUpdateChange}
+              placeholder="Mobile Number"
+              className="w-full p-2 border rounded-lg"
+              required
+            />
+            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg">
+              Update Address
+            </button>
+          </form>
         </div>
+      </div>
+      
       )}
     
     </div>
