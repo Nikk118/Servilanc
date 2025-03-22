@@ -50,12 +50,12 @@ function AllBookings() {
   };
 
   return (
-    <div className="p-6">
-      <h3 className="text-2xl font-bold text-white mb-6">Bookings Overview</h3>
-
+    <div className="p-4 md:p-6">
+      <h3 className="text-2xl font-bold text-white mb-6 text-center md:text-left">Bookings Overview</h3>
+  
       {!bookingsStats ? (
         <motion.p
-          className="text-blue-400 text-lg"
+          className="text-blue-400 text-lg text-center md:text-left"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -64,13 +64,16 @@ function AllBookings() {
         </motion.p>
       ) : (
         <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+          
           {/* Pie Chart */}
-          <div className="h-[400px] w-full flex justify-center">
-            <Pie data={pieData} options={pieOptions} />
+          <div className="w-full flex justify-center">
+            <div className="w-full max-w-[400px]">
+              <Pie data={pieData} options={{ ...pieOptions, maintainAspectRatio: false }} />
+            </div>
           </div>
-
+  
           {/* Booking Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
             <StatCard title="Total Bookings" value={bookingsStats.totalBookings} color="text-blue-400" />
             <StatCard title="Pending" value={bookingsStats.Pending} color="text-yellow-400" />
             <StatCard title="Cancelled" value={bookingsStats.Cancelled} color="text-red-500" />
@@ -81,6 +84,7 @@ function AllBookings() {
       )}
     </div>
   );
+  
 }
 
 const StatCard = ({ title, value, color }) => (

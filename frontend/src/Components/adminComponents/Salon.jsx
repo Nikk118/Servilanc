@@ -73,6 +73,7 @@ function Salon() {
 
   return (
     <div className="p-6">
+      {/* Add Service Button */}
       <button
         onClick={() => {
           setIsModalOpen(true);
@@ -83,30 +84,33 @@ function Salon() {
       >
         Add Service
       </button>
-
+  
+      {/* Modal for Adding/Updating Service */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg w-96 relative">
+          <div className="bg-gray-800 p-6 rounded-lg w-full sm:w-96 max-w-[90%] relative">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-3 right-3 text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded"
             >
               ✕
             </button>
-
-            <h3 className="text-xl font-semibold mb-4">{isUpdateMode ? "Update Salon Service" : "Add New Salon Service"}</h3>
+  
+            <h3 className="text-xl font-semibold mb-4">
+              {isUpdateMode ? "Update Salon Service" : "Add New Salon Service"}
+            </h3>
+  
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Service Name" className="p-2 rounded bg-gray-700 text-white" required />
               <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Service Description" className="p-2 rounded bg-gray-700 text-white" required></textarea>
               <input type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Service Price" className="p-2 rounded bg-gray-700 text-white" required />
               <input type="text" name="duration" value={formData.duration} onChange={handleChange} placeholder="Duration (optional)" className="p-2 rounded bg-gray-700 text-white" />
               <input type="file" name="image_url" onChange={handleChange} className="p-2 rounded bg-gray-700 text-white" accept="image/*" />
-
+  
               <button
                 type="submit"
                 className={`py-2 rounded text-white ${isAddingService ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
                 disabled={isAddingService}
-
               >
                 {isAddingService ? "Processing..." : isUpdateMode ? "Update Service" : "Add Service"}
               </button>
@@ -114,21 +118,23 @@ function Salon() {
           </div>
         </div>
       )}
-
+  
+      {/* List of Services */}
       <div className="bg-gray-900 p-6 rounded-lg">
         <h3 className="text-xl font-semibold mb-4 text-white">Total Salon Services</h3>
+  
         <ul className="space-y-4">
           {services && services.length > 0 ? (
             services.map((service) => (
-              <li key={service._id} className="flex items-center bg-gray-800 p-4 rounded-lg shadow-lg">
-
+              <li key={service._id} className="flex flex-wrap sm:flex-nowrap items-center bg-gray-800 p-4 rounded-lg shadow-lg gap-4">
+  
                 {/* Service Image */}
                 <img
                   src={service.image_url || "/default-salon.jpg"}
                   alt={service.name}
-                  className="w-20 h-20 rounded-lg object-cover mr-4"
+                  className="w-20 h-20 rounded-lg object-cover"
                 />
-
+  
                 {/* Service Details */}
                 <div className="flex-1">
                   <h4 className="text-lg font-semibold text-white">{service.name}</h4>
@@ -138,18 +144,18 @@ function Salon() {
                     <p className="text-gray-400">Duration: {service.duration}</p>
                   )}
                 </div>
-
+  
                 {/* Action Buttons */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <button
                     onClick={() => handleUpdateClick(service)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-all duration-300"
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-all duration-300 text-sm"
                   >
                     Update
                   </button>
                   <button
                     onClick={() => removeService(service._id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-all duration-300"
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-all duration-300 text-sm"
                   >
                     Remove
                   </button>
@@ -161,9 +167,9 @@ function Salon() {
           )}
         </ul>
       </div>
-
     </div>
   );
+  
 }
 
 export default Salon;

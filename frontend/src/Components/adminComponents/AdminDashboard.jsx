@@ -125,55 +125,55 @@ function AdminDashboard() {
   
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <h3 className="text-2xl font-bold text-white mb-6 text-center">📊 Admin Dashboard</h3>
-
+  
       {!servicesStats && !userstats ? (
         <p className="text-yellow-400 text-lg text-center animate-pulse">Loading data...</p>
       ) : (
-        <div className="bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-700">
-        {/* Bar Chart - Service Stats Breakdown */}
-        <div className="h-[450px] flex flex-col justify-center items-center">
-          <h3 className="text-yellow-400 text-xl font-bold mb-4">📊 Service Stats Breakdown</h3>
-          <Bar data={barData} options={chartOptions} />
-        </div>
-      
-        {/* Pie Chart - Service Share Pie */}
-        <div className="flex flex-col items-center my-20">
-  <h3 className="text-pink-400 text-2xl font-bold mb-6 text-center">
-    🍰 Service Share Pie
-  </h3>
-  <div className="w-[400px] h-[400px] bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-600 
-              overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col items-center">
-    <h4 className="text-white text-lg font-semibold text-center mb-4">
-      Service Distribution (%)
-    </h4>
-    <div className="w-[350px] h-[350px]">
-    <Pie data={pieData} options={{ ...pieOptions, maintainAspectRatio: false }} />
-
-    </div>
-  </div>
-</div>
-
-
-      
-        {/* Stats Blocks - Quick Glance Metrics */}
-        <div className="mt-12">
-          <h3 className="text-green-400 text-xl font-bold text-center mb-6">⚡ Quick Glance Metrics</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {stats.map((stat, index) => (
-              <div key={index} className={`p-6 rounded-lg text-white ${stat.color} shadow-md transform hover:scale-105 transition-all duration-300`}>
-                <h4 className="text-lg font-semibold">{stat.title}</h4>
-                <p className="text-3xl font-extrabold">{stat.value}</p>
+        <div className="bg-gray-900 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700">
+          
+          {/* Bar Chart - Service Stats Breakdown */}
+          <div className="h-auto md:h-[450px] flex flex-col justify-center items-center">
+            <h3 className="text-yellow-400 text-xl font-bold mb-4">📊 Service Stats Breakdown</h3>
+            <div className="w-full max-w-[600px]">
+              <Bar data={barData} options={chartOptions} />
+            </div>
+          </div>
+  
+          {/* Pie Chart - Service Share Pie */}
+          <div className="flex flex-col items-center my-10 md:my-20">
+            <h3 className="text-pink-400 text-2xl font-bold mb-6 text-center">
+              🍰 Service Share Pie
+            </h3>
+            <div className="w-full max-w-[400px] bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-600 
+                        transition-all duration-300 hover:shadow-xl flex flex-col items-center">
+              <h4 className="text-white text-lg font-semibold text-center mb-4">
+                Service Distribution (%)
+              </h4>
+              <div className="w-full max-w-[350px]">
+                <Pie data={pieData} options={{ ...pieOptions, maintainAspectRatio: false }} />
               </div>
-            ))}
+            </div>
+          </div>
+  
+          {/* Stats Blocks - Quick Glance Metrics */}
+          <div className="mt-12">
+            <h3 className="text-green-400 text-xl font-bold text-center mb-6">⚡ Quick Glance Metrics</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {stats.map((stat, index) => (
+                <div key={index} className={`p-6 rounded-lg text-white ${stat.color} shadow-md transform hover:scale-105 transition-all duration-300`}>
+                  <h4 className="text-lg font-semibold">{stat.title}</h4>
+                  <p className="text-3xl font-extrabold">{stat.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      
       )}
     </div>
   );
+  
 }
 
 export default AdminDashboard;

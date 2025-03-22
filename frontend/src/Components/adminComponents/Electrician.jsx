@@ -92,21 +92,19 @@ function Electrician() {
       >
         Add Electrician Service
       </button>
-
+  
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg w-96 relative">
+          <div className="bg-gray-800 p-6 rounded-lg w-full max-w-md md:max-w-lg lg:max-w-xl relative">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-3 right-3 text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded"
             >
               ✕
             </button>
-
+  
             <h3 className="text-xl font-semibold mb-4">
-              {isUpdateMode
-                ? "Update Electrician Service"
-                : "Add New Electrician Service"}
+              {isUpdateMode ? "Update Electrician Service" : "Add New Electrician Service"}
             </h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <input
@@ -150,70 +148,53 @@ function Electrician() {
                 className="p-2 rounded bg-gray-700 text-white"
                 accept="image/*"
               />
-
+  
               <button
                 type="submit"
                 className={`py-2 rounded text-white ${
-                  isAddingService
-                    ? "bg-gray-600 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
+                  isAddingService ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
                 }`}
                 disabled={isAddingService}
               >
-                {isAddingService
-                  ? "Processing..."
-                  : isUpdateMode
-                  ? "Update Service"
-                  : "Add Service"}
+                {isAddingService ? "Processing..." : isUpdateMode ? "Update Service" : "Add Service"}
               </button>
             </form>
           </div>
         </div>
       )}
-
+  
       <div className="bg-gray-900 p-6 rounded-lg">
-        <h3 className="text-xl font-semibold mb-4 text-white">
-          Total Electrician Services
-        </h3>
-        <ul className="space-y-4">
+        <h3 className="text-xl font-semibold mb-4 text-white">Total Electrician Services</h3>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {services && services.length > 0 ? (
             services.map((service) => (
               <li
                 key={service._id}
-                className="flex items-center bg-gray-800 p-4 rounded-lg"
+                className="flex flex-col sm:flex-row items-center bg-gray-800 p-4 rounded-lg"
               >
-                {/* Image Section (Left) */}
                 <img
-                  src={service.image_url}
+                  src={service.image_url || "/default-electrician.jpg"}
                   alt={service.name}
-                  className="w-20 h-20 rounded-lg object-cover mr-4"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover"
                 />
-
-                {/* Service Details (Middle) */}
-                <div className="flex-1">
-                  <h4 className="text-lg font-semibold text-white">
-                    {service.name}
-                  </h4>
+  
+                <div className="flex-1 text-center sm:text-left">
+                  <h4 className="text-lg font-semibold text-white">{service.name}</h4>
                   <p className="text-gray-400">{service.description}</p>
                   <p className="text-gray-400">Price: ${service.price}</p>
-                  {service.duration && (
-                    <p className="text-gray-400">
-                      Duration: {service.duration}
-                    </p>
-                  )}
+                  {service.duration && <p className="text-gray-400">Duration: {service.duration}</p>}
                 </div>
-
-                {/* Buttons (Right) */}
-                <div className="flex flex-col gap-2">
+  
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                   <button
                     onClick={() => handleUpdateClick(service)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                    className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
                   >
                     Update
                   </button>
                   <button
                     onClick={() => removeService(service._id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+                    className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
                   >
                     Remove
                   </button>
@@ -221,9 +202,7 @@ function Electrician() {
               </li>
             ))
           ) : (
-            <p className="text-gray-400 text-center">
-              No electrician services available
-            </p>
+            <p className="text-gray-400 text-center">No electrician services available</p>
           )}
         </ul>
       </div>
