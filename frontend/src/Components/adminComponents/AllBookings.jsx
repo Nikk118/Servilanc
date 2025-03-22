@@ -51,7 +51,9 @@ function AllBookings() {
 
   return (
     <div className="p-4 md:p-6">
-      <h3 className="text-2xl font-bold text-white mb-6 text-center md:text-left">Bookings Overview</h3>
+      <h3 className="text-2xl font-bold text-white mb-6 text-center md:text-left">
+        Bookings Overview
+      </h3>
   
       {!bookingsStats ? (
         <motion.p
@@ -65,10 +67,10 @@ function AllBookings() {
       ) : (
         <div className="bg-gray-800 p-6 rounded-lg shadow-md">
           
-          {/* Pie Chart */}
+          {/* Pie Chart - Increased Size */}
           <div className="w-full flex justify-center">
-            <div className="w-full max-w-[400px]">
-              <Pie data={pieData} options={{ ...pieOptions, maintainAspectRatio: false }} />
+            <div className="w-full max-w-[600px] h-[400px]"> 
+              <Pie data={pieData} options={{ ...pieOptions, responsive: true, maintainAspectRatio: false }} />
             </div>
           </div>
   
@@ -84,6 +86,7 @@ function AllBookings() {
       )}
     </div>
   );
+  
   
 }
 

@@ -3,13 +3,14 @@ import { Menu } from "lucide-react";
 import React from "react";
 import { motion } from "framer-motion";
 import { User } from "lucide-react";
-import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaHome } from "react-icons/fa";
+import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaHome ,FaCalendarAlt } from "react-icons/fa";
 
 const menuItems = [
   { name: "Professional Dashboard", icon: <FaHome /> },
   { name: "New Requests", icon: <FaClipboardList /> },
   { name: "Accepted Services", icon: <FaHourglassHalf /> },
   { name: "Completed Services", icon: <FaCheckCircle /> },
+  { name: "Services Schedule", icon: <FaCalendarAlt /> },
   { name: "Profile", icon: <User /> },
 ];
 

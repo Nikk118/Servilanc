@@ -134,25 +134,43 @@ function AdminDashboard() {
         <div className="bg-gray-900 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700">
           
           {/* Bar Chart - Service Stats Breakdown */}
-          <div className="h-auto md:h-[450px] flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center">
             <h3 className="text-yellow-400 text-xl font-bold mb-4">📊 Service Stats Breakdown</h3>
-            <div className="w-full max-w-[600px]">
-              <Bar data={barData} options={chartOptions} />
+            
+            {/* Increase the width/height container for the Bar chart */}
+            <div className="w-full" /* removed max-w to allow full width */>
+              <div className="h-[500px]" /* or whatever height you want */>
+                <Bar
+                  data={barData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...chartOptions, // keep your existing chartOptions
+                  }}
+                />
+              </div>
             </div>
           </div>
   
           {/* Pie Chart - Service Share Pie */}
           <div className="flex flex-col items-center my-10 md:my-20">
-            <h3 className="text-pink-400 text-2xl font-bold mb-6 text-center">
-              🍰 Service Share Pie
-            </h3>
-            <div className="w-full max-w-[400px] bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-600 
-                        transition-all duration-300 hover:shadow-xl flex flex-col items-center">
+            <h3 className="text-pink-400 text-2xl font-bold mb-6 text-center">🍰 Service Share Pie</h3>
+            
+            {/* Increase the width/height container for the Pie chart */}
+            <div className="w-full bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-600 
+                            transition-all duration-300 hover:shadow-xl flex flex-col items-center">
               <h4 className="text-white text-lg font-semibold text-center mb-4">
                 Service Distribution (%)
               </h4>
-              <div className="w-full max-w-[350px]">
-                <Pie data={pieData} options={{ ...pieOptions, maintainAspectRatio: false }} />
+              <div className="w-full h-[400px]" /* or a bigger dimension, removing max-w */>
+                <Pie
+                  data={pieData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...pieOptions,
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -162,7 +180,10 @@ function AdminDashboard() {
             <h3 className="text-green-400 text-xl font-bold text-center mb-6">⚡ Quick Glance Metrics</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {stats.map((stat, index) => (
-                <div key={index} className={`p-6 rounded-lg text-white ${stat.color} shadow-md transform hover:scale-105 transition-all duration-300`}>
+                <div
+                  key={index}
+                  className={`p-6 rounded-lg text-white ${stat.color} shadow-md transform hover:scale-105 transition-all duration-300`}
+                >
                   <h4 className="text-lg font-semibold">{stat.title}</h4>
                   <p className="text-3xl font-extrabold">{stat.value}</p>
                 </div>
@@ -173,6 +194,7 @@ function AdminDashboard() {
       )}
     </div>
   );
+  
   
 }
 
