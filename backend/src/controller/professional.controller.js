@@ -110,7 +110,7 @@ const getAcceptedBooking = asyncHandler(async (req, res) => {
       status: "Accepted"
     })
       .populate("user")
-      .sort({ createdAt: -1 });
+      .sort({ bookingDate: 1, bookingTime: 1 });
 
     // Extract user IDs and service IDs from bookings
     const userIds = acceptedBookings.map(booking => booking.user?._id).filter(id => id);
@@ -146,7 +146,7 @@ const getAcceptedBooking = asyncHandler(async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-1
+
 const getNewBooking = asyncHandler(async (req, res) => {
   try {
     if (!req.professional) {

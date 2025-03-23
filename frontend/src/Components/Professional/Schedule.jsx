@@ -4,35 +4,27 @@ import "react-calendar/dist/Calendar.css";
 import { useProfessionalStore } from "../../store/useProfessionalStore";
 
 function Schedule() {
-  const { acceptedBooking = [], setAcceptedBooking } = useProfessionalStore(); // Ensure it's always an array
+  const { acceptedBooking = [], setAcceptedBooking } = useProfessionalStore();
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // Fetch bookings when component mounts (Ensure it's fetching data correctly)
   useEffect(() => {
     if (typeof setAcceptedBooking === "function") {
-      setAcceptedBooking(); 
+      setAcceptedBooking();
     }
-  }, []);
+  }, [setAcceptedBooking]);
 
-  console.log("Accepted Bookings:", acceptedBooking); // Debugging log
-
-  // Extract dates from accepted bookings (Ensure bookingDate exists)
-  const bookingDates = acceptedBooking
-    ?.filter((booking) => booking?.bookingDate)
-    .map((booking) => ({
-      date: new Date(booking.bookingDate), // Convert to Date object
-      formattedDate: booking.bookingDate.split("T")[0], // Extract YYYY-MM-DD
+  const bookingDates = acceptedBooking?.map((booking) => {
+    const formattedDate = new Date(booking.bookingDate).toDateString(); // Use local date format
+    return {
+      date: new Date(booking.bookingDate),
+      formattedDate,
       details: booking,
-    }));
+    };
+  });
 
-  console.log("Processed Booking Dates:", bookingDates); // Debugging log
-
-  // Function to check if a date has an accepted booking
-  const tileClassName = ({ date }) => {
-    const formattedDate = date.toISOString().split("T")[0]; // Extract YYYY-MM-DD
-    return bookingDates?.some((booking) => booking.formattedDate === formattedDate)
-      ? "bg-yellow-500 text-black font-bold rounded-md"
-      : "";
+  const isBookedDate = (date) => {
+    const formattedDate = date.toDateString(); // Compare using local date
+    return bookingDates?.some((booking) => booking.formattedDate === formattedDate);
   };
 
   return (
@@ -41,34 +33,31 @@ function Schedule() {
         Professional Schedule
       </h2>
 
-      {/* Calendar Component */}
       <div className="flex justify-center">
-      <Calendar
-  onClickDay={(value) => setSelectedDate(value)}
-  tileClassName={({ date }) => {
-    const formattedDate = date.toISOString().split("T")[0]; 
-    return bookingDates?.some((booking) => booking.formattedDate === formattedDate)
-      ? "bg-yellow-500 text-black font-bold rounded-md"
-      : "text-black";  // Ensure all dates are visible
-  }}
-  className="bg-white text-black rounded-lg shadow-md p-4"
-/>
+        <Calendar
+          onClickDay={(value) => setSelectedDate(value)}
+          tileClassName={({ date }) => {
+            const formattedDate = date.toDateString(); // Convert to local date
+            const today = new Date().toDateString();  // Local today’s date
 
+            if (formattedDate === today) {
+              return "highlighted-today";
+            }
+            if (isBookedDate(date)) {
+              return "highlighted-booking";
+            }
+            return "";
+          }}
+          className="bg-white text-black rounded-lg shadow-md p-4"
+        />
       </div>
 
-      {/* Booking Details Section */}
       {selectedDate && (
         <div className="mt-6 p-4 bg-gray-800 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold text-yellow-400">Booking Details</h3>
-          {bookingDates?.some(
-            (booking) =>
-              booking.formattedDate === selectedDate.toISOString().split("T")[0]
-          ) ? (
+          {isBookedDate(selectedDate) ? (
             bookingDates
-              .filter(
-                (booking) =>
-                  booking.formattedDate === selectedDate.toISOString().split("T")[0]
-              )
+              .filter((booking) => booking.formattedDate === selectedDate.toDateString())
               .map((booking, index) => (
                 <div key={index} className="mt-3 p-3 bg-gray-700 rounded-md">
                   <p className="text-white">
@@ -99,6 +88,28 @@ function Schedule() {
           )}
         </div>
       )}
+
+<style jsx>{`
+  .highlighted-booking {
+    background-color: #facc15 !important;
+    color: #000 !important;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 5px; 
+    margin: 3px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .highlighted-today {
+    background-color: #3b82f6 !important;
+    color: #fff !important;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+`}</style>
+
     </div>
   );
 }
