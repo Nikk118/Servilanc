@@ -5,42 +5,69 @@ import toast from "react-hot-toast";
 import BookingSuccess from "../booking components/BookingSuccess";
 
 export default function Payment() {
-  const {selectedService,createBooking}=useBookingStore()
+  const { selectedService, createBooking } = useBookingStore();
   const location = useLocation();
   const [isBooked, setIsBooked] = useState(false);
-  const initialBooking = location.state?.booking || {}; 
+  const initialBooking = location.state?.booking || {};
   const [booking, setBooking] = useState(initialBooking);
   const [formData, setFormData] = useState({
     cardNumber: "",
     expiryDate: "",
     cvv: "",
-    amount: selectedService?.price || 0, 
+    amount: selectedService?.price || 0,
     transactionId: "",
   });
-  
+
   useEffect(() => {
     if (selectedService) {
       setFormData((prev) => ({ ...prev, amount: selectedService.price }));
     }
   }, [selectedService]);
-  
-
 
   useEffect(() => {
     if (selectedService) {
       localStorage.setItem("selectedService", JSON.stringify(selectedService));
     }
   }, [selectedService]);
-  
+
   useEffect(() => {
     const storedService = localStorage.getItem("selectedService");
     if (storedService) {
       useBookingStore.setState({ selectedService: JSON.parse(storedService) });
     }
   }, []);
-  
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const validateForm = () => {
+    const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/; // MM/YY format
+    if (formData.cardNumber.length !== 14) {
+      toast.error("Card number must be 14 digits long");
+      return false;
+    }
+    if (formData.cvv.length !== 3) {
+      toast.error("CVV must be 3 digits long");
+      return false;
+    }
+    if (!expiryRegex.test(formData.expiryDate)) {
+      toast.error("Expiry date must be in MM/YY format");
+      return false;
+    }
+    
+    // Check if expiry date is in the future
+    const [month, year] = formData.expiryDate.split("/").map(Number);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear() % 100; // Get last two digits of the year
+    const currentMonth = currentDate.getMonth() + 1; // JavaScript months are 0-based
+    
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      toast.error("Expiry date must be in the future");
+      return false;
+    }
+    
+    return true;
   };
 
   const generateTransactionId = () => {
@@ -49,35 +76,33 @@ export default function Payment() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
+    if (!validateForm()) return;
+
     // Generate Transaction ID
     const transactionId = generateTransactionId();
-  
+
     // Create updated booking data
     const updatedBooking = { ...booking, transactionId };
-  
+
     // Update states
     setBooking(updatedBooking);
     setFormData((prev) => ({ ...prev, transactionId }));
-  
+
     // Use updatedBooking instead of booking
     console.log("Updated Booking Data:", updatedBooking);
     
     try {
-      createBooking(updatedBooking)
-      setIsBooked(true)
+      createBooking(updatedBooking);
+      setIsBooked(true);
     } catch (error) {
-      toast.error("something went wrong")
+      toast.error("Something went wrong");
     }
   };
-  
-  
 
-  return (
-    isBooked ? (
-     
-      <BookingSuccess booking={booking} />    
-  ) : ( 
+  return isBooked ? (
+    <BookingSuccess booking={booking} />
+  ) : (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-5">
       <div className="bg-white w-96 p-6 shadow-lg rounded-lg">
         <h2 className="text-xl font-semibold mb-4">Payment Details</h2>
@@ -116,7 +141,6 @@ export default function Payment() {
             name="amount"
             placeholder="Amount"
             value={formData.amount}
-            // onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-md"
           />
@@ -130,6 +154,5 @@ export default function Payment() {
         </form>
       </div>
     </div>
-  )
   );
 }

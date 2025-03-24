@@ -12,7 +12,7 @@ export default function Home() {
   const [comment, setComment] = useState("");
   
 
-  // Fetch feedbacks when component mounts
+
   React.useEffect(() => {
     if (!feedbacks) {
       
