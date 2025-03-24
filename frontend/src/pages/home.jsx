@@ -87,7 +87,7 @@ export default function Home() {
             title: "Pest Control",
             icon: <FaBug size={40} className="text-red-500" />,
             image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1930&q=80",
-            path: "/pest-control"
+            path: "/pest control"
           }
         ].map((service, index) => (
           <div key={index}
