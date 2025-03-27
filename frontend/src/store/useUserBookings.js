@@ -5,7 +5,8 @@ import toast from "react-hot-toast";
 
 
 
-export const useUserBookings = create((set) => ({
+
+export const useUserBookings = create((set,get) => ({
     userBookings: null,
     isCheckingUserBookings: true,
     getUserBookings: async () => {
@@ -29,11 +30,7 @@ export const useUserBookings = create((set) => ({
         try {
             const res=await axiosInstant.patch(`/booking/cancleBooking/${bookingId}`);
             toast.success("Booking cancle successfully");
-            set((state) => ({
-                userBookings: state.userBookings
-                    ? state.userBookings.filter((booking) => booking._id !== bookingId)
-                    : [] 
-            }));
+            get().getUserBookings();
         } catch (error) {
             console.error("Authentication error:", error);
             set({ userBookings: null });

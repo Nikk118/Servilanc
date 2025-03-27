@@ -18,6 +18,14 @@ function UserBookings() {
     getUserBookings();
   }, [getUserBookings]);
 
+ 
+  const handleCancel = (bookingId) => {
+    const isConfirmed = window.confirm("Are you sure you want to cancel this booking?");
+    if (isConfirmed) {
+      cancelBooking(bookingId);
+    }
+  };
+  
   const filteredBookings = (userBookings || []).filter(
     (booking) => filter === "All" || booking.status === filter
   );
@@ -93,6 +101,13 @@ function UserBookings() {
                       <span className="font-semibold text-gray-700">Time:</span>{" "}
                       {booking.bookingTime || "N/A"}
                     </p>
+                    {booking.cancelledBy === "Professional" && (
+                      <p className="text-red-500 font-semibold">
+                        Booking Cancelled by Professional. Check your email for
+                        the reason.
+                      </p>
+                    )}
+
                     <p className="font-semibold">
                       <span className="mr-2 text-gray-700">Status:</span>
                       <span
@@ -116,7 +131,7 @@ function UserBookings() {
                     {booking.status !== "Completed" &&
                       booking.status !== "Cancelled" && (
                         <button
-                          onClick={() => cancelBooking(booking._id)}
+                        onClick={() => handleCancel(booking._id)}
                           className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-400 transition-all shadow-md"
                         >
                           Cancel

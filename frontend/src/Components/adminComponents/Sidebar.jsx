@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
-import { UserPlus, FileText } from "lucide-react";
+import { UserPlus, FileText,Ban, UserX } from "lucide-react";
 import { FaBars, FaTimes } from "react-icons/fa"; // Import icons for toggle
 import {
   FaUserTie,
@@ -28,6 +28,7 @@ const menuItems = [
   { name: "User Messages", icon: <MessageCircle /> },
   { name: "New Registration", icon: <UserPlus /> },
   { name: "Feedback", icon: <FaComment /> },
+  { name: "Professional Cancel Services", icon: <UserX /> },
 ];
 
 const categories = [

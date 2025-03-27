@@ -8,6 +8,7 @@ import { useProfessionalStore } from "../store/useProfessionalStore";
 import ProfessionalDashboard from "../Components/Professional/ProfessionalDashboard";
 import Profile from "../Components/Professional/Profile";
 import Schedule from "../Components/Professional/Schedule";
+import CancelledBooking from "../Components/Professional/CancelledBooking";
 
 function ProfessionalHome() {
   const { professionalLogout, authProfessional } = useProfessionalStore();
@@ -27,6 +28,8 @@ function ProfessionalHome() {
         return <Schedule/>
       case "Profile":
         return <Profile/>
+      case "Services Cancelled":
+        return <CancelledBooking/>
       default:
         return <ProfessionalDashboard/>;
     }

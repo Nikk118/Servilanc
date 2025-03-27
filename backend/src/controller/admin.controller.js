@@ -11,6 +11,7 @@ import { Electrician } from "../models/electrician.model.js"
 import { Carpentry } from "../models/carpentry.model.js"
 import { PestControl } from "../models/pestControl.model.js"
 import {Booking} from "../models/booking.model.js"
+import {Cancellation} from "../models/Cancellation.model.js"
 
 const findServiceById = async (serviceId) => {
     try {
@@ -31,6 +32,38 @@ const findServiceById = async (serviceId) => {
         return null;
     }
 };
+
+const getAllCancellations = asyncHandler(async (req, res) => {
+  try {
+    const cancellations = await Cancellation.find().sort({ createdAt: 1 }).populate("booking");
+
+    // Fetch service and professional details properly
+    const detailedCancellations = await Promise.all(
+      cancellations.map(async (cancellation) => {
+        // Ensure cancellation.booking exists before accessing its properties
+        if (!cancellation.booking) {
+          return cancellation.toObject();
+        }
+
+        const service = await findServiceById(cancellation.booking.service);
+        const professional = await Professional.findById(cancellation.booking.professional);
+
+        return {
+          ...cancellation.toObject(),
+          service: service || null, // Ensure service is either the found object or null
+          professional: professional || null, // Ensure professional is either the found object or null
+        };
+      })
+    );
+
+    res.status(200).json({ cancellations: detailedCancellations });
+  } catch (error) {
+    console.error("Error fetching cancellations:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 
 const adminSignUp= asyncHandler(async(req,res)=>{
 
@@ -413,6 +446,7 @@ const getALLBookingWithDeatils = asyncHandler(async (req, res) => {
 
 
 export {
+  getAllCancellations,
   getALLBookingWithDeatils,
   removeUser,
   removeProfessional,

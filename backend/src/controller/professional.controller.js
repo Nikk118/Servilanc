@@ -36,6 +36,57 @@ const findServiceById = async (serviceId) => {
 };
 
 
+const getCancelledBookingByProfessional = asyncHandler(async (req, res) => {
+  try {
+    if (!req.professional) {
+      return res.status(400).json({ message: "Professional not found" });
+    }
+
+    const professionalId = req.professional._id;
+
+    // Fetch cancelled bookings sorted by newest first
+    const cancelledBookings = await Booking.find({
+      professional: professionalId,
+      status: "Cancelled",
+      cancelledBy: "Professional"
+    })
+      .populate("user")
+      .sort({ bookingDate: -1, bookingTime: -1 });
+
+    // Extract user IDs and service IDs from bookings
+    const userIds = cancelledBookings.map(booking => booking.user?._id).filter(id => id);
+    const serviceIds = cancelledBookings.map(booking => booking.service).filter(id => id);
+
+    // Fetch all addresses for the users in a single query
+    const userAddresses = await Address.find({ userId: { $in: userIds } });
+
+    // Fetch all services for the given service IDs
+    const serviceDetails = await Promise.all(serviceIds.map(serviceId => findServiceById(serviceId)));
+
+    // Attach address and service details to each booking
+    const bookingsWithDetails = cancelledBookings.map((booking, index) => {
+      const address = userAddresses.find(addr => addr.userId.toString() === booking.user?._id.toString());
+      const service = serviceDetails[index];
+
+      return {
+        ...booking.toObject(),
+        user: {
+          ...booking.user.toObject(),
+          address: address || null
+        },
+        service: service || null
+      };
+    });
+
+    return res.status(200).json({
+      message: "Cancelled bookings retrieved successfully",
+      cancelledBookings: bookingsWithDetails
+    });
+  } catch (error) {
+    console.error("Error fetching cancelled bookings:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 
 
@@ -146,6 +197,7 @@ const getAcceptedBooking = asyncHandler(async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 const getNewBooking = asyncHandler(async (req, res) => {
   try {
@@ -330,7 +382,7 @@ const getProfessionalStats = asyncHandler(async (req, res) => {
     // Count status-based bookings
     const completedCount = await Booking.countDocuments({ professional: professionalId, status: "Completed" });
     const acceptedCount = await Booking.countDocuments({ professional: professionalId, status: "Accepted" });
-    const cancelledCount = await Booking.countDocuments({ professional: professionalId, status: "Cancelled" });
+    const cancelledCount = await Booking.countDocuments({ professional: professionalId, status: "Cancelled",cancelledBy:"Professional" });
 
     // Calculate total earnings where paymentStatus is "Paid"
     const totalEarningsResult = await Booking.aggregate([
@@ -405,4 +457,5 @@ export {
   getCurrentprofessional,
   getAcceptedBooking,
   updateProfile,
+  getCancelledBookingByProfessional,
 };

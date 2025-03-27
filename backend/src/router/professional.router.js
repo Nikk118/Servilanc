@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {professionalLogin,professionalLogout,getCurrentprofessional,getAcceptedBooking,updateProfile,getNewBooking,getCompletedBooking ,getProfessionalStats,paymentPaid } from "../controller/professional.controller.js";
+import {professionalLogin,professionalLogout,getCurrentprofessional,getAcceptedBooking,updateProfile,getNewBooking,getCompletedBooking ,getProfessionalStats,paymentPaid,getCancelledBookingByProfessional } from "../controller/professional.controller.js";
 
 import {verifyProfessional} from "../middleware/professionalAuth.middleware.js"
 import { upload } from "../middleware/multer.middleware.js";
@@ -25,5 +25,7 @@ router.route("/getCompletedBooking").get(verifyProfessional,getCompletedBooking)
 router.route("/getProfessionalStats").get(verifyProfessional,getProfessionalStats)
 
 router.route("/paymentPaid/:id").patch(verifyProfessional,paymentPaid)
+
+router.route("/getCancelledBookingByProfessional").get(verifyProfessional,getCancelledBookingByProfessional)
 
 export default router

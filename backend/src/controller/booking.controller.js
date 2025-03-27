@@ -186,7 +186,7 @@ const cancleBooking = asyncHandler(async (req, res) => {
     }
 });
 
-// ✅ **Send cancellation email in the background**
+
 
 
 

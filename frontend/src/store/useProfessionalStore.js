@@ -12,7 +12,36 @@ export const useProfessionalStore = create((set,get) => ({
   newBooking: null,
   completedBooking:null,
   professionalStats:null,
+  isProfessionalCancelBooking:false,
+  cancelledBookings:null,
 
+  setCancelledBookings: async () => {
+    try {
+      const res = await axiosInstant.get("/professional/getCancelledBookingByProfessional");
+      set({ cancelledBookings: res.data.cancelledBookings });
+      console.log("Cancelled Bookings:", res.data.cancelledBookings);
+    } catch (error) {
+      console.error("Error fetching canceled bookings:", error);
+    }
+  },
+
+
+
+professionalCancelBooking: async (bookingId, reason) => {
+    set({isProfessionalCancelBooking:true});
+    try {
+        const res = await axiosInstant.patch(`/profesionalCancel/professionalCancelBooking/${bookingId}`, { reason });
+        console.log("Cancellation Response:", res.data);
+        toast.success("Booking cancelled successfully");
+        get().setAcceptedBooking();
+        return res.data;
+    } catch (error) {
+        console.error("Error cancelling booking:", error);
+        throw error;
+    }finally{
+      set({isProfessionalCancelBooking:false});
+    }
+},
   setProfessionalStats: async () => {
     try {
       const res = await axiosInstant.get("/professional/getProfessionalStats");

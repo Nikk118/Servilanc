@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import {loginAdmin,getAdmin,logoutAdmin,addProfessional,adminSignUp,totalServices,
     userstats,bookingsStats,getAllProfessionalStats,getAllUsersStats,removeProfessional,
-    removeUser,getALLBookingWithDeatils
+    removeUser,getALLBookingWithDeatils,getAllCancellations
 } from "../controller/admin.controller.js"
 import { verifyAdmin } from "../middleware/adminAuth.middleware.js";
 
@@ -34,5 +34,6 @@ router.route("/removeUser/:userId").delete(verifyAdmin,removeUser)
 
 router.route("/getALLBookingWithDeatils").get(getALLBookingWithDeatils)
 
+router.route("/getAllCancellations").get(getAllCancellations)
 
 export default router

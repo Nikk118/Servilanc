@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Menu } from "lucide-react";
 import React from "react";
 import { motion } from "framer-motion";
-import { User } from "lucide-react";
+import { User,XCircle  } from "lucide-react";
 import { FaClipboardList, FaHourglassHalf, FaCheckCircle, FaHome ,FaCalendarAlt } from "react-icons/fa";
 
 const menuItems = [
@@ -11,6 +11,7 @@ const menuItems = [
   { name: "Accepted Services", icon: <FaHourglassHalf /> },
   { name: "Completed Services", icon: <FaCheckCircle /> },
   { name: "Services Schedule", icon: <FaCalendarAlt /> },
+  { name: "Services Cancelled", icon: <XCircle  /> },
   { name: "Profile", icon: <User /> },
 ];
 

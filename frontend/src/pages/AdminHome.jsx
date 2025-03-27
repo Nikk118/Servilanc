@@ -16,6 +16,7 @@ import Electrician from "../Components/adminComponents/Electrician";
 import Carpentry from "../Components/adminComponents/Carpenty"
 import PestControl from "../Components/adminComponents/PestControl";
 import BookingWithDetails from "../Components/adminComponents/BookingWithDetails";
+import ProfessionalServicesCanceled from "../Components/adminComponents/ProfessionalServicesCanceled";
 
 function AdminHome() {
   const { adminLogout, authAdmin } = useAdminStore();
@@ -52,7 +53,10 @@ function AdminHome() {
       case "New Registration":
         return <NewRegistration />;
       case "Feedback":
+        
         return <FeedbackManagement />;
+        case "Professional Cancel Services":
+          return <ProfessionalServicesCanceled/>
       default:
         return <AdminDashboard />;
     }
