@@ -29,6 +29,7 @@ const menuItems = [
   { name: "New Registration", icon: <UserPlus /> },
   { name: "Feedback", icon: <FaComment /> },
   { name: "Professional Cancel Services", icon: <UserX /> },
+  { name: "Users Cancel Services", icon: <UserX /> },
 ];
 
 const categories = [

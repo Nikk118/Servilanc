@@ -3,7 +3,7 @@ import { axiosInstant } from "../lib/axios.js";
 import toast from "react-hot-toast";
 
 
-const BASE_URL = "http://localhost:3000/api";
+
 
 export const useBookingStore = create((set,get) => ({
     booking: null,

@@ -97,7 +97,7 @@ export default function SignupUser() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Sign Up
+            { isSignUp ? "Signing Up... ":"Sign Up"}
           </motion.button>
         </form>
 

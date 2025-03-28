@@ -17,6 +17,18 @@ export const useAdminStore = create((set,get) => ({
     professionalStats: null,
     BookingDeatils:null,
     allCancelServices:null,
+    allUserCancelServices:null,
+    
+
+    setAllUserCancelServices:async()=>{
+      try {
+        const res= await axiosInstant.get("/admin/getUserCancellations")
+        set({allUserCancelServices:res.data.cancellations})
+        console.log("all user cancel services",res.data.cancellations)
+      } catch (error) {
+        console.log("cant fetch all cancel services",error)
+      }
+    },
 
     setAllCancelServices:async()=>{
       try {

@@ -35,12 +35,12 @@ const findServiceById = async (serviceId) => {
 
 const getAllCancellations = asyncHandler(async (req, res) => {
   try {
-    const cancellations = await Cancellation.find().sort({ createdAt: 1 }).populate("booking");
+    const cancellations = await Cancellation.find({ cancelledBy: "Professional" }).sort({ createdAt: -1 }).populate("booking");
 
-    // Fetch service and professional details properly
+    
     const detailedCancellations = await Promise.all(
       cancellations.map(async (cancellation) => {
-        // Ensure cancellation.booking exists before accessing its properties
+       
         if (!cancellation.booking) {
           return cancellation.toObject();
         }
@@ -50,8 +50,8 @@ const getAllCancellations = asyncHandler(async (req, res) => {
 
         return {
           ...cancellation.toObject(),
-          service: service || null, // Ensure service is either the found object or null
-          professional: professional || null, // Ensure professional is either the found object or null
+          service: service || null, 
+          professional: professional || null,
         };
       })
     );
@@ -59,6 +59,36 @@ const getAllCancellations = asyncHandler(async (req, res) => {
     res.status(200).json({ cancellations: detailedCancellations });
   } catch (error) {
     console.error("Error fetching cancellations:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+const getUserCancellations = asyncHandler(async (req, res) => {
+  try {
+    const userCancellations = await Cancellation.find({ cancelledBy: "User" })
+      .sort({ createdAt: -1 })
+      .populate("booking");
+
+    const detailedCancellations = await Promise.all(
+      userCancellations.map(async (cancellation) => {
+        if (!cancellation.booking) {
+          return cancellation.toObject();
+        }
+
+        const service = await findServiceById(cancellation.booking.service);
+        const user = await User.findById(cancellation.booking.user);
+
+        return {
+          ...cancellation.toObject(),
+          service: service || null,
+          user: user || null,
+        };
+      })
+    );
+
+    res.status(200).json({ cancellations: detailedCancellations });
+  } catch (error) {
+    console.error("Error fetching user cancellations:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -459,5 +489,6 @@ export {
     getAdmin,
     loginAdmin,
     logoutAdmin,
-    addProfessional
+    addProfessional,
+    getUserCancellations
 }

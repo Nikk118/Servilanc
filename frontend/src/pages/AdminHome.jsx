@@ -17,6 +17,7 @@ import Carpentry from "../Components/adminComponents/Carpenty"
 import PestControl from "../Components/adminComponents/PestControl";
 import BookingWithDetails from "../Components/adminComponents/BookingWithDetails";
 import ProfessionalServicesCanceled from "../Components/adminComponents/ProfessionalServicesCanceled";
+import UserCancelServices from "../Components/adminComponents/UserCancelServices";
 
 function AdminHome() {
   const { adminLogout, authAdmin } = useAdminStore();
@@ -53,10 +54,11 @@ function AdminHome() {
       case "New Registration":
         return <NewRegistration />;
       case "Feedback":
-        
         return <FeedbackManagement />;
-        case "Professional Cancel Services":
+      case "Professional Cancel Services":
           return <ProfessionalServicesCanceled/>
+      case "Users Cancel Services":
+          return <UserCancelServices/>
       default:
         return <AdminDashboard />;
     }

@@ -8,6 +8,7 @@ import { Carpentry } from "../models/carpentry.model.js";
 import { PestControl } from "../models/pestControl.model.js";
 import { sendEmail } from "../utils/emailService.js";
 import { Professional } from "../models/professional.model.js";
+import {Cancellation} from "../models/Cancellation.model.js"
 import {User} from "../models/user.model.js"
 
 const findServiceById = async (serviceId) => {
@@ -35,7 +36,7 @@ const addBooking = asyncHandler(async (req, res) => {
     console.log("Received booking request", req.body);
     
     const { bookingDate, bookingTime, transactionId } = req.body;
-    const user = req.user; // Ensure this contains username and email
+    const user = req.user; 
     const { serviceId } = req.params;
 
     if (!serviceId) {
@@ -137,54 +138,74 @@ const getBooking = asyncHandler(async (req, res) => {
 
 
 
-const cancleBooking = asyncHandler(async (req, res) => {
+const cancelBookingByUser = asyncHandler(async (req, res) => {
     try {
         const { bookingId } = req.params;
+        const userId = req.user._id;
+        const { reason } = req.body;
 
-        if (!bookingId) {
-            return res.status(400).json({ message: "Booking ID is required" });
+        if (!bookingId || !reason || !userId) {
+            return res.status(400).json({ message: "Booking ID, user ID, and reason are required" });
         }
 
-        // Update booking status to "Cancelled"
-        const booking = await Booking.findByIdAndUpdate(
-            bookingId,
-            { status: "Cancelled" },
-            { new: true }
-        );
-
+        const booking = await Booking.findById(bookingId);
         if (!booking) {
             return res.status(404).json({ message: "Booking not found" });
         }
 
-        // Fetch user and service details
-        const user = await User.findById(booking.user);
-        const service = await findServiceById(booking.service);
-
-        if (!user || !service) {
-            return res.status(400).json({ message: "User or service details not found" });
+        // Ensure the booking belongs to the user
+        if (booking.user.toString() !== userId.toString()) {
+            return res.status(403).json({ message: "Unauthorized: You can only cancel your own bookings" });
         }
 
-        // ✅ **Send response first (Prevents network error)**
-        res.status(200).json({ message: "Booking cancelled successfully", booking });
+        // Update booking status
+        booking.status = "Cancelled";
+        booking.cancelledBy = "User";
+        await booking.save();
 
-        // ✅ **Send cancellation email in the background**
-        try {
-            await sendEmail(
-                user.email,
-                "Your Booking has been Cancelled",
-                `Hello ${user.username},\n\nYour booking for ${service.name} has been cancelled successfully.\n\nIf this was a mistake, please book again.\n\nThank you!`
-            );
-            console.log("Cancellation email sent to:", user.email);
-        } catch (error) {
-            console.error("Error sending cancellation email:", error);
+        // Store cancellation record
+        const cancellation = new Cancellation({
+            booking: bookingId,
+            cancelledBy: "User",
+            reason
+        });
+        await cancellation.save();
+
+        // Fetch service details
+        const Service = await findServiceById(booking.service);
+        if (!Service) {
+            return res.status(404).json({ message: "Service details not found" });
         }
 
-        return;
+        // Send response before sending email
+        res.status(200).json({
+            message: "Booking cancelled successfully",
+            cancellation
+        });
+
+        // Send email notification only if a professional is assigned
+        if (booking.professional) {
+            const professional = await Professional.findById(booking.professional);
+            if (professional) {
+                try {
+                    await sendEmail(
+                        professional.email,
+                        "Booking Cancelled",
+                        `Dear ${professional.username},\n\nThe booking for **${Service.name}** has been cancelled by the user.\n\nReason: ${reason}\n\nThank you!`
+                    );
+                    console.log("Cancellation email sent to:", professional.email);
+                } catch (error) {
+                    console.error("Error sending email:", error);
+                }
+            }
+        }
+
     } catch (error) {
         console.error("Error cancelling booking:", error);
         return res.status(500).json({ message: "Internal server error", error: error.message });
     }
 });
+
 
 
 
@@ -301,7 +322,7 @@ const completeBooking = asyncHandler(async (req, res) => {
 export {
     addBooking,
     getBooking,
-    cancleBooking,
+    cancelBookingByUser,
     accpetBooking,
     completeBooking
 }

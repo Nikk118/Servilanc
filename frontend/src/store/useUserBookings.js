@@ -26,15 +26,33 @@ export const useUserBookings = create((set,get) => ({
         }
     },
 
-    cancelBooking: async (bookingId) => {
+    cancelBooking: async (bookingId, reason) => {
         try {
-            const res=await axiosInstant.patch(`/booking/cancleBooking/${bookingId}`);
-            toast.success("Booking cancle successfully");
-            get().getUserBookings();
+            if (!reason) {
+                toast.error("Cancellation reason is required.");
+                return;
+            }
+    
+            const res = await axiosInstant.patch(`/booking/cancleBooking/${bookingId}`, { reason });
+    
+            if (res.status === 200) {
+                toast.success("Booking cancelled successfully");
+                get().getUserBookings();
+            } else {
+                toast.error("Failed to cancel booking. Please try again.");
+            }
         } catch (error) {
-            console.error("Authentication error:", error);
+            console.error("Error cancelling booking:", error);
+            
+            if (error.response) {
+                toast.error(error.response.data.message || "Cancellation failed.");
+            } else {
+                toast.error("Network error. Please check your connection.");
+            }
+    
             set({ userBookings: null });
         }
     }
+    
 }));
     
