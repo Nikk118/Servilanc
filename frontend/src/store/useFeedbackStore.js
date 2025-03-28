@@ -56,6 +56,8 @@ export const useFeedbackStore = create((set, get) => ({
       console.error("Error adding feedback:", error);
       toast.error("Failed to add feedback");
       set({ isAddingFeedback: false });
+    }finally{
+      set({ isAddingFeedback: false });
     }
   },
   deleteFeedback: async (id) => {

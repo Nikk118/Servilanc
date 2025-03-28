@@ -24,7 +24,7 @@ const get10Feedback=asyncHandler(async(req,res)=>{
 })
 
 const getAllFeedback=asyncHandler(async(req,res)=>{
-    const feedback= await Feedback.find().populate("user")
+    const feedback= await Feedback.find().sort({createdAt:-1}).populate("user")
     return res.status(200).json({message:"Feedback fetched successfully",feedback})
 });
 

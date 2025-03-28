@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFeedbackStore } from "../../store/useFeedbackStore";
-import toast from "react-hot-toast";
 
 const FeedbackManagement = () => {
   const { allFeedback, getAllFeedback, deleteFeedback } = useFeedbackStore();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Set number of feedbacks per page
 
   useEffect(() => {
     getAllFeedback();
@@ -14,6 +15,11 @@ const FeedbackManagement = () => {
       await deleteFeedback(id);
     }
   };
+
+  // Pagination calculations
+  const totalPages = Math.ceil((allFeedback?.length || 0) / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedFeedback = allFeedback?.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="p-6">
@@ -28,7 +34,7 @@ const FeedbackManagement = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-600">
-            {allFeedback?.map((feedback) => (
+            {paginatedFeedback?.map((feedback) => (
               <tr key={feedback._id} className="hover:bg-gray-700 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                   {feedback.user?.username || "Anonymous"}
@@ -49,6 +55,29 @@ const FeedbackManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-4 space-x-2">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-800 text-gray-300 rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <span className="px-4 py-2 bg-gray-700 text-white rounded">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-800 text-gray-300 rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

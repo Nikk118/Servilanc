@@ -2,31 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useAdminStore } from "../../store/useAdminStore";
 
 function UserCancelServices() {
-  const { setAllUserCancelServices, allUserCancelServices = [] } = useAdminStore();
+  const { setAllUserCancelServices, allUserCancelServices  } = useAdminStore();
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const fetchCanceledServices = async () => {
-      try {
-        await setAllUserCancelServices();
-        console.log("Fetched User Canceled Services:", allUserCancelServices);
-      } catch (error) {
-        console.error("Error fetching user canceled services:", error);
-      }
-    };
-
-    fetchCanceledServices();
+      setAllUserCancelServices();
   }, [setAllUserCancelServices]);
 
-  // Filter services based on username search query
-  const filteredServices = allUserCancelServices.filter((cancel) =>
-    cancel.user?.username?.toLowerCase().includes(searchQuery.toLowerCase())
+  
+  const filteredServices = (allUserCancelServices || []).filter((cancel) =>
+    cancel?.user?.username?.toLowerCase()?.includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="p-4 bg-gray-900 min-h-screen">
       <h2 className="text-2xl font-bold mb-4 text-white">User Cancelled Services</h2>
 
+      <p className="text-gray-300 mb-2">Total Cancelled Services: <span className="font-bold text-yellow-400">{filteredServices.length}</span></p>
       {/* Search Input */}
       <input
         type="text"

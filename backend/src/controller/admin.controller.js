@@ -323,6 +323,7 @@ const getAllProfessionalStats = asyncHandler(async (_, res) => {
       });
 
       const cancelledBookings = await Booking.countDocuments({
+        cancelledBy: "Professional",
         professional: professional._id,
         status: "Cancelled",
       });
@@ -453,7 +454,7 @@ const removeUser=asyncHandler(async(req,res)=>{
 const getALLBookingWithDeatils = asyncHandler(async (req, res) => {
   try {
      
-      const bookings = await Booking.find().populate("user professional");
+      const bookings = await Booking.find().sort({ createdAt: -1 }).populate("user professional");
 
      
       const bookingsWithDetails = await Promise.all(

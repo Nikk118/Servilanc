@@ -7,7 +7,7 @@ import OurProfessional from "../Components/homepage/OurProfessional.jsx";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { feedbacks, getFeedbacks, addFeedback } = useFeedbackStore();
+  const { feedbacks, getFeedbacks, addFeedback,isAddingFeedback } = useFeedbackStore();
   const [showForm, setShowForm] = useState(false);
   const [comment, setComment] = useState("");
   
@@ -182,7 +182,7 @@ export default function Home() {
                     type="submit"
                     className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
                   >
-                    Submit
+                    {isAddingFeedback?"Submitting...":"Submit"}
                   </button>
                 </div>
               </form>

@@ -14,18 +14,16 @@ function UserBookings() {
   const [filter, setFilter] = useState("All");
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-const [cancelReason, setCancelReason] = useState("");
-const [bookingToCancel, setBookingToCancel] = useState(null);
-
+  const [cancelReason, setCancelReason] = useState("");
+  const [bookingToCancel, setBookingToCancel] = useState(null);
 
   useEffect(() => {
     getUserBookings();
   }, [getUserBookings]);
 
- 
   const handleCancel = (bookingId) => {
     setBookingToCancel(bookingId);
-    setIsCancelModalOpen(true); 
+    setIsCancelModalOpen(true);
   };
 
   const confirmCancel = async () => {
@@ -33,16 +31,12 @@ const [bookingToCancel, setBookingToCancel] = useState(null);
       alert("Please provide a reason for cancellation.");
       return;
     }
-  
-    await cancelBooking(bookingToCancel, cancelReason); 
+
+    await cancelBooking(bookingToCancel, cancelReason);
     setIsCancelModalOpen(false);
-    setCancelReason(""); 
+    setCancelReason("");
   };
 
-
-  
-  
-  
   const filteredBookings = (userBookings || []).filter(
     (booking) => filter === "All" || booking.status === filter
   );
@@ -50,7 +44,6 @@ const [bookingToCancel, setBookingToCancel] = useState(null);
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 pt-20 px-4">
       <div className="bg-white text-gray-900 p-6 rounded-2xl shadow-lg border border-gray-200 w-full max-w-3xl">
-
         {/* Heading and Filter */}
         <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800">
@@ -148,10 +141,13 @@ const [bookingToCancel, setBookingToCancel] = useState(null);
                   <div className="flex flex-col gap-3">
                     {booking.status !== "Completed" &&
                       booking.status !== "Cancelled" && (
-                       <button onClick={() => handleCancel(booking._id)} className="px-4 py-2 bg-red-500 ...">
-  Cancel
-</button>
-
+                        <button
+                        onClick={() => handleCancel(booking._id)}
+                        className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+                      >
+                        Cancel
+                      </button>
+                      
                       )}
 
                     {booking.paymentStatus === "Paid" && (
@@ -184,33 +180,34 @@ const [bookingToCancel, setBookingToCancel] = useState(null);
           </div>
         )}
         {isCancelModalOpen && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-      <h3 className="text-lg font-semibold mb-3">Enter Reason for Cancellation</h3>
-      <textarea
-        value={cancelReason}
-        onChange={(e) => setCancelReason(e.target.value)}
-        className="w-full p-2 border border-gray-300 rounded-lg"
-        placeholder="Write your reason here..."
-      />
-      <div className="flex justify-end mt-4 space-x-2">
-        <button
-          onClick={() => setIsCancelModalOpen(false)}
-          className="px-4 py-2 bg-gray-400 text-white rounded-lg"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={confirmCancel}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg"
-        >
-          Confirm
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+              <h3 className="text-lg font-semibold mb-3">
+                Enter Reason for Cancellation
+              </h3>
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                placeholder="Write your reason here..."
+              />
+              <div className="flex justify-end mt-4 space-x-2">
+                <button
+                  onClick={() => setIsCancelModalOpen(false)}
+                  className="px-4 py-2 bg-gray-400 text-white rounded-lg"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmCancel}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Invoice Modal */}
