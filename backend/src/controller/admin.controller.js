@@ -12,6 +12,7 @@ import { Carpentry } from "../models/carpentry.model.js"
 import { PestControl } from "../models/pestControl.model.js"
 import {Booking} from "../models/booking.model.js"
 import {Cancellation} from "../models/Cancellation.model.js"
+import {sendEmail} from "../utils/emailService.js"
 
 const findServiceById = async (serviceId) => {
     try {
@@ -92,7 +93,6 @@ const getUserCancellations = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
 
 
 const adminSignUp= asyncHandler(async(req,res)=>{
@@ -199,56 +199,50 @@ const getAdmin=asyncHandler(async(req,res)=>{
   )
 })
 
-const addProfessional= asyncHandler(async(req,res)=>{
+const addProfessional = asyncHandler(async (req, res) => {
+  const { email, name, password, phone, category } = req.body;
 
-   
-    const {email,name,password,phone,category}=req.body
+  console.log(email, name, password, phone, category);
 
-      console.log(email,name,password,phone,category)
-    if(!email || !name|| !password || !phone || !category){
-      return res.status(400)
-      .json(
-       { message:"all feilds are required"}
+  if (!email || !name || !password || !phone || !category) {
+      return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const professionalExists = await Professional.findOne({ $or: [{ name }, { email }] });
+
+  if (professionalExists) {
+      return res.status(400).json({ message: "Professional already exists" });
+  }
+
+  const professional = await Professional.create({
+      name,
+      email,
+      password,
+      phone,
+      category
+  });
+
+  const createdProfessional = await Professional.findById(professional._id).select("-password");
+
+  if (createdProfessional) {
+      // ✅ Return response first
+      res.status(201).json({
+          message: "Professional created successfully",
+          professional: createdProfessional
+      });
+
+      // ✅ Send email asynchronously after returning response
+      sendEmail(
+          email,
+          "Welcome to Our Service Platform",
+          `Hello ${name},\n\nCongratulations! You have been successfully added as a professional on our platform.\n\nCategory: ${category}\n\nStart accepting service requests and grow your business with us.\n\nBest Regards,\nYour Team`
       )
-    }
-
-      const professionalExists= await Professional.findOne({$or:[{name},{email}]})
-    
-        if(professionalExists){
-          return res.status(400)
-          .json(
-           { message:"professional already exists"}
-          )
-        }
-    
-        const professional= await Professional.create({
-            name,
-            email,
-            password,
-            phone,
-            category
-        })
-    
-        const createdprofessional= await Professional.findById(professional._id).select("-password")
-    
-        if(createdprofessional){
-            return res.status(201)
-            .json(
-                {
-                    message:"professional created successfully",
-                    professional:createdprofessional
-                }
-            )
-        }else{
-          return res.status(500)
-          .json(
-           { message:"internal server error"}
-          )
-    
-        }
-        
-        
-})
+      .then(() => console.log("Professional added email sent to:", email))
+      .catch((error) => console.error("Error sending email to professional:", error));
+  } else {
+      res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 const totalServices=asyncHandler(async(req,res)=>{
       const salon= await Salon.countDocuments()
