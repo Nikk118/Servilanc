@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useElectricianStore } from "../../store/useElectricianStore";
 
 function Electrician() {
-  const {
-    services,
-    addService,
-    removeService,
-    fetchServices,
-    updateService,
-    isAddingService,
-  } = useElectricianStore();
+  const { services, addService, removeService, fetchServices, updateService, isAddingService } = useElectricianStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
@@ -47,14 +40,7 @@ function Electrician() {
       await addService(formDataToSend);
     }
 
-    setFormData({
-      name: "",
-      description: "",
-      price: "",
-      duration: "",
-      image_url: null,
-      category: "Electrician",
-    });
+    setFormData({ name: "", description: "", price: "", duration: "", image_url: null, category: "Electrician" });
     setIsModalOpen(false);
     setIsUpdateMode(false);
   };
@@ -74,28 +60,21 @@ function Electrician() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <button
         onClick={() => {
           setIsModalOpen(true);
           setIsUpdateMode(false);
-          setFormData({
-            name: "",
-            description: "",
-            price: "",
-            duration: "",
-            image_url: null,
-            category: "Electrician",
-          });
+          setFormData({ name: "", description: "", price: "", duration: "", image_url: null, category: "Electrician" });
         }}
-        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mb-6"
+        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mb-4 sm:mb-6 w-full sm:w-auto"
       >
         Add Electrician Service
       </button>
   
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg w-full max-w-md md:max-w-lg lg:max-w-xl relative">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+          <div className="bg-gray-800 p-6 rounded-lg w-full max-w-lg relative">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-3 right-3 text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded"
@@ -103,59 +82,15 @@ function Electrician() {
               ✕
             </button>
   
-            <h3 className="text-xl font-semibold mb-4">
-              {isUpdateMode ? "Update Electrician Service" : "Add New Electrician Service"}
-            </h3>
+            <h3 className="text-xl font-semibold mb-4">{isUpdateMode ? "Update Electrician Service" : "Add New Electrician Service"}</h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Service Name"
-                className="p-2 rounded bg-gray-700 text-white"
-                required
-              />
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Service Description"
-                className="p-2 rounded bg-gray-700 text-white"
-                required
-              ></textarea>
-              <input
-                type="text"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                placeholder="Service Price"
-                className="p-2 rounded bg-gray-700 text-white"
-                required
-              />
-              <input
-                type="text"
-                name="duration"
-                value={formData.duration}
-                onChange={handleChange}
-                placeholder="Duration (optional)"
-                className="p-2 rounded bg-gray-700 text-white"
-              />
-              <input
-                type="file"
-                name="image_url"
-                onChange={handleChange}
-                className="p-2 rounded bg-gray-700 text-white"
-                accept="image/*"
-              />
-  
-              <button
-                type="submit"
-                className={`py-2 rounded text-white ${
-                  isAddingService ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-                }`}
-                disabled={isAddingService}
-              >
+              <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Service Name" className="p-2 rounded bg-gray-700 text-white w-full" required />
+              <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Service Description" className="p-2 rounded bg-gray-700 text-white w-full" required></textarea>
+              <input type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Service Price" className="p-2 rounded bg-gray-700 text-white w-full" required />
+              <input type="text" name="duration" value={formData.duration} onChange={handleChange} placeholder="Duration (optional)" className="p-2 rounded bg-gray-700 text-white w-full" />
+              <input type="file" name="image_url" onChange={handleChange} className="p-2 rounded bg-gray-700 text-white w-full" accept="image/*" />
+              
+              <button type="submit" className={`py-2 rounded text-white w-full ${isAddingService ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`} disabled={isAddingService}>
                 {isAddingService ? "Processing..." : isUpdateMode ? "Update Service" : "Add Service"}
               </button>
             </form>
@@ -165,18 +100,11 @@ function Electrician() {
   
       <div className="bg-gray-900 p-6 rounded-lg">
         <h3 className="text-xl font-semibold mb-4 text-white">Total Electrician Services</h3>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ul className="grid sm:grid-cols-2 gap-4">
           {services && services.length > 0 ? (
             services.map((service) => (
-              <li
-                key={service._id}
-                className="flex flex-col sm:flex-row items-center bg-gray-800 p-4 rounded-lg"
-              >
-                <img
-                  src={service.image_url || "/default-electrician.jpg"}
-                  alt={service.name}
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover"
-                />
+              <li key={service._id} className="flex flex-col sm:flex-row items-center bg-gray-800 p-4 rounded-lg shadow-lg">
+                <img src={service.image_url || "/default-electrician.jpg"} alt={service.name} className="w-24 h-24 rounded-lg object-cover mb-2 sm:mb-0 sm:mr-4" />
   
                 <div className="flex-1 text-center sm:text-left">
                   <h4 className="text-lg font-semibold text-white">{service.name}</h4>
@@ -185,17 +113,11 @@ function Electrician() {
                   {service.duration && <p className="text-gray-400">Duration: {service.duration}</p>}
                 </div>
   
-                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                  <button
-                    onClick={() => handleUpdateClick(service)}
-                    className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-                  >
+                <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2 sm:mt-0">
+                  <button onClick={() => handleUpdateClick(service)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
                     Update
                   </button>
-                  <button
-                    onClick={() => removeService(service._id)}
-                    className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-                  >
+                  <button onClick={() => removeService(service._id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
                     Remove
                   </button>
                 </div>
