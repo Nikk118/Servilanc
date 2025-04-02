@@ -58,14 +58,15 @@ export const useSalonStore = create((set,get) => ({
 
     try {
       await axiosInstant.patch(`/salon/updateSalonService/${serviceId}`, serviceData);
-
       get().fetchServices();
       toast.success("Service updated successfully");
-      set({ isAddingService: false }); 
-
+      
     } catch (error) {
       toast.error(error.response.data.message);
       console.error("Error updating service:", error);
+      set({ isAddingService: false }); 
+    } finally {
+      set({ isAddingService: false });
     }
   }
 }));
