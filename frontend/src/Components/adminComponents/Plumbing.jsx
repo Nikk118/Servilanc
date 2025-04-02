@@ -118,27 +118,50 @@ function Plumbing() {
         </div>
       )}
   
-      <div className="bg-gray-900 p-6 rounded-lg">
-        <h3 className="text-xl font-semibold mb-4 text-white">Total Services</h3>
-        <ul className="grid sm:grid-cols-2 gap-4">
+  <div className="bg-gray-900 p-6 rounded-lg">
+        <h3 className="text-xl font-semibold mb-4 text-white">Total Salon Services</h3>
+  
+        <ul className="space-y-4">
           {services && services.length > 0 ? (
             services.map((service) => (
-              <li key={service._id} className="flex flex-col sm:flex-row items-center bg-gray-800 p-4 rounded-lg shadow-lg">
-                <img src={service.image_url || "/default-plumbing.jpg"} alt={service.name} className="w-24 h-24 rounded-lg object-cover mb-2 sm:mb-0 sm:mr-4" />
-                <div className="flex-1 text-center sm:text-left">
+              <li key={service._id} className="flex flex-wrap sm:flex-nowrap items-center bg-gray-800 p-4 rounded-lg shadow-lg gap-4">
+  
+                {/* Service Image */}
+                <img
+                  src={service.image_url || "/default-salon.jpg"}
+                  alt={service.name}
+                  className="w-20 h-20 rounded-lg object-cover"
+                />
+  
+                {/* Service Details */}
+                <div className="flex-1">
                   <h4 className="text-lg font-semibold text-white">{service.name}</h4>
                   <p className="text-gray-400">{service.description}</p>
-                  <p className="text-gray-400">Price: ${service.price}</p>
-                  {service.duration && <p className="text-gray-400">Duration: {service.duration}</p>}
+                  <p className="text-gray-400">Price: ₹{service.price}</p>
+                  {service.duration && (
+                    <p className="text-gray-400">Duration: {service.duration}</p>
+                  )}
                 </div>
-                <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
-                  <button onClick={() => handleUpdateClick(service)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Update</button>
-                  <button onClick={() => removeService(service._id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Remove</button>
+  
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    onClick={() => handleUpdateClick(service)}
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-all duration-300 text-sm"
+                  >
+                    Update
+                  </button>
+                  <button
+                    onClick={() => removeService(service._id)}
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-all duration-300 text-sm"
+                  >
+                    Remove
+                  </button>
                 </div>
               </li>
             ))
           ) : (
-            <p className="text-gray-400 text-center">No services available</p>
+            <p className="text-gray-400 text-center">No salon services available</p>
           )}
         </ul>
       </div>

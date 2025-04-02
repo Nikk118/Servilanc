@@ -139,7 +139,7 @@ function Salon() {
                 <div className="flex-1">
                   <h4 className="text-lg font-semibold text-white">{service.name}</h4>
                   <p className="text-gray-400">{service.description}</p>
-                  <p className="text-gray-400">Price: ${service.price}</p>
+                  <p className="text-gray-400">Price: ₹{service.price}</p>
                   {service.duration && (
                     <p className="text-gray-400">Duration: {service.duration}</p>
                   )}
