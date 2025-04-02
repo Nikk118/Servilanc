@@ -60,7 +60,7 @@ function PestControl() {
     setSelectedServiceId(null);
   };
 
-  const handleEditClick = (service) => {
+  const handleUpdateClick = (service) => {
     setSelectedServiceId(service._id);
     setFormData({
       name: service.name,
