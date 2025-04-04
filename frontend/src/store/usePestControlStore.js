@@ -56,6 +56,8 @@ export const usePestControlStore = create((set, get) => ({
   },
 
   removeService: async (serviceId) => {
+    const isConfirmed = window.confirm("Are you sure you want to remove this service?");
+  if (!isConfirmed) return;
     try {
       await axiosInstant.delete(`/pestcontrol/removePestControlService/${serviceId}`);
       set((state) => ({

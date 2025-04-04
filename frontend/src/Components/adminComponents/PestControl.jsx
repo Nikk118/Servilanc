@@ -89,7 +89,7 @@ function PestControl() {
         }}
         className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mb-6"
       >
-        Add Service
+        Add Pest Control Service
       </button>
   
       {/* Add/Edit Service Modal */}
@@ -113,7 +113,7 @@ function PestControl() {
               <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Service Description" className="p-2 rounded bg-gray-700 text-white" required />
               <input type="text" name="price" value={formData.price} onChange={handleChange} placeholder="Service Price" className="p-2 rounded bg-gray-700 text-white" required />
               <input type="text" name="duration" value={formData.duration} onChange={handleChange} placeholder="Duration (optional)" className="p-2 rounded bg-gray-700 text-white" />
-              <input type="file" name="image_url" onChange={handleChange} className="p-2 rounded bg-gray-700 text-white" accept="image/*" />
+              {!isEditModalOpen&&(<input type="file" name="image_url" onChange={handleChange} className="p-2 rounded bg-gray-700 text-white" accept="image/*" />)}
   
               <button type="submit" className={`py-2 rounded text-white ${isAddingService || isUpdatingService ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`} disabled={isAddingService || isUpdatingService}>
                 {isUpdatingService ? "Updating..." : selectedServiceId ? "Update Service" : "Add Service"}
@@ -125,7 +125,7 @@ function PestControl() {
   
       {/* Pest Control Services List */}
       <div className="bg-gray-900 p-6 rounded-lg">
-        <h3 className="text-xl font-semibold mb-4 text-white">Total Salon Services</h3>
+        <h3 className="text-xl font-semibold mb-4 text-white">Total Pest Control Services</h3>
   
         <ul className="space-y-4">
           {services && services.length > 0 ? (
@@ -167,7 +167,7 @@ function PestControl() {
               </li>
             ))
           ) : (
-            <p className="text-gray-400 text-center">No salon services available</p>
+            <p className="text-gray-400 text-center">No Pest Control services available</p>
           )}
         </ul>
       </div>

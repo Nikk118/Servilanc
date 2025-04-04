@@ -63,9 +63,9 @@ const updatePlumbingService = asyncHandler(async (req, res) => {
     console.log("Request Body:", req.body);
     const { plumbingId } = req.params;
     const { name, description, price, duration, category } = req.body;
-    const image_urlLocalPath = req.file?.path;
+    // const image_urlLocalPath = req.file?.path;
 
-    console.log("Request File:", req.file);
+    // console.log("Request File:", req.file);
 
     if (!name || !description || !price || !duration || !category) {
         return res.status(400).json({ message: "All fields are required" });
@@ -73,10 +73,10 @@ const updatePlumbingService = asyncHandler(async (req, res) => {
 
     let updateData = { name, description, price, duration, category };
 
-    if (image_urlLocalPath) {
-        const image_url = await uploadOnCloudinary(image_urlLocalPath);
-        updateData.image_url = image_url.secure_url;
-    }
+    // if (image_urlLocalPath) {
+    //     const image_url = await uploadOnCloudinary(image_urlLocalPath);
+    //     updateData.image_url = image_url.secure_url;
+    // }
 
     const plumbing = await Plumbing.findByIdAndUpdate(plumbingId, updateData, { new: true });
 

@@ -93,7 +93,7 @@ function Carpentry() {
         }}
         className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mb-6 w-full sm:w-auto"
       >
-        Add Service
+        Add Carpentry Service
       </button>
   
       {isModalOpen && (
@@ -107,27 +107,70 @@ function Carpentry() {
             </button>
   
             <h3 className="text-xl font-semibold mb-4 text-white">{isUpdateMode ? "Update Carpentry Service" : "Add New Carpentry Service"}</h3>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Service Name" className="p-2 rounded bg-gray-700 text-white" required />
-              <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Service Description" className="p-2 rounded bg-gray-700 text-white" required></textarea>
-              <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Service Price" className="p-2 rounded bg-gray-700 text-white" required />
-              <input type="text" name="duration" value={formData.duration} onChange={handleChange} placeholder="Duration (optional)" className="p-2 rounded bg-gray-700 text-white" />
-              <input type="file" name="image_url" onChange={handleChange} className="p-2 rounded bg-gray-700 text-white" accept="image/*" />
+           
+<form onSubmit={handleSubmit} className="flex flex-col gap-4">
+  <input
+    type="text"
+    name="name"
+    value={formData.name}
+    onChange={handleChange}
+    placeholder="Service Name"
+    className="p-2 rounded bg-gray-700 text-white w-full"
+    required
+  />
+  <textarea
+    name="description"
+    value={formData.description}
+    onChange={handleChange}
+    placeholder="Service Description"
+    className="p-2 rounded bg-gray-700 text-white w-full"
+    required
+  ></textarea>
+  <input
+    type="text"
+    name="price"
+    value={formData.price}
+    onChange={handleChange}
+    placeholder="Service Price"
+    className="p-2 rounded bg-gray-700 text-white w-full"
+    required
+  />
+  <input
+    type="text"
+    name="duration"
+    value={formData.duration}
+    onChange={handleChange}
+    placeholder="Duration (optional)"
+    className="p-2 rounded bg-gray-700 text-white w-full"
+  />
   
-              <button
-                type="submit"
-                className={`py-2 rounded text-white ${isAddingService ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
-                disabled={isAddingService}
-              >
-                {isAddingService ? "Processing..." : isUpdateMode ? "Update Service" : "Add Service"}
-              </button>
-            </form>
+  {!isUpdateMode && (
+    <input
+      type="file"
+      name="image_url"
+      onChange={handleChange}
+      className="p-2 rounded bg-gray-700 text-white w-full"
+      accept="image/*"
+    />
+  )}
+  
+  <button
+    type="submit"
+    className={`py-2 rounded text-white w-full ${
+      isAddingService ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+    }`}
+    disabled={isAddingService}
+  >
+    {isAddingService ? "Processing..." : isUpdateMode ? "Update Service" : "Add Service"}
+  </button>
+</form>
+ 
           </div>
         </div>
       )}
   
   <div className="bg-gray-900 p-6 rounded-lg">
-        <h3 className="text-xl font-semibold mb-4 text-white">Total Salon Services</h3>
+        <h3 className="text-xl font-semibold mb-4 text-white">Total Carpentry Services</h3>
   
         <ul className="space-y-4">
           {services && services.length > 0 ? (
@@ -169,7 +212,7 @@ function Carpentry() {
               </li>
             ))
           ) : (
-            <p className="text-gray-400 text-center">No salon services available</p>
+            <p className="text-gray-400 text-center">No Carpentry services available</p>
           )}
         </ul>
       </div>

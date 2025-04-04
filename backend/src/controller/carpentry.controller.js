@@ -56,21 +56,18 @@ const updateCarpentryService = asyncHandler(async (req, res) => {
     console.log("req body", req.body);
     const { carpentryId } = req.params;
     const { name, description, price, duration } = req.body;
-    const image_urlLocalPath = req.file?.path;
-    console.log("Request File:", req.file);
+    // const image_urlLocalPath = req.file?.path;
+    // console.log("Request File:", req.file);
 
     if (!name || !description || !price || !duration) {
         return res.status(400).json({ message: "All fields are required" });
     }
-    if (!image_urlLocalPath) {
-        return res.status(404).json({ message: "Image is required" });
-    }
+    
 
-    const image_url = await uploadOnCloudinary(image_urlLocalPath);
     
     const carpentry = await Carpentry.findByIdAndUpdate(
         carpentryId, 
-        { name, description, price, duration, image_url: image_url.secure_url }, 
+        { name, description, price, duration }, 
         { new: true }
     );
 
