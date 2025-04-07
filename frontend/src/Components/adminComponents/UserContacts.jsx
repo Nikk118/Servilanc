@@ -1,16 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useContactStore } from "../../store/useContactStore.js";
 
 function UserContacts() {
   const { getContact, contacts, deleteContact } = useContactStore();
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    getContact();
+    const fetchContacts = async () => {
+      setLoading(true);
+      await getContact();
+      setLoading(false); 
+    };
+
+    fetchContacts();
   }, []);
 
   const handleDelete = (id) => {
     deleteContact(id);
   };
+
+ 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white text-xl">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen flex flex-col items-center">
@@ -33,15 +49,14 @@ function UserContacts() {
             <tbody>
               {Array.isArray(contacts) && contacts.length > 0 ? (
                 [...contacts]
-                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sorting by newest first
+                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map((contact, index) => (
-                    <tr key={contact.id || index} className="text-white">
+                    <tr key={contact._id || index} className="text-white">
                       <td className="p-3 border text-center">{index + 1}</td>
                       <td className="p-3 border">{contact.fullName}</td>
                       <td className="p-3 border">{contact.email}</td>
                       <td className="p-3 border">{contact.phone}</td>
                       <td className="message-column p-3 border">{contact.message}</td>
-
                       <td className="p-3 border text-center">
                         <button
                           onClick={() => handleDelete(contact._id)}
