@@ -191,7 +191,7 @@ const cancelBookingByUser = asyncHandler(async (req, res) => {
                     await sendEmail(
                         professional.email,
                         "Booking Cancelled",
-                        `Dear ${professional.username},\n\nThe booking for **${Service.name}** has been cancelled by the user.\n\nReason: ${reason}\n\nThank you!`
+                        `Dear ${professional.name},\n\nThe booking for **${Service.name}** has been cancelled by the user.\n\nReason: ${reason}\n\nThank you!`
                     );
                     console.log("Cancellation email sent to:", professional.email);
                 } catch (error) {

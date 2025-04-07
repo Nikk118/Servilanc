@@ -72,7 +72,7 @@ function AddProfessional() {
           required
         >
           <option value="Salon">Salon</option>
-          <option value="Cleaner">Cleaner</option>
+          <option value="Cleaning">Cleaning</option>
           <option value="Plumber">Plumber</option>
           <option value="Electrician">Electrician</option>
           <option value="PestControl">pestControl</option>
