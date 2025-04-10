@@ -82,7 +82,7 @@ function Salon() {
         }}
         className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mb-6"
       >
-        Add Slaon Service
+        Add Salon Service
       </button>
   
       {/* Modal for Adding/Updating Service */}
