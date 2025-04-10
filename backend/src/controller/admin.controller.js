@@ -259,8 +259,8 @@ const totalServices=asyncHandler(async(req,res)=>{
 
 const userstats = asyncHandler(async (req, res) => {
   try {
-    const users = await User.countDocuments(); // ✅ Await added
-    const professionals = await Professional.countDocuments(); // ✅ Await added
+    const users = await User.countDocuments(); 
+    const professionals = await Professional.countDocuments(); 
 
     return res.status(200).json({
       message: "User stats",
@@ -407,6 +407,7 @@ const getAllUsersStats = asyncHandler(async (req, res) => {
       const cancelledBookings = await Booking.countDocuments({
         user: user._id,
         status: "Cancelled",
+        cancelledBy: "User",
       });
 
       return {
