@@ -56,28 +56,34 @@ export default function Home() {
       </header>
 
       {/* Categories Section */}
-      <section className="p-4 sm:p-6 md:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
-        {categories.length > 0 ? (
-          categories.map((category, index) => (
-            <div
-              key={index}
-              className="relative w-full h-64 sm:h-72 bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition transform hover:scale-105 flex flex-col justify-center items-center p-4"
-            >
-              <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-4">
-                {category}
-              </h3>
-              <button
-                onClick={() => navigate(`/category/${toSlug(category)}`)}
-                className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white text-sm sm:text-lg font-medium rounded-lg hover:bg-blue-500 transition"
-              >
-                Book Now
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-400 col-span-full text-center">No categories available yet.</p>
-        )}
-      </section>
+   
+<section className="p-4 sm:p-6 md:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+  {categories.length > 0 ? (
+    categories.map((category, index) => (
+      <div
+        key={index}
+        className="relative w-full h-40 sm:h-48 bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition transform hover:scale-105 flex flex-col justify-center items-center p-6 text-center"
+      >
+        <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-4 tracking-wide">
+          {category}
+        </h3>
+
+        <button
+          onClick={() => navigate(`/category/${toSlug(category)}`)}
+          className="px-6 py-2 sm:px-8 sm:py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition"
+        >
+          Book Now
+        </button>
+      </div>
+    ))
+  ) : (
+    <p className="text-gray-400 col-span-full text-center">
+      No categories available yet.
+    </p>
+  )}
+</section>
+
+
 
       <OurProfessional />
 
