@@ -1,9 +1,13 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const serviceSchema = new mongoose.Schema({
-  category: String,
-  status: String, // "completed" or "pending"
-  price: Number,  // Price of service
-});
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  price: { type: Number, required: true },
+  duration: { type: String, default: "" },
+  image_url: { type: String, default: "" },
+  category: { type: String, required: true }, // e.g., Carpentry, Salon, etc.
+  status: { type: String, default: "pending" }, // "completed" or "pending"
+}, { timestamps: true });
 
-module.exports = mongoose.model("Service", serviceSchema);
+export const Service = mongoose.model("Service", serviceSchema);

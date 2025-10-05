@@ -15,6 +15,7 @@ import electricianRoutes from "./router/electrician.router.js"
 import carpentryRoutes from "./router/carpentry.router.js";
 import pestControlRoutes from "./router/pestControl.router.js";
 import ProfessionalCancelRouter from "./router/cancellation.router.js"
+import ServiceRouter from "./router/service.router.js"
 import cors from "cors"
 // import smsRouter from "./router/sms.router.js"
 import path from "path"
@@ -73,6 +74,7 @@ app.use("/api/electrician", electricianRoutes);
 app.use("/api/carpentry", carpentryRoutes);
 app.use("/api/pestControl", pestControlRoutes);
 app.use("/api/profesionalCancel",ProfessionalCancelRouter)
+app.use("/api/service",ServiceRouter)
 
 if(process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname,"../frontend/dist")));
