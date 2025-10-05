@@ -22,20 +22,14 @@ function AdminDashboard() {
     setUserStats();
   }, []);
 
-  const totalServices = servicesStats?.totalCount || 1; // Avoid division by zero
+  // Get all service categories dynamically
+  const serviceCategories = servicesStats
+    ? Object.keys(servicesStats).filter((key) => key !== "totalCount")
+    : [];
 
+  // Data for Bar chart
   const barData = {
-    labels: [
-      "Users",
-      "Professionals",
-      "Total Services",
-      "Salon",
-      "Cleaning",
-      "Plumbing",
-      "Electrician",
-      "Pest Control",
-      "Carpentry",
-    ],
+    labels: ["Users", "Professionals", "Total Services", ...serviceCategories],
     datasets: [
       {
         label: "Statistics",
@@ -43,35 +37,28 @@ function AdminDashboard() {
           userstats?.users || 0,
           userstats?.professionals || 0,
           servicesStats?.totalCount || 0,
-          servicesStats?.salon || 0,
-          servicesStats?.cleaning || 0,
-          servicesStats?.plumbing || 0,
-          servicesStats?.electrician || 0,
-          servicesStats?.pestControl || 0,
-          servicesStats?.carpentry || 0,
+          ...serviceCategories.map((cat) => servicesStats[cat] || 0),
         ],
         backgroundColor: [
-          "#00E676", "#FF4081", "#FFD700", "#FF5722", "#3D5AFE",
-          "#00BCD4", "#FFA500", "#8E44AD", "#2ECC71"
-        ],
+          "#00E676", "#FF4081", "#FFD700",
+          "#FF5722", "#3D5AFE", "#00BCD4", "#FFA500", "#8E44AD", "#2ECC71",
+        ].slice(0, serviceCategories.length + 3), // make sure colors match
         borderRadius: 8,
       },
     ],
   };
 
+  const totalServices = servicesStats?.totalCount || 1; // avoid division by zero
+
+  // Data for Pie chart
   const pieData = {
-    labels: ["Salon", "Cleaning", "Plumbing", "Electrician", "Pest Control", "Carpentry"],
+    labels: serviceCategories,
     datasets: [
       {
-        data: [
-          (servicesStats?.salon / totalServices) * 100,
-          (servicesStats?.cleaning / totalServices) * 100,
-          (servicesStats?.plumbing / totalServices) * 100,
-          (servicesStats?.electrician / totalServices) * 100,
-          (servicesStats?.pestControl / totalServices) * 100,
-          (servicesStats?.carpentry / totalServices) * 100,
-        ],
-        backgroundColor: ["#FF5722", "#3D5AFE", "#00BCD4", "#FFA500", "#8E44AD", "#2ECC71"],
+        data: serviceCategories.map((cat) => ((servicesStats[cat] || 0) / totalServices) * 100),
+        backgroundColor: [
+          "#FF5722", "#3D5AFE", "#00BCD4", "#FFA500", "#8E44AD", "#2ECC71", "#FFC107", "#E91E63",
+        ].slice(0, serviceCategories.length), // dynamic colors
         hoverOffset: 10,
       },
     ],
@@ -95,87 +82,59 @@ function AdminDashboard() {
     },
   };
 
-  const stats = [
-    { title: "Users", value: userstats?.users || 0, color: "bg-green-600" },
-    { title: "Professionals", value: userstats?.professionals || 0, color: "bg-pink-500" },
-    { title: "Total Services", value: servicesStats?.totalCount || 0, color: "bg-yellow-500" },
-    { title: "Salon", value: servicesStats?.salon || 0, color: "bg-red-500" },
-    { title: "Cleaning", value: servicesStats?.cleaning || 0, color: "bg-blue-600" },
-    { title: "Plumbing", value: servicesStats?.plumbing || 0, color: "bg-cyan-500" },
-    { title: "Electrician", value: servicesStats?.electrician || 0, color: "bg-orange-500" },
-    { title: "Pest Control", value: servicesStats?.pestControl || 0, color: "bg-purple-700" },
-    { title: "Carpentry", value: servicesStats?.carpentry || 0, color: "bg-green-500" },
-  ];
-
   const pieOptions = {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: {
-          font: {
-            size: 16, // Increase label size
-            weight: "bold",
-          },
-          color: "#FFFFFF", // Ensure visibility on dark backgrounds
-        },
-        position: "top", // Adjust position if needed
+        labels: { font: { size: 16, weight: "bold" }, color: "#FFFFFF" },
+        position: "top",
       },
     },
   };
-  
+
+  // Stats blocks dynamically
+  const stats = [
+    { title: "Users", value: userstats?.users || 0, color: "bg-green-600" },
+    { title: "Professionals", value: userstats?.professionals || 0, color: "bg-pink-500" },
+    { title: "Total Services", value: servicesStats?.totalCount || 0, color: "bg-yellow-500" },
+    ...serviceCategories.map((cat, idx) => ({
+      title: cat,
+      value: servicesStats[cat] || 0,
+      color: [
+        "bg-red-500", "bg-blue-600", "bg-cyan-500",
+        "bg-orange-500", "bg-purple-700", "bg-green-500",
+      ][idx % 6], // loop colors if more than 6 categories
+    })),
+  ];
 
   return (
     <div className="p-4 md:p-6">
       <h3 className="text-2xl font-bold text-white mb-6 text-center">📊 Admin Dashboard</h3>
-  
+
       {!servicesStats && !userstats ? (
         <p className="text-yellow-400 text-lg text-center animate-pulse">Loading data...</p>
       ) : (
         <div className="bg-gray-900 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700">
-          
-          {/* Bar Chart - Service Stats Breakdown */}
+          {/* Bar Chart */}
           <div className="flex flex-col justify-center items-center">
             <h3 className="text-yellow-400 text-xl font-bold mb-4">📊 Service Stats Breakdown</h3>
-            
-            {/* Increase the width/height container for the Bar chart */}
-            <div className="w-full" /* removed max-w to allow full width */>
-              <div className="h-[500px]" /* or whatever height you want */>
-                <Bar
-                  data={barData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    ...chartOptions, // keep your existing chartOptions
-                  }}
-                />
-              </div>
+            <div className="w-full h-[500px]">
+              <Bar data={barData} options={chartOptions} />
             </div>
           </div>
-  
-          {/* Pie Chart - Service Share Pie */}
+
+          {/* Pie Chart */}
           <div className="flex flex-col items-center my-10 md:my-20">
             <h3 className="text-pink-400 text-2xl font-bold mb-6 text-center">🍰 Service Share Pie</h3>
-            
-            {/* Increase the width/height container for the Pie chart */}
-            <div className="w-full bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-600 
-                            transition-all duration-300 hover:shadow-xl flex flex-col items-center">
-              <h4 className="text-white text-lg font-semibold text-center mb-4">
-                Service Distribution (%)
-              </h4>
-              <div className="w-full h-[400px]" /* or a bigger dimension, removing max-w */>
-                <Pie
-                  data={pieData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    ...pieOptions,
-                  }}
-                />
+            <div className="w-full bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-600 flex flex-col items-center">
+              <h4 className="text-white text-lg font-semibold text-center mb-4">Service Distribution (%)</h4>
+              <div className="w-full h-[400px]">
+                <Pie data={pieData} options={pieOptions} />
               </div>
             </div>
           </div>
-  
-          {/* Stats Blocks - Quick Glance Metrics */}
+
+          {/* Stats Blocks */}
           <div className="mt-12">
             <h3 className="text-green-400 text-xl font-bold text-center mb-6">⚡ Quick Glance Metrics</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -194,8 +153,6 @@ function AdminDashboard() {
       )}
     </div>
   );
-  
-  
 }
 
 export default AdminDashboard;

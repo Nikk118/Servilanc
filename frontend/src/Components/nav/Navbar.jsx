@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthStore } from "../../store/useAuthStore";
 import { LogOut, Menu, User, CalendarCheck, Wrench } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useServiceStore } from "../../store/useServiceStore";
 
 function Navbar() {
   const { logout, authUser } = useAuthStore();
+  const { services, fetchServices } = useServiceStore();
   const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [servicesMenuOpen, setServicesMenuOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const handleLogout = () => {
     logout();
@@ -16,6 +20,19 @@ function Navbar() {
     setIsOpen(false);
     setProfileMenuOpen(false);
   };
+
+  useEffect(() => {
+    if (!services || services.length === 0) fetchServices();
+  }, [fetchServices, services]);
+
+  useEffect(() => {
+    const uniqueCategories = [
+      ...new Set(services.map((s) => s.category)),
+    ];
+    setCategories(uniqueCategories);
+  }, [services]);
+
+  const toSlug = (text) => text.toLowerCase().replace(/\s+/g, "-");
 
   return (
     <nav className="bg-gray-800 px-4 py-2 shadow-md flex justify-between items-center fixed left-0 right-0 z-50 h-20">
@@ -48,16 +65,20 @@ function Navbar() {
           </button>
           {servicesMenuOpen && (
             <div className="absolute left-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-xl shadow-xl overflow-hidden">
-              {["Plumbing", "Cleaning", "Salon", "Electrician", "Carpentry", "Pest Control"].map((service) => (
-                <NavLink
-                  key={service}
-                  to={`/${service.toLowerCase()}`}
-                  className="block px-4 py-3 text-sm text-white hover:bg-gray-700 transition transform hover:scale-105"
-                  onClick={() => setServicesMenuOpen(false)}
-                >
-                  {service}
-                </NavLink>
-              ))}
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <NavLink
+                    key={category}
+                    to={`/category/${toSlug(category)}`}
+                    className="block px-4 py-3 text-sm text-white hover:bg-gray-700 transition transform hover:scale-105"
+                    onClick={() => setServicesMenuOpen(false)}
+                  >
+                    {category}
+                  </NavLink>
+                ))
+              ) : (
+                <p className="text-gray-400 px-4 py-3 text-sm">No services</p>
+              )}
             </div>
           )}
         </div>
@@ -67,7 +88,6 @@ function Navbar() {
       <div className="flex items-center space-x-3">
         {authUser && (
           <div className="relative">
-            {/* Profile Image & Name */}
             <div
               className="flex items-center cursor-pointer bg-gray-700 px-3 py-1 rounded-md hover:bg-gray-600 transition"
               onClick={() => setProfileMenuOpen(!profileMenuOpen)}
@@ -76,7 +96,6 @@ function Navbar() {
               <span className="ml-2 text-white text-sm font-semibold">{authUser.username}</span>
             </div>
 
-            {/* Profile Dropdown Menu */}
             {profileMenuOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-xl shadow-xl">
                 <NavLink
@@ -137,19 +156,23 @@ function Navbar() {
           </button>
           {servicesMenuOpen && (
             <div className="pl-5">
-              {["Plumbing", "Cleaning", "Salon", "Electrician", "Carpentry", "Pest Control"].map((service) => (
-                <NavLink
-                  key={service}
-                  to={`/${service.toLowerCase()}`}
-                  className="block p-3 text-sm transition hover:text-blue-400"
-                  onClick={() => {
-                    setIsOpen(false);
-                    setServicesMenuOpen(false);
-                  }}
-                >
-                  {service}
-                </NavLink>
-              ))}
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <NavLink
+                    key={category}
+                    to={`/category/${toSlug(category)}`}
+                    className="block p-3 text-sm transition hover:text-blue-400"
+                    onClick={() => {
+                      setIsOpen(false);
+                      setServicesMenuOpen(false);
+                    }}
+                  >
+                    {category}
+                  </NavLink>
+                ))
+              ) : (
+                <p className="px-3 py-2 text-gray-400 text-sm">No services</p>
+              )}
             </div>
           )}
         </div>

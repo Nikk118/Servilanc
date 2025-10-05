@@ -2,26 +2,51 @@ import React, { useState } from "react";
 import { useAdminStore } from "../../store/useAdminStore";
 
 function AddProfessional() {
-
-  const {isAddingProfessional,addProfessional}=useAdminStore()
+  const { isAddingProfessional, addProfessional } = useAdminStore();
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     phone: "",
-    category: "Salon",
+    category: "",
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Convert to Title Case
+  const toTitleCase = (str) =>
+    str
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    addProfessional(formData);
-    setFormData({ name: "", email: "", password: "", phone: "", category: "Salon" });
-   
+
+    if (!formData.category) {
+      alert("Please enter a category");
+      return;
+    }
+
+    // Convert category to Title Case
+    const updatedFormData = {
+      ...formData,
+      category: toTitleCase(formData.category),
+    };
+
+    await addProfessional(updatedFormData);
+
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      phone: "",
+      category: "",
+    });
   };
 
   return (
@@ -64,20 +89,16 @@ function AddProfessional() {
           className="w-full p-3 border border-gray-700 rounded bg-gray-800 text-white"
           required
         />
-        <select
+        {/* Dynamic Category Field */}
+        <input
+          type="text"
           name="category"
           value={formData.category}
           onChange={handleChange}
+          placeholder="Category (e.g., Salon, Plumbing)"
           className="w-full p-3 border border-gray-700 rounded bg-gray-800 text-white"
           required
-        >
-          <option value="Salon">Salon</option>
-          <option value="Cleaning">Cleaning</option>
-          <option value="Plumber">Plumber</option>
-          <option value="Electrician">Electrician</option>
-          <option value="PestControl">pestControl</option>
-          <option value="Carpentry">Carpentry</option>
-        </select>
+        />
         <button
           type="submit"
           className="w-full bg-blue-600 text-white p-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-300"

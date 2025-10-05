@@ -1,15 +1,10 @@
 import {asyncHandler} from "../utils/asyncHandler.js";
 import { Booking } from "../models/booking.model.js";
-import { Salon } from "../models/Salon.model.js";
-import { Plumbing } from "../models/Plumbing.model.js";
-import { Cleaning } from "../models/Cleaning.model.js";
-import { Electrician } from "../models/electrician.model.js";
-import { Carpentry } from "../models/carpentry.model.js";
-import { PestControl } from "../models/pestControl.model.js";
 import { sendEmail } from "../utils/emailService.js";
 import { Professional } from "../models/professional.model.js";
 import {Cancellation} from "../models/Cancellation.model.js"
 import {User} from "../models/user.model.js"
+import { Service } from "../models/service.model.js";
 
 const findServiceById = async (serviceId) => {
     try {
@@ -43,7 +38,7 @@ const addBooking = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Service ID is required" });
     }
 
-    const service = await findServiceById(serviceId);
+    const service = await Service.findById(serviceId);
 
     if (!service) {
         console.log("Service not found");
@@ -75,20 +70,20 @@ const addBooking = asyncHandler(async (req, res) => {
         });
     }
 
-    // Extract username and service name
-    const userName = user.username || "User"; // Default to "User" if undefined
-    const serviceName = service.name || "the service"; // Default if service name is missing
+    
+    const userName = user.username || "User"; 
+    const serviceName = service.name || "the service"; 
      res.status(201).json({
         message: "Booking created successfully. You will be notified when a professional accepts it.",
         booking: newBooking,
     });
 
-    // Send booking request email
+    
     try {
         await sendEmail(
-            user.email,  // toEmail
-            "Your Booking Request is Pending",  // subject
-            `Hello ${userName},\n\nYour booking request for ${serviceName} on ${bookingDate} at ${bookingTime} is pending. We will notify you when a professional accepts it. If no professional accepts, your request will be automatically canceled.\n\nThank you for choosing our service!` // message
+            user.email,  
+            "Your Booking Request is Pending",  
+            `Hello ${userName},\n\nYour booking request for ${serviceName} on ${bookingDate} at ${bookingTime} is pending. We will notify you when a professional accepts it. If no professional accepts, your request will be automatically canceled.\n\nThank you for choosing our service!` 
         );
         
         console.log("Booking request email sent to:", user.email);
@@ -100,6 +95,7 @@ const addBooking = asyncHandler(async (req, res) => {
 });
 
 
+
 const getBooking = asyncHandler(async (req, res) => {
     try {
         const user = req.user;
@@ -107,17 +103,17 @@ const getBooking = asyncHandler(async (req, res) => {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
-        // Fetch user bookings sorted by newest first
+        // Get all bookings for the logged-in user
         const bookings = await Booking.find({ user: user._id }).sort({ createdAt: -1 });
 
         if (!bookings.length) {
             return res.status(404).json({ message: "No bookings found" });
         }
 
-        // Populate service details
+        // Populate each booking with its related service details
         const populatedBookings = await Promise.all(
             bookings.map(async (booking) => {
-                const serviceDetails = await findServiceById(booking.service);
+                const serviceDetails = await Service.findById(booking.service);
                 return {
                     ...booking.toObject(),
                     service: serviceDetails || "Service not found",
@@ -135,6 +131,8 @@ const getBooking = asyncHandler(async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
+
 
 
 
@@ -172,8 +170,10 @@ const cancelBookingByUser = asyncHandler(async (req, res) => {
         await cancellation.save();
 
         // Fetch service details
-        const Service = await findServiceById(booking.service);
-        if (!Service) {
+    const service = await Service.findById(booking.service);
+
+       
+        if (!service) {
             return res.status(404).json({ message: "Service details not found" });
         }
 
@@ -191,7 +191,7 @@ const cancelBookingByUser = asyncHandler(async (req, res) => {
                     await sendEmail(
                         professional.email,
                         "Booking Cancelled",
-                        `Dear ${professional.name},\n\nThe booking for **${Service.name}** has been cancelled by the user.\n\nReason: ${reason}\n\nThank you!`
+                        `Dear ${professional.name},\n\nThe booking for **${service.name}** has been cancelled by the user.\n\nReason: ${reason}\n\nThank you!`
                     );
                     console.log("Cancellation email sent to:", professional.email);
                 } catch (error) {
@@ -237,7 +237,7 @@ const accpetBooking = asyncHandler(async (req, res) => {
         // Fetch user, professional, and service details
         const user = await User.findById(booking.user);
         const professional = await Professional.findById(booking.professional);
-        const service = await findServiceById(booking.service);
+        const service = await Service.findById(booking.service);
 
         if (!user || !professional || !service) {
             return res.status(400).json({ message: "User, professional, or service details not found" });
@@ -287,7 +287,7 @@ const completeBooking = asyncHandler(async (req, res) => {
         // Fetch user, professional, and service details
         const user = await User.findById(booking.user);
         const professional = await Professional.findById(booking.professional);
-        const service = await findServiceById(booking.service);
+        const service = await Service.findById(booking.service);
 
         if (!user || !service || !professional) {
             return res.status(400).json({ message: "User, service, or professional details not found" });

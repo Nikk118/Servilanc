@@ -1,22 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
-import { UserPlus, FileText,Ban, UserX } from "lucide-react";
-import { FaBars, FaTimes } from "react-icons/fa"; // Import icons for toggle
-import {
-  FaUserTie,
-  FaUsers,
-  FaClipboardList,
-  FaPlus,
-  FaWrench,
-  FaBroom,
-  FaCut,
-  FaChartBar,
-  FaComment,
-  FaBug,
-  FaHammer,
-  FaBolt,
-} from "react-icons/fa";
+import { FaBars, FaTimes, FaChartBar, FaClipboardList, FaUserTie, FaUsers, FaPlus, FaComment } from "react-icons/fa";
+import { MessageCircle, UserPlus, FileText, UserX } from "lucide-react";
 
 const menuItems = [
   { name: "Admin Dashboard", icon: <FaChartBar /> },
@@ -32,22 +17,12 @@ const menuItems = [
   { name: "Users Cancel Services", icon: <UserX /> },
 ];
 
-const categories = [
-  { name: "Salon", icon: <FaCut /> },
-  { name: "Cleaning", icon: <FaBroom /> },
-  { name: "Plumbing", icon: <FaWrench /> },
-  { name: "Pest Control", icon: <FaBug /> },
-  { name: "Carpentry", icon: <FaHammer /> },
-  { name: "Electrician", icon: <FaBolt /> },
-];
-
-function Sidebar({ setSelectedMenu, selectedMenu }) {
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [isOpen, setIsOpen] = useState(false); // Sidebar toggle state
+function Sidebar({ selectedMenu, setSelectedMenu }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      {/* Hamburger Menu Button */}
+      {/* Hamburger */}
       <button
         className="md:hidden fixed top-4 left-4 z-50 bg-gray-800 p-3 rounded-md text-white"
         onClick={() => setIsOpen(!isOpen)}
@@ -61,18 +36,13 @@ function Sidebar({ setSelectedMenu, selectedMenu }) {
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
-        <h2 className="text-xl font-bold mb-6 text-center text-white">
-          Admin Panel
-        </h2>
+        <h2 className="text-xl font-bold mb-6 text-center text-white">Admin Panel</h2>
 
         <nav>
           {menuItems.map((item) => (
             <motion.div
               key={item.name}
-              onClick={() => {
-                setSelectedMenu(item.name);
-                setIsOpen(false); // Close sidebar on selection
-              }}
+              onClick={() => { setSelectedMenu(item.name); setIsOpen(false); }}
               className={`flex items-center gap-3 p-3 my-2 rounded-md cursor-pointer transition-all ${
                 selectedMenu === item.name ? "bg-blue-600" : "hover:bg-gray-700"
               }`}
@@ -83,31 +53,18 @@ function Sidebar({ setSelectedMenu, selectedMenu }) {
             </motion.div>
           ))}
 
-          {/* 🔽 Category Dropdown 🔽 */}
-          <div className="mt-4">
-            <h3 className="text-white text-sm mb-2">Select Category</h3>
-            <div className="bg-gray-700 p-2 rounded-md">
-              {categories.map((category) => (
-                <motion.div
-                  key={category.name}
-                  onClick={() => {
-                    setSelectedCategory(category.name);
-                    setSelectedMenu(category.name);
-                    setIsOpen(false);
-                  }}
-                  className={`flex items-center gap-3 p-2 my-1 rounded-md cursor-pointer transition-all ${
-                    selectedCategory === category.name
-                      ? "bg-blue-500"
-                      : "hover:bg-gray-600"
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {category.icon} <span className="text-white">{category.name}</span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          {/* Generic Services Option */}
+          <motion.div
+            key="Services"
+            onClick={() => { setSelectedMenu("Services"); setIsOpen(false); }}
+            className={`flex items-center gap-3 p-2 my-2 rounded-md cursor-pointer transition-all ${
+              selectedMenu === "Services" ? "bg-blue-500" : "hover:bg-gray-600"
+            }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaPlus /> <span className="text-white">Services</span>
+          </motion.div>
         </nav>
       </div>
     </>

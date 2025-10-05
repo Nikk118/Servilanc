@@ -1,33 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useServiceStore } from "../store/useServiceStore.js";
 import { useFeedbackStore } from "../store/useFeedbackStore.js";
-
-import { FaWrench, FaBroom, FaCut, FaPlus,FaBug,FaHammer,FaBolt } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import OurProfessional from "../Components/homepage/OurProfessional.jsx";
 
 export default function Home() {
   const navigate = useNavigate();
-  const { feedbacks, getFeedbacks, addFeedback,isAddingFeedback } = useFeedbackStore();
+  const { services, fetchServices } = useServiceStore();
+  const { feedbacks, getFeedbacks, addFeedback, isAddingFeedback } = useFeedbackStore();
+
+  const [categories, setCategories] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [comment, setComment] = useState("");
-  
 
+  // Fetch services and feedbacks
+  useEffect(() => {
+    if (!services || services.length === 0) fetchServices();
+    getFeedbacks();
+  }, [fetchServices, getFeedbacks, services]);
 
-  React.useEffect(() => {
-    if (!feedbacks) {
-      
-      getFeedbacks();
-    }
-  }, [getFeedbacks]);
+  // Extract unique categories
+  useEffect(() => {
+    const uniqueCategories = [...new Set(services.map((s) => s.category))];
+    setCategories(uniqueCategories);
+  }, [services]);
 
- 
+  const toSlug = (text) => text.toLowerCase().replace(/\s+/g, "-");
 
-  // Handle feedback submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (comment.trim() === "") return;
-
-    await addFeedback({comment});
+    await addFeedback({ comment });
     setComment("");
     setShowForm(false);
   };
@@ -35,9 +39,11 @@ export default function Home() {
   return (
     <div className="bg-gray-900 text-gray-100 min-h-screen pt-20">
       {/* Hero Section */}
-      <header 
+      <header
         className="relative h-[50vh] sm:h-[60vh] flex flex-col justify-center items-center bg-cover bg-center shadow-md"
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1570993414854-047f3a2a6f68?auto=format&fit=crop&w=1920&q=80')` }}
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1570993414854-047f3a2a6f68?auto=format&fit=crop&w=1920&q=80')`,
+        }}
       >
         <div className="bg-black bg-opacity-70 p-6 sm:p-10 rounded-lg text-center shadow-xl max-w-lg sm:max-w-2xl">
           <h2 className="text-3xl sm:text-5xl font-bold text-white">
@@ -48,86 +54,45 @@ export default function Home() {
           </p>
         </div>
       </header>
-  
-      {/* Services Section */}
+
+      {/* Categories Section */}
       <section className="p-4 sm:p-6 md:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
-        {/* Service Cards */}
-        {[
-          {
-            title: "Plumbing",
-            icon: <FaWrench size={40} className="text-blue-400" />,
-            image: "https://images.unsplash.com/photo-1543674892-7d64d45df18b?auto=format&fit=crop&w=1930&q=80",
-            path: "/plumbing"
-          },
-          {
-            title: "Cleaning",
-            icon: <FaBroom size={40} className="text-blue-400" />,
-            image: "https://images.unsplash.com/photo-1581578731548-c64695cc6959?auto=format&fit=crop&w=1930&q=80",
-            path: "/cleaning"
-          },
-          {
-            title: "Salon",
-            icon: <FaCut size={40} className="text-blue-400" />,
-            image: "https://images.unsplash.com/photo-1517940310602-7100e3b75da9?auto=format&fit=crop&w=1930&q=80",
-            path: "/salon"
-          },
-          {
-            title: "Electrician",
-            icon: <FaBolt size={40} className="text-yellow-400" />,
-            image: "https://images.unsplash.com/photo-1581090464774-0e04a9e883dc?auto=format&fit=crop&w=1930&q=80",
-            path: "/electrician"
-          },
-          {
-            title: "Carpentry",
-            icon: <FaHammer size={40} className="text-brown-600" />,
-            image: "https://images.unsplash.com/photo-1571175443142-7af255b11de7?auto=format&fit=crop&w=1930&q=80",
-            path: "/carpentry"
-          },
-          {
-            title: "Pest Control",
-            icon: <FaBug size={40} className="text-red-500" />,
-            image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1930&q=80",
-            path: "/pest control"
-          }
-        ].map((service, index) => (
-          <div key={index}
-            className="relative w-full h-64 sm:h-72 bg-cover bg-center rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition transform hover:scale-105"
-            style={{ backgroundImage: `url('${service.image}')` }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center p-4 sm:p-6 text-center">
-              {service.icon}
-              <h3 className="text-2xl sm:text-3xl font-semibold mt-2 sm:mt-4 text-white">
-                {service.title}
+        {categories.length > 0 ? (
+          categories.map((category, index) => (
+            <div
+              key={index}
+              className="relative w-full h-64 sm:h-72 bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition transform hover:scale-105 flex flex-col justify-center items-center p-4"
+            >
+              <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-4">
+                {category}
               </h3>
-              <p className="text-gray-300 mt-2 sm:mt-3 text-sm sm:text-base">
-                Get expert professionals at your doorstep.
-              </p>
               <button
-                onClick={() => navigate(service.path)}
-                className="mt-4 sm:mt-5 px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white text-sm sm:text-lg font-medium rounded-lg hover:bg-blue-500 transition"
+                onClick={() => navigate(`/category/${toSlug(category)}`)}
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white text-sm sm:text-lg font-medium rounded-lg hover:bg-blue-500 transition"
               >
                 Book Now
               </button>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-gray-400 col-span-full text-center">No categories available yet.</p>
+        )}
       </section>
-  
+
       <OurProfessional />
-  
+
       {/* Customer Feedback Section */}
       <section className="bg-gray-800 p-4 sm:p-6 md:p-8 text-white">
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6">
           Customer Feedback
         </h2>
-  
-        {/* Auto-scrolling feedback container */}
+
         <div className="overflow-hidden relative w-full">
           <div className="flex space-x-4 sm:space-x-6 animate-scroll">
             {(feedbacks ?? []).length > 0 ? (
               [...feedbacks].map((feedback, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="bg-gray-700 bg-opacity-90 p-4 sm:p-6 min-w-[250px] sm:min-w-[300px] max-w-[350px] rounded-xl shadow-md"
                 >
                   <p className="italic break-words text-sm sm:text-base">
@@ -143,7 +108,7 @@ export default function Home() {
             )}
           </div>
         </div>
-  
+
         {/* Add Feedback Button */}
         <div className="text-center mt-6 sm:mt-8">
           <button
@@ -153,8 +118,8 @@ export default function Home() {
             <FaPlus className="mr-2" /> Add Feedback
           </button>
         </div>
-  
-        {/* Feedback Form (Popup) */}
+
+        {/* Feedback Form Popup */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center p-4">
             <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-xl max-w-md w-full">
@@ -166,7 +131,6 @@ export default function Home() {
                   className="w-full p-2 sm:p-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows="4"
                   placeholder="Write your feedback here..."
-                  name="comment"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                 ></textarea>
@@ -182,7 +146,7 @@ export default function Home() {
                     type="submit"
                     className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
                   >
-                    {isAddingFeedback?"Submitting...":"Submit"}
+                    {isAddingFeedback ? "Submitting..." : "Submit"}
                   </button>
                 </div>
               </form>
@@ -192,5 +156,4 @@ export default function Home() {
       </section>
     </div>
   );
-  
 }

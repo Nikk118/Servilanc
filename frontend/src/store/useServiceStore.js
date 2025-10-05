@@ -5,13 +5,16 @@ import toast from "react-hot-toast";
 export const useServiceStore = create((set, get) => ({
   services: [],
   isAddingService: false,
+  isUpdatingService: false,
 
-  fetchServices: async (category) => {
+  fetchServices: async () => {
     try {
-      const response = await axiosInstant.get(`/service/allServices${category ? `?category=${category}` : ""}`);
+      const response = await axiosInstant.get("/service/allServices");
       set({ services: response.data.services });
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
+      toast.error("Failed to fetch services");
     }
   },
 
@@ -19,16 +22,10 @@ export const useServiceStore = create((set, get) => ({
     try {
       set({ isAddingService: true });
 
-      const response = await axiosInstant.post("/service/addService", serviceData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axiosInstant.post("/service/addService", serviceData);
 
-      set((state) => ({
-        services: [...state.services, response.data.service],
-        isAddingService: false,
-      }));
+      get().fetchServices();
+      set({ isAddingService: false });
 
       toast.success("Service added successfully");
     } catch (error) {
@@ -38,29 +35,31 @@ export const useServiceStore = create((set, get) => ({
     }
   },
 
-  updateService: async (serviceData, serviceId) => {
-    set({ isAddingService: true });
-
+  updateService: async (serviceId, updatedData) => {
     try {
-      await axiosInstant.patch(`/service/updateService/${serviceId}`, serviceData);
+      set({ isUpdatingService: true });
 
-      get().fetchServices(serviceData.category); // Refresh services after update
+      const response = await axiosInstant.patch(`/service/updateService/${serviceId}`, updatedData);
+
+      set((state) => ({
+        services: state.services.map((service) =>
+          service._id === serviceId ? { ...service, ...response.data.service } : service
+        ),
+        isUpdatingService: false,
+      }));
+
       toast.success("Service updated successfully");
     } catch (error) {
-      if (error.response && error.response.data) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("An unexpected error occurred while updating the service.");
-      }
       console.error("Error updating service:", error);
-    } finally {
-      set({ isAddingService: false });
+      toast.error("Failed to update service");
+      set({ isUpdatingService: false });
     }
   },
 
   removeService: async (serviceId) => {
     const isConfirmed = window.confirm("Are you sure you want to remove this service?");
     if (!isConfirmed) return;
+
     try {
       await axiosInstant.delete(`/service/removeService/${serviceId}`);
       set((state) => ({
@@ -69,6 +68,7 @@ export const useServiceStore = create((set, get) => ({
       toast.success("Service removed successfully");
     } catch (error) {
       console.error("Error removing service:", error);
+      toast.error("Failed to remove service");
     }
   },
 }));

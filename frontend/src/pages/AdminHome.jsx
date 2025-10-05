@@ -1,48 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/adminComponents/Sidebar";
 import AdminDashboard from "../Components/adminComponents/AdminDashboard";
 import AllBookings from "../Components/adminComponents/AllBookings";
-import Salon from "../Components/adminComponents/Salon";
-import Plumbing from "../Components/adminComponents/Plumbing";
-import Cleaning from "../Components/adminComponents/Cleaning";
 import AllProfessionals from "../Components/adminComponents/AllProfessionals";
 import AddProfessional from "../Components/adminComponents/AddProfessional";
 import AllUsers from "../Components/adminComponents/AllUsers";
 import UserContacts from "../Components/adminComponents/UserContacts";
-import { useAdminStore } from "../store/useAdminStore";
 import NewRegistration from "../Components/adminComponents/NewRegistration";
 import FeedbackManagement from "../Components/adminComponents/FeedbackManagement";
-import Electrician from "../Components/adminComponents/Electrician";
-import Carpentry from "../Components/adminComponents/Carpenty"
-import PestControl from "../Components/adminComponents/PestControl";
 import BookingWithDetails from "../Components/adminComponents/BookingWithDetails";
 import ProfessionalServicesCanceled from "../Components/adminComponents/ProfessionalServicesCanceled";
 import UserCancelServices from "../Components/adminComponents/UserCancelServices";
+import ManageService from "../Components/adminComponents/ManageService";
+import { useAdminStore } from "../store/useAdminStore";
+import { useServiceStore } from "../store/useServiceStore";
 
 function AdminHome() {
   const { adminLogout, authAdmin } = useAdminStore();
+  const { services, fetchServices } = useServiceStore();
   const [selectedMenu, setSelectedMenu] = useState("Admin Dashboard");
+  const [serviceCategories, setServiceCategories] = useState([]);
+
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
+
+  useEffect(() => {
+    const categories = [...new Set(services.map((s) => s.category))];
+    setServiceCategories(categories);
+  }, [services]);
 
   const renderContent = () => {
+    // If selectedMenu is "Services" or a dynamic category, open ManageService
+    if (selectedMenu === "Services" || serviceCategories.includes(selectedMenu)) {
+      return <ManageService initialCategory={selectedMenu === "Services" ? "" : selectedMenu} />;
+    }
+
     switch (selectedMenu) {
       case "Admin Dashboard":
         return <AdminDashboard />;
       case "All Bookings":
         return <AllBookings />;
-      case "Salon":
-        return <Salon />;
-      case "Plumbing":
-        return <Plumbing />;
-      case "Cleaning":
-        return <Cleaning />;
-      case "BookingWithDetails":
-        return <BookingWithDetails/>
-      case "Pest Control":
-        return <PestControl/>
-      case "Electrician":
-        return <Electrician/>
-      case "Carpentry":
-        return <Carpentry/>
       case "All Professionals":
         return <AllProfessionals />;
       case "Add Professional":
@@ -55,10 +53,12 @@ function AdminHome() {
         return <NewRegistration />;
       case "Feedback":
         return <FeedbackManagement />;
+      case "BookingWithDetails":
+        return <BookingWithDetails />;
       case "Professional Cancel Services":
-          return <ProfessionalServicesCanceled/>
+        return <ProfessionalServicesCanceled />;
       case "Users Cancel Services":
-          return <UserCancelServices/>
+        return <UserCancelServices />;
       default:
         return <AdminDashboard />;
     }
@@ -66,11 +66,11 @@ function AdminHome() {
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
-      {/* Sidebar (Already Responsive) */}
+      {/* Sidebar */}
       <div className="w-1/5 bg-gray-800 min-h-screen shadow-lg">
         <Sidebar setSelectedMenu={setSelectedMenu} selectedMenu={selectedMenu} />
       </div>
-  
+
       {/* Main Content */}
       <div className="w-full md:w-4/5 flex flex-col">
         {/* Navbar */}
@@ -78,7 +78,7 @@ function AdminHome() {
           <h2 className="text-lg font-bold text-blue-400 tracking-wide uppercase text-center w-full md:w-auto">
             {selectedMenu}
           </h2>
-  
+
           <div className="flex flex-wrap items-center gap-4 mt-2 md:mt-0 justify-center md:justify-end w-full md:w-auto">
             <div className="bg-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 shadow-md">
               <span className="text-gray-300 text-sm">Welcome,</span>
@@ -87,7 +87,7 @@ function AdminHome() {
               </span>
               <span className="bg-blue-500 text-xs px-2 py-1 rounded-full text-white font-bold">Admin</span>
             </div>
-  
+
             <button
               onClick={adminLogout}
               className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition shadow-md"
@@ -96,7 +96,7 @@ function AdminHome() {
             </button>
           </div>
         </div>
-  
+
         {/* Page Content */}
         <div className="flex-1 p-4 md:p-6 overflow-y-auto">
           <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-md">
@@ -106,7 +106,6 @@ function AdminHome() {
       </div>
     </div>
   );
-  
 }
 
 export default AdminHome;

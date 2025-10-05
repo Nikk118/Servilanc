@@ -1,11 +1,11 @@
 import { verifyAdmin } from "../middleware/adminAuth.middleware.js";
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
-import {
-    addService,
-    allServices,
+import { 
+    addService, 
+    allServices, 
     removeService,
-    updateService
+    updateService 
 } from "../controller/service.controller.js";
 
 const router = Router();
