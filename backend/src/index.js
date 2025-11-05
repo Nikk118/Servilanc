@@ -9,11 +9,11 @@ import feedbackRouter from "./router/feedback.router.js"
 import ContactRouter from "./router/contact.router.js"
 import registerRouter from "./router/registers.router.js"
 import ServiceRouter from "./router/service.router.js"
+import { Booking } from "./models/booking.model.js"
 import cors from "cors"
-// import smsRouter from "./router/sms.router.js"
+import cron from "node-cron"
 import path from "path"
-
- 
+import { sendEmail } from "./utils/emailService.js"
 
 
 const app = express()
@@ -24,11 +24,14 @@ dotenv.config();
 const __dirname = path.resolve();
 
 import connectDB from "./db/index.js"
+import { startBookingScheduler } from "./utils/bookingshedular.js"
+
 connectDB()
 .then(()=>{
     app.listen(process.env.PORT || 3000,()=>{
         console.log(`server is running on port : ${process.env.PORT}`)
     })
+    startBookingScheduler()
 })
 .catch((err)=>{
     console.log("connection fail...",err);
@@ -63,6 +66,8 @@ app.use("/api/contact",ContactRouter)
 app.use("/api/registers",registerRouter)
 
 app.use("/api/service",ServiceRouter)
+
+
 
 if(process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname,"../frontend/dist")));

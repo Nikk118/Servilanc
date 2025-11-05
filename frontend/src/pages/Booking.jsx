@@ -133,59 +133,81 @@ function Booking() {
             )}
           </div>
             {/* for booking */}
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Select Booking Date & Time</h3>
-            <form  onSubmit={makeBooking} className="space-y-3">
-              <input 
-              type="date" 
-              className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300" 
-              value={booking.bookingDate}
-              min={new Date().toISOString().split("T")[0]} 
-              onChange={(e) => setBooking({ ...booking, bookingDate: e.target.value })}/>
-              <select 
-              className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
-              value={booking.bookingTime}
-              onChange={(e) => setBooking({ ...booking, bookingTime: e.target.value })}>
-                <option value="">Select Time</option>  
-                <option value="9:00 AM">9:00 AM</option>
-                <option value="10:00 AM">10:00 AM</option>
-                <option value="11:00 AM">11:00 AM</option>
-                <option value="12:00 PM">12:00 PM</option>
-                <option value="1:00 PM">1:00 PM</option>
-                <option value="02:00 PM">02:00 PM</option>
-                <option value="03:00 PM">03:00 PM</option>
-                <option value="04:00 PM">04:00 PM</option>
-                <option value="05:00 PM">05:00 PM</option>
-                <option value="06:00 PM">06:00 PM</option>
-              </select>
-              <div className="mt-3">
-            <h3 className="text-lg font-semibold mb-2">Select Payment Method</h3>
-            <label className="flex items-center space-x-2">
-              <input 
-                type="radio" 
-                name="paymentMethod" 
-                value="cash"
-                className="form-radio text-blue-600"
-                onChange={(e) => setBooking({ ...booking, paymentMethod: e.target.value })}
-              />
-              <span>Cash on Service</span>
-            </label>
-            <label className="flex items-center space-x-2 mt-2">
-              <input 
-                type="radio" 
-                name="paymentMethod" 
-                value="online"
-                className="form-radio text-blue-600"
-                onChange={(e) => setBooking({ ...booking, paymentMethod: e.target.value })}
-              />
-              <span>Online Payment</span>
-            </label>
-          </div>
-              <button  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
-                Confirm Booking
-              </button>
-            </form>
-          </div>
+         <div>
+  <h3 className="text-lg font-semibold mb-2">Select Booking Date & Time</h3>
+
+  <form onSubmit={makeBooking} className="space-y-4">
+    {/* Booking Date */}
+    <input
+      type="date"
+      className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
+      value={booking.bookingDate}
+      min={new Date().toISOString().split("T")[0]}
+      onChange={(e) =>
+        setBooking({ ...booking, bookingDate: e.target.value })
+      }
+      required
+    />
+
+    {/* Booking Time */}
+    <input
+      type="time"
+      className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
+      value={booking.bookingTime}
+      min="09:00"
+      max="18:00"
+      step="1800" // 30-minute interval
+      onChange={(e) =>
+        setBooking({ ...booking, bookingTime: e.target.value })
+      }
+      required
+    />
+
+    {/* Payment Method */}
+    <div className="mt-3">
+      <h3 className="text-lg font-semibold mb-2">Select Payment Method</h3>
+      <div className="space-y-2">
+        <label className="flex items-center space-x-2">
+          <input
+            type="radio"
+            name="paymentMethod"
+            value="cash"
+            checked={booking.paymentMethod === "cash"}
+            onChange={(e) =>
+              setBooking({ ...booking, paymentMethod: e.target.value })
+            }
+            className="text-blue-600 focus:ring-blue-500"
+            required
+          />
+          <span>Cash on Service</span>
+        </label>
+
+        <label className="flex items-center space-x-2">
+          <input
+            type="radio"
+            name="paymentMethod"
+            value="online"
+            checked={booking.paymentMethod === "online"}
+            onChange={(e) =>
+              setBooking({ ...booking, paymentMethod: e.target.value })
+            }
+            className="text-blue-600 focus:ring-blue-500"
+          />
+          <span>Online Payment</span>
+        </label>
+      </div>
+    </div>
+
+    {/* Confirm Button */}
+    <button
+      type="submit"
+      className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+    >
+      Confirm Booking
+    </button>
+  </form>
+</div>
+
         </div>
 
             {/* for displaaying slected service */}
